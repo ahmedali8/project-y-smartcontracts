@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedali8/foundry-hardhat-template",
-  "description": "Starter kit for writing Solidity smart contracts in hardhat and foundry environment",
+  "name": "@ahmedali8/project-y-smartcontracts",
+  "description": "Smart contracts of Project Y to be submitted in polygon hackathon",
   "version": "0.1.0",
   "author": {
     "name": "Ahmed Ali Bhatti",
