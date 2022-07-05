@@ -69,3 +69,6 @@ stackAllocation = true                                        # whether to enabl
 optimizerSteps = 'dhfoDgvulfnTUtnIf'                          # the optimization steps to be applied
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
+
+[ci]
+fuzz-runs = 500

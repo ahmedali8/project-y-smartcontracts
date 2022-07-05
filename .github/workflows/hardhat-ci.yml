@@ -1,4 +1,4 @@
-name: "Hardhat CI"
+name: Hardhat CI
 
 env:
   COVERAGE_GIT_BRANCH: "main"
