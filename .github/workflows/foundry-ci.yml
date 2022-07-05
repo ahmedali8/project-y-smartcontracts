@@ -1,4 +1,4 @@
-name: Foundry CI
+name: Foundry-CI
 
 on:
   pull_request:
@@ -12,11 +12,20 @@ env:
   FOUNDRY_PROFILE: ci
 
 jobs:
-  run-ci:
+  foundry-ci:
     runs-on: ubuntu-latest
     steps:
       - name: "Check out the repo"
         uses: "actions/checkout@v3"
+
+      - name: "Install Node.js"
+        uses: "actions/setup-node@v3"
+        with:
+          cache: "yarn"
+          node-version: "16"
+
+      - name: "Install the dependencies"
+        run: "yarn install --immutable"
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
