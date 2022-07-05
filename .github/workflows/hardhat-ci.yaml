@@ -4,7 +4,7 @@ env:
   COVERAGE_GIT_BRANCH: "main"
   COVERAGE_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
   COVERAGE_SERVICE_NAME: "github-actions-ci"
-  INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
+  INFURA_PROJECT_ID: ${{ secrets.INFURA_API_KEY }}
   PRIVATE_KEY_1: ${{ secrets.PRIVATE_KEY_1 }}
 
 on:
