@@ -13,6 +13,7 @@
 2. All dealings in matic
 3. only erc721 standard supported
 4. factory pattern for wrapped version
+5. [ERC-4907](https://eips.ethereum.org/EIPS/eip-4907) for rental NFT i.e. wrapped NFT
 
 ### Steps/Notes:
 
