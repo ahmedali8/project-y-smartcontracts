@@ -88,6 +88,9 @@ const config: HardhatUserConfig = {
     coinmarketcap: process.env.COIN_MARKET_CAP_API_KEY || undefined,
     excludeContracts: [],
     src: "./contracts",
+    outputFile: undefined,
+    token: "ETH",
+    noColors: false,
   },
   namedAccounts: {
     deployer: {
