@@ -6,7 +6,7 @@
 
 ```bash
 # Clone repo
-$ git clone https://github.com/ahmedali8/erc1155-merkle-example
+$ git clone https://github.com/ahmedali8/project-y-smartcontracts
 
 # Initialize submodule dependencies
 $ git submodule update --init --recursive
