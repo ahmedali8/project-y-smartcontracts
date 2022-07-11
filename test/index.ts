@@ -1,10 +1,9 @@
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { ethers, waffle } from "hardhat";
+import { ethers } from "hardhat";
 
 import { Signers } from "./shared/types";
 import { testToken } from "./token/Token";
-
-const { createFixtureLoader } = waffle;
 
 describe("Unit tests", () => {
   before(async function () {
@@ -15,7 +14,7 @@ describe("Unit tests", () => {
     this.signers.user = signers[1];
     this.signers.accounts = signers.slice(2);
 
-    this.loadFixture = createFixtureLoader();
+    this.loadFixture = loadFixture;
   });
 
   testToken();
