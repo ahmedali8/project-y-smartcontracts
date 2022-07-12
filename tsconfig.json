@@ -26,6 +26,7 @@
     "test/**/*",
     "types/**/*",
     "utils/**/*",
-    "config/**/*"
+    "config/**/*",
+    "helpers/**/*"
   ]
 }

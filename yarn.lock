@@ -34,6 +34,7 @@ __metadata:
     "@openzeppelin/hardhat-upgrades": ^1.19.0
     "@openzeppelin/test-helpers": ^0.5.15
     "@primitivefi/hardhat-dodoc": ^0.2.3
+    "@rari-capital/solmate": ^6.4.0
     "@trivago/prettier-plugin-sort-imports": ^3.2.0
     "@truffle/dashboard": ^0.1.8
     "@typechain/ethers-v5": ^10.1.0
@@ -82,6 +83,7 @@ __metadata:
     ts-node: ^10.8.2
     typechain: ^8.1.0
     typescript: ^4.7.4
+    web3-utils: ^1.7.4
   languageName: unknown
   linkType: soft
 
@@ -2563,6 +2565,13 @@ __metadata:
     hardhat: ^2.6.4
     squirrelly: ^8.0.8
   checksum: b05bbfe2586a8d26e73580b7d3a945e7bb56873b02beda90581b5ece29b2444f057f49b4edbf4ab90beb899a05b7b7c681204f09129c52e43997734a1e8dc14d
+  languageName: node
+  linkType: hard
+
+"@rari-capital/solmate@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "@rari-capital/solmate@npm:6.4.0"
+  checksum: 27c656f72ce9b51ab6ec25165ae5426f74af934352eca062eb8419c4cf7fc4c6debf45487afd6bee7860e38b7c33d3a6d353a0d4c176c961c9c8125d30cf52a4
   languageName: node
   linkType: hard
 
@@ -15109,6 +15118,21 @@ __metadata:
     randombytes: ^2.1.0
     utf8: 3.0.0
   checksum: b35bccec3cd5f579ac4fe705a302015106290ec37a0f7fa47003b993b5f82faba9dafbec7d496c6621d5d2936d821206ffd32a034155370338dc88442baad549
+  languageName: node
+  linkType: hard
+
+"web3-utils@npm:^1.7.4":
+  version: 1.7.4
+  resolution: "web3-utils@npm:1.7.4"
+  dependencies:
+    bn.js: ^5.2.1
+    ethereum-bloom-filters: ^1.0.6
+    ethereumjs-util: ^7.1.0
+    ethjs-unit: 0.1.6
+    number-to-bn: 1.7.0
+    randombytes: ^2.1.0
+    utf8: 3.0.0
+  checksum: 5d9256366904e5c24c7198a8791aa76217100aa068650ccc18264ff670d1e8d42d40fcc5ddc66e3c05fac3b480753ccf7e519709e60aefd73d71dd4c4d2adcbb
   languageName: node
   linkType: hard
 

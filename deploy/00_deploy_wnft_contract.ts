@@ -1,8 +1,8 @@
 import { DeployFunction, DeployResult } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 
+import { WNFT_NAME, WNFT_SYMBOL } from "../helpers/constants";
 import { preDeploy } from "../utils/contracts";
-import { toWei } from "../utils/format";
 import { verifyContract } from "../utils/verify";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
@@ -11,13 +11,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  const CONTRACT_NAME = "Token";
+  const CONTRACT_NAME = "WNFT";
 
   await preDeploy({ signerAddress: deployer, contractName: CONTRACT_NAME });
   const deployResult: DeployResult = await deploy(CONTRACT_NAME, {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    args: ["testing new created token", "TCT", toWei("6000000"), deployer],
+    args: [deployer, WNFT_NAME, WNFT_SYMBOL],
     log: true,
     // waitConfirmations: 5,
   });
@@ -34,4 +34,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 };
 
 export default func;
-func.tags = ["Token"];
+func.tags = ["all", "WNFT"];
