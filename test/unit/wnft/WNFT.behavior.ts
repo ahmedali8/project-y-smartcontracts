@@ -13,59 +13,59 @@ import shouldBehaveLikeUserExpires from "./view/userExpires";
 import shouldBehaveLikeUserOf from "./view/userOf";
 
 export function shouldBehaveLikeWNFT(): void {
-  // describe("View Functions", function () {
-  //   describe("name", function () {
-  //     shouldBehaveLikeName();
-  //   });
+  describe("View Functions", function () {
+    describe("name", function () {
+      shouldBehaveLikeName();
+    });
 
-  //   describe("symbol", function () {
-  //     shouldBehaveLikeSymbol();
-  //   });
+    describe("symbol", function () {
+      shouldBehaveLikeSymbol();
+    });
 
-  //   describe("owner", function () {
-  //     shouldBehaveLikeOwner();
-  //   });
+    describe("owner", function () {
+      shouldBehaveLikeOwner();
+    });
 
-  //   describe("balanceOf", function () {
-  //     shouldBehaveLikeBalanceOf();
-  //   });
+    describe("balanceOf", function () {
+      shouldBehaveLikeBalanceOf();
+    });
 
-  //   describe("ownerOf", function () {
-  //     shouldBehaveLikeOwnerOf();
-  //   });
+    describe("ownerOf", function () {
+      shouldBehaveLikeOwnerOf();
+    });
 
-  //   describe("getApproved", function () {
-  //     shouldBehaveLikeGetApproved();
-  //   });
+    describe("getApproved", function () {
+      shouldBehaveLikeGetApproved();
+    });
 
-  //   describe("totalSupply", function () {
-  //     shouldBehaveLikeTotalSupply();
-  //   });
+    describe("totalSupply", function () {
+      shouldBehaveLikeTotalSupply();
+    });
 
-  //   describe("tokenOfOwnerByIndex", function () {
-  //     shouldBehaveLikeTokenOfOwnerByIndex();
-  //   });
+    describe("tokenOfOwnerByIndex", function () {
+      shouldBehaveLikeTokenOfOwnerByIndex();
+    });
 
-  //   describe("tokenByIndex", function () {
-  //     shouldBehaveLikeTokenByIndex();
-  //   });
+    describe("tokenByIndex", function () {
+      shouldBehaveLikeTokenByIndex();
+    });
 
-  //   describe("tokenURI", function () {
-  //     shouldBehaveLikeTokenURI();
-  //   });
+    describe("tokenURI", function () {
+      shouldBehaveLikeTokenURI();
+    });
 
-  //   describe("userOf", function () {
-  //     shouldBehaveLikeUserOf();
-  //   });
+    describe("userOf", function () {
+      shouldBehaveLikeUserOf();
+    });
 
-  //   describe("userExpires", function () {
-  //     shouldBehaveLikeUserExpires();
-  //   });
+    describe("userExpires", function () {
+      shouldBehaveLikeUserExpires();
+    });
 
-  //   describe("supportsInterface", function () {
-  //     shouldBehaveLikeSupportsInterface();
-  //   });
-  // });
+    describe("supportsInterface", function () {
+      shouldBehaveLikeSupportsInterface();
+    });
+  });
 
   describe("Effects Functions", function () {
     //
