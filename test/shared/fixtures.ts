@@ -2,7 +2,8 @@ import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signe
 import { ethers } from "hardhat";
 
 import { WNFT_NAME, WNFT_SYMBOL } from "../../helpers/constants";
-import { WNFT, WNFT__factory } from "../../src/types";
+import type { WNFT } from "../../src/types/contracts/WNFT/WNFT";
+import type { WNFT__factory } from "../../src/types/factories/contracts/WNFT/WNFT__factory";
 
 export async function wnftFixture(): Promise<{ wnft: WNFT }> {
   const signers = await ethers.getSigners();
