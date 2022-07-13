@@ -1,3 +1,11 @@
+import shouldBehaveLikeApprove from "./effects/approve";
+import shouldBehaveLikeBurn from "./effects/burn";
+import shouldBehaveLikeCreate from "./effects/create";
+import shouldBehaveLikeSafeTransferFrom from "./effects/safeTransferFrom";
+import shouldBehaveLikeSetApprovalForAll from "./effects/setApprovalForAll";
+import shouldBehaveLikeSetOwner from "./effects/setOwner";
+import shouldBehaveLikeSetUser from "./effects/setUser";
+import shouldBehaveLikeTransferFrom from "./effects/transferFrom";
 import shouldBehaveLikeBalanceOf from "./view/balanceOf";
 import shouldBehaveLikeGetApproved from "./view/getApproved";
 import shouldBehaveLikeName from "./view/name";
@@ -14,60 +22,71 @@ import shouldBehaveLikeUserOf from "./view/userOf";
 
 export function shouldBehaveLikeWNFT(): void {
   describe("View Functions", function () {
-    describe("name", function () {
+    describe("#name", function () {
       shouldBehaveLikeName();
     });
-
-    describe("symbol", function () {
+    describe("#symbol", function () {
       shouldBehaveLikeSymbol();
     });
-
-    describe("owner", function () {
+    describe("#owner", function () {
       shouldBehaveLikeOwner();
     });
-
-    describe("balanceOf", function () {
+    describe("#balanceOf", function () {
       shouldBehaveLikeBalanceOf();
     });
-
-    describe("ownerOf", function () {
+    describe("#ownerOf", function () {
       shouldBehaveLikeOwnerOf();
     });
-
-    describe("getApproved", function () {
+    describe("#getApproved", function () {
       shouldBehaveLikeGetApproved();
     });
-
-    describe("totalSupply", function () {
+    describe("#totalSupply", function () {
       shouldBehaveLikeTotalSupply();
     });
-
-    describe("tokenOfOwnerByIndex", function () {
+    describe("#tokenOfOwnerByIndex", function () {
       shouldBehaveLikeTokenOfOwnerByIndex();
     });
-
-    describe("tokenByIndex", function () {
+    describe("#tokenByIndex", function () {
       shouldBehaveLikeTokenByIndex();
     });
-
-    describe("tokenURI", function () {
+    describe("#tokenURI", function () {
       shouldBehaveLikeTokenURI();
     });
-
-    describe("userOf", function () {
+    describe("#userOf", function () {
       shouldBehaveLikeUserOf();
     });
-
-    describe("userExpires", function () {
+    describe("#userExpires", function () {
       shouldBehaveLikeUserExpires();
     });
-
-    describe("supportsInterface", function () {
+    describe("#supportsInterface", function () {
       shouldBehaveLikeSupportsInterface();
     });
   });
 
   describe("Effects Functions", function () {
-    //
+    describe("#setApprovalForAll", function () {
+      shouldBehaveLikeSetApprovalForAll();
+    });
+    describe("#approve", function () {
+      shouldBehaveLikeApprove();
+    });
+    describe("#transferFrom", function () {
+      shouldBehaveLikeTransferFrom();
+    });
+    describe("#safeTransferFrom", function () {
+      shouldBehaveLikeSafeTransferFrom();
+    });
+    describe("#setOwner", function () {
+      shouldBehaveLikeSetOwner();
+    });
+    describe("#create", function () {
+      shouldBehaveLikeCreate();
+    });
+    describe("#burn", function () {
+      shouldBehaveLikeBurn();
+    });
+    describe("#setUser", function () {
+      shouldBehaveLikeSetUser();
+    });
   });
 }

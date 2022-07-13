@@ -43,7 +43,7 @@ contract WNFT is IWNFT, Owned, ERC4907 {
 
     /// @inheritdoc IWNFT
     function burn(uint256 tokenId_) external override onlyOwner {
-        require(block.timestamp >= userExpires(tokenId_), "Cannot burn before expires");
+        require(block.timestamp >= userExpires(tokenId_), "WNFT: Cannot burn before expires");
         _burn(tokenId_);
 
         emit WNFTBurned(tokenId_);
@@ -70,6 +70,6 @@ contract WNFT is IWNFT, Owned, ERC4907 {
     ) internal virtual override(ERC4907) {
         super._beforeTokenTransfer(from, to, tokenId);
 
-        require(from == address(0) || to == address(0), "Not allowed to transfer token");
+        require(from == address(0) || to == address(0), "WNFT: Not allowed to transfer token");
     }
 }

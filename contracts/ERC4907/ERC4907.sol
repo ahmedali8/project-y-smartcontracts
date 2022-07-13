@@ -26,6 +26,7 @@ contract ERC4907 is IERC4907, ERC721Enumerable, ERC721URIStorage {
         uint64 expires
     ) public virtual {
         _requireMinted(tokenId);
+        require(uint256(expires) >= block.timestamp, "ERC4907: Invalid expires");
 
         _users[tokenId] = UserInfo({ user: user, expires: expires });
 
@@ -37,7 +38,7 @@ contract ERC4907 is IERC4907, ERC721Enumerable, ERC721URIStorage {
     /// @param tokenId The NFT to get the user address for
     /// @return The user address for this NFT
     function userOf(uint256 tokenId) public view virtual returns (address) {
-        if (uint64(block.timestamp) <= _users[tokenId].expires) {
+        if (uint256(_users[tokenId].expires) >= block.timestamp) {
             return _users[tokenId].user;
         } else {
             return address(0);

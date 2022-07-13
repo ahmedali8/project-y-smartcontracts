@@ -2,7 +2,6 @@
 pragma solidity ^0.8.15;
 
 import "forge-std/Script.sol";
-import { Token } from "contracts/Token.sol";
 
 contract TokenScript is Script {
     function setUp() public {}
@@ -11,7 +10,6 @@ contract TokenScript is Script {
         vm.startBroadcast();
 
         // deploy our contract
-        new Token("TokenName", "TKN", 1000000e18, msg.sender);
 
         vm.stopBroadcast();
     }
