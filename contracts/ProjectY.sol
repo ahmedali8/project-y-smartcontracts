@@ -4,6 +4,7 @@ pragma solidity 0.8.15;
 import "./WNFT/IWNFT.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@rari-capital/solmate/src/auth/Owned.sol";
@@ -14,9 +15,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
     Counters.Counter private _entryIdTracker;
     Counters.Counter private _bidIdTracker;
 
-    uint256 public constant NFT_LOCKING_PERIOD = 90 days;
-    uint256 public constant ETH_LOCKING_PERIOD = 30 days;
-    uint256 public constant BIDDING_PERIOD = 7 days;
+    uint64 public constant NFT_LOCKING_PERIOD = 90 days;
+    uint64 public constant ONE_MONTH = 30 days;
+    uint64 public constant BIDDING_PERIOD = 7 days;
 
     IWNFT public immutable wnft;
 
@@ -41,6 +42,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint64 timestamp;
         uint256 tokenId;
         uint256 howMuchToSell;
+        uint256 selectedBidId;
     }
     // entryId -> SellerInfo
     mapping(uint256 => SellerInfo) internal _sellerInfo;
@@ -52,6 +54,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 bidPrice;
         uint256 entryId;
         uint256 pricePaid; // initially 34% of bidPrice
+        uint256 wnftTokenId;
     }
     // bidId -> BuyerInfo
     mapping(uint256 => BuyerInfo) internal _buyerInfo;
@@ -103,7 +106,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
             contractAddress: contractAddress_,
             timestamp: blockTimestamp_,
             tokenId: tokenId_,
-            howMuchToSell: howMuchToSell_
+            howMuchToSell: howMuchToSell_,
+            selectedBidId: 0
         });
 
         emit NFTLocked(_msgSender(), contractAddress_, tokenId_, blockTimestamp_);
@@ -131,9 +135,181 @@ contract ProjectY is Context, Owned, ERC721Holder {
             timestamp: blockTimestamp_,
             bidPrice: bidPrice_,
             entryId: entryId_,
-            pricePaid: value_
+            pricePaid: value_,
+            wnftTokenId: 0
         });
 
         emit Bid(_msgSender(), entryId_, bidId_, blockTimestamp_);
     }
+
+    function selectBid(uint256 bidId_, string memory wnftURI_) public {
+        uint64 blockTimestamp_ = uint64(block.timestamp);
+        uint256 entryId_ = _buyerInfo[bidId_].entryId;
+
+        isBidIdValid(bidId_);
+        require(
+            blockTimestamp_ >= _sellerInfo[entryId_].timestamp + BIDDING_PERIOD,
+            "ProjectY: Bidding period not over"
+        );
+
+        // update buyer info
+        _buyerInfo[bidId_].isSelected = true;
+        _buyerInfo[bidId_].timestamp = blockTimestamp_;
+
+        uint64 expires_ = blockTimestamp_ + NFT_LOCKING_PERIOD;
+
+        // make NFT onSale off and set selected bidId
+        _sellerInfo[entryId_].onSale = false;
+        _sellerInfo[entryId_].selectedBidId = bidId_;
+
+        // mint WNFT to buyer
+        wnft.create(_buyerInfo[bidId_].buyerAddress, expires_, wnftURI_);
+    }
+
+    function payInstallment(uint256 entryId_) public payable {
+        uint256 value_ = msg.value;
+        uint64 blockTimestamp_ = uint64(block.timestamp);
+
+        isEntryIdValid(entryId_);
+
+        uint256 bidId_ = _sellerInfo[entryId_].selectedBidId;
+        require(bidId_ != 0, "ProjectY: BidId not selected");
+
+        uint256 bidPrice_ = _buyerInfo[bidId_].bidPrice;
+        uint256 pricePaid_ = _buyerInfo[bidId_].pricePaid;
+
+        // time at which 1st installment is done
+        uint256 timestampWhenFirstInstallmentIsDone_ = _buyerInfo[bidId_].timestamp;
+
+        // if (
+        //     ((bidPrice_ * 34) / 100 == pricePaid_) &&
+        //     (blockTimestamp_ > timestampWhenFirstInstallmentIsDone_ &&
+        //         blockTimestamp_ <= timestampWhenFirstInstallmentIsDone_ + ONE_MONTH)
+        // ) {
+        //     // first installment done (34%) and can pay next 33% installment
+        //     require((bidPrice_ * 33) / 100 == value_, "ProjectY: value must be 33% of BidPrice");
+
+        //     _buyerInfo[bidId_].pricePaid += value_;
+        // }
+        require((bidPrice_ * 33) / 100 == value_, "ProjectY: value must be 33% of BidPrice");
+
+        _buyerInfo[bidId_].pricePaid += value_;
+
+        if (
+            ((bidPrice_ * 67) / 100 == pricePaid_) &&
+            (blockTimestamp_ > timestampWhenFirstInstallmentIsDone_ + ONE_MONTH &&
+                blockTimestamp_ <= timestampWhenFirstInstallmentIsDone_ + (2 * ONE_MONTH))
+        ) {
+            // second installment done (67%) and can pay next 33% installment to complete 100%
+
+            // all installments done so transfer NFT to buyer and burn WNFT
+            IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(
+                address(this),
+                _msgSender(),
+                _sellerInfo[entryId_].tokenId
+            );
+            wnft.burn(_buyerInfo[bidId_].wnftTokenId);
+        }
+    }
+
+    function slash(uint256 entryId_) public {
+        uint64 blockTimestamp_ = uint64(block.timestamp);
+
+        isEntryIdValid(entryId_);
+
+        uint256 bidId_ = _sellerInfo[entryId_].selectedBidId;
+        require(bidId_ != 0, "ProjectY: BidId not selected");
+
+        uint256 bidPrice_ = _buyerInfo[bidId_].bidPrice;
+        uint256 pricePaid_ = _buyerInfo[bidId_].pricePaid;
+
+        // time at which 1st installment is done
+        uint256 timestampWhenFirstInstallmentIsDone_ = _buyerInfo[bidId_].timestamp;
+
+        // one month passed since first payment but second installment (total 67%) still not done only 34% done
+        if (
+            (blockTimestamp_ >= timestampWhenFirstInstallmentIsDone_ + ONE_MONTH) &&
+            // ((bidPrice_ * 67) / 100 != pricePaid_)
+            ((bidPrice_ * 34) / 100 == pricePaid_)
+        ) {
+            // first payment goes to seller
+            Address.sendValue(payable(_sellerInfo[entryId_].sellerAddress), (bidPrice_ * 34) / 100);
+        }
+
+        // two months passed since first payment but third installment (total 100%) still not done
+        if (
+            (blockTimestamp_ >= timestampWhenFirstInstallmentIsDone_ + (2 * ONE_MONTH)) &&
+            (bidPrice_ != pricePaid_)
+        ) {
+            // first payment to seller
+            Address.sendValue(payable(_sellerInfo[entryId_].sellerAddress), (bidPrice_ * 34) / 100);
+
+            // second payment to buyer
+            Address.sendValue(payable(_buyerInfo[bidId_].buyerAddress), (bidPrice_ * 33) / 100);
+        }
+
+        // one month passed since first payment but second installment (total 67%) still not done
+        // or
+        // two months passed since first payment but third installment (total 100%) still not done
+        if (
+            ((blockTimestamp_ >= timestampWhenFirstInstallmentIsDone_ + ONE_MONTH) &&
+                ((bidPrice_ * 34) / 100 == pricePaid_)) ||
+            ((blockTimestamp_ > timestampWhenFirstInstallmentIsDone_ + (2 * ONE_MONTH)) &&
+                (bidPrice_ != pricePaid_))
+        ) {
+            // transfer NFT to seller and burn WNFT
+            IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(
+                address(this),
+                _sellerInfo[entryId_].sellerAddress,
+                _sellerInfo[entryId_].tokenId
+            );
+            wnft.burn(_buyerInfo[bidId_].wnftTokenId);
+        }
+    }
+
+    function withdraw(uint256 entryId_) public {
+        uint64 blockTimestamp_ = uint64(block.timestamp);
+
+        isEntryIdValid(entryId_);
+
+        uint256 bidId_ = _sellerInfo[entryId_].selectedBidId;
+        require(bidId_ != 0, "ProjectY: BidId not selected");
+
+        uint256 bidPrice_ = _buyerInfo[bidId_].bidPrice;
+        uint256 pricePaid_ = _buyerInfo[bidId_].pricePaid;
+
+        // time at which 1st installment is done
+        uint256 timestampWhenFirstInstallmentIsDone_ = _buyerInfo[bidId_].timestamp;
+
+        // first month passed and second payment is done
+        if (
+            (blockTimestamp_ >= timestampWhenFirstInstallmentIsDone_ + ONE_MONTH) &&
+            ((bidPrice_ * 67) / 100 == pricePaid_)
+        ) {
+            // send first payment to seller (always)
+            Address.sendValue(payable(_sellerInfo[entryId_].sellerAddress), (bidPrice_ * 34) / 100);
+        }
+
+        // two months passed and third/last payment is done
+        if (
+            (blockTimestamp_ >= timestampWhenFirstInstallmentIsDone_ + (2 * ONE_MONTH)) &&
+            (bidPrice_ == pricePaid_)
+        ) {
+            // send second payment to seller
+            Address.sendValue(payable(_sellerInfo[entryId_].sellerAddress), (bidPrice_ * 33) / 100);
+        }
+
+        // three months passed and third/last payment is done
+        if (
+            (blockTimestamp_ >= timestampWhenFirstInstallmentIsDone_ + (3 * ONE_MONTH)) &&
+            (bidPrice_ == pricePaid_)
+        ) {
+            // send third/last payment to seller
+            Address.sendValue(payable(_sellerInfo[entryId_].sellerAddress), bidPrice_);
+        }
+    }
+
+    // blockTimestamp_ >= timestampWhenFirstInstallmentIsDone_ + ONE_MONTH       // release first payment to seller
+    // blockTimestamp_ >= timestampWhenFirstInstallmentIsDone_ + (2 * ONE_MONTH) // release second payment to seller
+    // blockTimestamp_ >= timestampWhenFirstInstallmentIsDone_ + (3 * ONE_MONTH) // release third payment to seller
 }
