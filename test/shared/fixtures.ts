@@ -21,7 +21,7 @@ export async function wnftFixture(): Promise<{ wnft: WNFT }> {
   return { wnft };
 }
 
-export async function projectyFixture(): Promise<{ projecty: ProjectY }> {
+export async function projectyFixture(): Promise<{ wnft: WNFT; projecty: ProjectY }> {
   const signers: SignerWithAddress[] = await ethers.getSigners();
   const owner: SignerWithAddress = signers[0];
 
@@ -35,5 +35,5 @@ export async function projectyFixture(): Promise<{ projecty: ProjectY }> {
     wnft.address
   )) as ProjectY;
 
-  return { projecty };
+  return { wnft, projecty };
 }
