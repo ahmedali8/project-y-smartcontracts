@@ -51,7 +51,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 selectedBidId;
     }
     // entryId -> SellerInfo
-    mapping(uint256 => SellerInfo) internal _sellerInfo;
+    mapping(uint256 => SellerInfo) public _sellerInfo;
 
     struct BuyerInfo {
         bool isSelected;
@@ -63,7 +63,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 wnftTokenId;
     }
     // bidId -> BuyerInfo
-    mapping(uint256 => BuyerInfo) internal _buyerInfo;
+    mapping(uint256 => BuyerInfo) public _buyerInfo;
 
     constructor(address owner_, address wnft_) Owned(owner_) {
         wnft = IWNFT(wnft_);
@@ -96,6 +96,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 howMuchToSell_,
         uint256 tokenId_
     ) public {
+        require(howMuchToSell_ != 0, "ProjectY: Invalid Price");
+
         uint64 blockTimestamp_ = uint64(block.timestamp);
 
         // create unique entryId

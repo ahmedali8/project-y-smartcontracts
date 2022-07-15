@@ -26,3 +26,7 @@ export enum WNFT__Errors {
 export enum Owned__Errors {
   Unauthorized = "UNAUTHORIZED",
 }
+
+export enum ProjectY__Errors {
+  InvalidPrice = "ProjectY: Invalid Price",
+}
