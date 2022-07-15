@@ -15,7 +15,7 @@ declare module "mocha" {
 
 export interface Contracts {
   wnft: WNFT;
-  projectY: ProjectY;
+  projecty: ProjectY;
 }
 
 export interface Signers {

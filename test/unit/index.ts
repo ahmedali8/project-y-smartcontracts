@@ -3,6 +3,7 @@ import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { ethers } from "hardhat";
 
 import type { Contracts, Signers } from "../shared/types";
+import { testProjectY } from "./projecty/ProjectY";
 import { testWNFT } from "./wnft/WNFT";
 
 describe("Unit tests", () => {
@@ -17,5 +18,6 @@ describe("Unit tests", () => {
     this.loadFixture = loadFixture;
   });
 
-  testWNFT();
+  // testWNFT();
+  testProjectY();
 });
