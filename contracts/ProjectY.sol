@@ -35,6 +35,12 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint64 timestamp
     );
 
+    enum InstallmentPhases {
+        PhaseOne,
+        PhaseTwo,
+        PhaseThree
+    }
+
     struct SellerInfo {
         bool onSale;
         address sellerAddress;
@@ -85,7 +91,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         );
     }
 
-    function lockNFT(
+    function sell(
         address contractAddress_,
         uint256 howMuchToSell_,
         uint256 tokenId_
