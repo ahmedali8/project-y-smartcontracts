@@ -49,6 +49,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint64 timestamp;
         uint256 tokenId;
         uint256 sellingPrice;
+        uint256 totalBids;
         uint256 selectedBidId;
     }
     // entryId -> SellerInfo
@@ -82,6 +83,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function sellerSellingPrice(uint256 entryId_) public view returns (uint256) {
         isEntryIdValid(entryId_);
         return _sellerInfo[entryId_].sellingPrice;
+    }
+
+    function sellerTotalBids(uint256 entryId_) public view returns (uint256) {
+        isEntryIdValid(entryId_);
+        return _sellerInfo[entryId_].totalBids;
     }
 
     function sellerSelectedBidId(uint256 entryId_) public view returns (uint256) {
@@ -186,6 +192,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
             timestamp: blockTimestamp_,
             tokenId: tokenId_,
             sellingPrice: sellingPrice_,
+            totalBids: 0,
             selectedBidId: 0
         });
 
@@ -193,13 +200,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
         return entryId_;
     }
 
-    function bid(uint256 entryId_, uint256 bidPrice_) public payable {
+    function bid(uint256 entryId_, uint256 bidPrice_) public payable returns (uint256) {
         uint256 value_ = msg.value;
         uint64 blockTimestamp_ = uint64(block.timestamp);
 
         isEntryIdValid(entryId_);
         require(
-            (bidPrice_ * 34) / 100 == value_ && value_ != 0,
+            value_ != 0 && value_ == (bidPrice_ * 34) / 100,
             "ProjectY: value must be 34% of BidPrice"
         );
 
@@ -222,7 +229,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
             wnftTokenId: 0
         });
 
+        _sellerInfo[entryId_].totalBids += 1;
+
         emit Bid(_msgSender(), entryId_, bidId_, blockTimestamp_);
+        return bidId_;
     }
 
     function selectBid(uint256 bidId_, string memory wnftURI_) public {

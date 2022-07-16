@@ -15,7 +15,7 @@ export default function shouldBehaveLikeSell(): void {
         this.contracts.projecty
           .connect(this.signers.accounts[0])
           .sell(this.signers.accounts[0].address, toWei("1"), 4)
-      ).to.be.reverted;
+      ).to.be.revertedWithoutReason();
     });
   });
 
@@ -102,6 +102,7 @@ export default function shouldBehaveLikeSell(): void {
         );
         expect(await this.contracts.projecty.sellerTokenId(entryId)).to.equal(firstTokenId);
         expect(await this.contracts.projecty.sellerSellingPrice(entryId)).to.equal(toWei("1"));
+        expect(await this.contracts.projecty.sellerTotalBids(entryId)).to.equal(0);
         expect(await this.contracts.projecty.sellerSelectedBidId(entryId)).to.equal(0);
       });
 

@@ -44,7 +44,7 @@ export function omitEndZeros(value: number): string | undefined {
  * @param value string value preferred.
  * @return BigNumber value
  */
-export function toBN(value: string | number | bigint): BigNumber {
+export function toBN(value: BigNumberish): BigNumber {
   return BigNumber.from(value);
 }
 
