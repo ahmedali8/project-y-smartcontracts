@@ -29,4 +29,6 @@ export enum Owned__Errors {
 
 export enum ProjectY__Errors {
   InvalidPrice = "ProjectY: Invalid Price",
+  InvalidEntryId = "ProjectY: Invalid entryId",
+  InvalidBidId = "ProjectY: Invalid bidId",
 }
