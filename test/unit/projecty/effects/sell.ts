@@ -101,7 +101,7 @@ export default function shouldBehaveLikeSell(): void {
           2
         );
         expect(await this.contracts.projecty.sellerTokenId(entryId)).to.equal(firstTokenId);
-        expect(await this.contracts.projecty.sellerHowMuchToSell(entryId)).to.equal(toWei("1"));
+        expect(await this.contracts.projecty.sellerSellingPrice(entryId)).to.equal(toWei("1"));
         expect(await this.contracts.projecty.sellerSelectedBidId(entryId)).to.equal(0);
       });
 

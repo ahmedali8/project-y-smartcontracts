@@ -48,7 +48,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         address contractAddress;
         uint64 timestamp;
         uint256 tokenId;
-        uint256 howMuchToSell;
+        uint256 sellingPrice;
         uint256 selectedBidId;
     }
     // entryId -> SellerInfo
@@ -79,9 +79,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
         return _sellerInfo[entryId_].tokenId;
     }
 
-    function sellerHowMuchToSell(uint256 entryId_) public view returns (uint256) {
+    function sellerSellingPrice(uint256 entryId_) public view returns (uint256) {
         isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].howMuchToSell;
+        return _sellerInfo[entryId_].sellingPrice;
     }
 
     function sellerSelectedBidId(uint256 entryId_) public view returns (uint256) {
@@ -165,9 +165,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function sell(
         address contractAddress_,
         uint256 tokenId_,
-        uint256 howMuchToSell_
+        uint256 sellingPrice_
     ) public returns (uint256) {
-        require(howMuchToSell_ != 0, "ProjectY: Invalid Price");
+        require(sellingPrice_ != 0, "ProjectY: Invalid Price");
 
         uint64 blockTimestamp_ = uint64(block.timestamp);
 
@@ -185,7 +185,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
             contractAddress: contractAddress_,
             timestamp: blockTimestamp_,
             tokenId: tokenId_,
-            howMuchToSell: howMuchToSell_,
+            sellingPrice: sellingPrice_,
             selectedBidId: 0
         });
 
@@ -198,7 +198,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint64 blockTimestamp_ = uint64(block.timestamp);
 
         isEntryIdValid(entryId_);
-        require((bidPrice_ * 34) / 100 == value_, "ProjectY: value must be 34% of BidPrice");
+        require(
+            (bidPrice_ * 34) / 100 == value_ && value_ != 0,
+            "ProjectY: value must be 34% of BidPrice"
+        );
 
         require(
             blockTimestamp_ <= _sellerInfo[entryId_].timestamp + BIDDING_PERIOD,
