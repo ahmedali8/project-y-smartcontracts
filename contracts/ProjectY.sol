@@ -21,10 +21,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     IWNFT public immutable wnft;
 
-    event NFTLocked(
+    event Sell(
         address indexed seller,
         address indexed contractAddress,
-        uint256 indexed tokenId,
+        uint256 tokenId,
+        uint256 indexed entryId,
         uint64 timestamp
     );
 
@@ -51,7 +52,42 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 selectedBidId;
     }
     // entryId -> SellerInfo
-    mapping(uint256 => SellerInfo) public _sellerInfo;
+    mapping(uint256 => SellerInfo) internal _sellerInfo;
+
+    function sellerOnSale(uint256 entryId_) public view returns (bool) {
+        isEntryIdValid(entryId_);
+        return _sellerInfo[entryId_].onSale;
+    }
+
+    function sellerAddress(uint256 entryId_) public view returns (address) {
+        isEntryIdValid(entryId_);
+        return _sellerInfo[entryId_].sellerAddress;
+    }
+
+    function sellerContractAddress(uint256 entryId_) public view returns (address) {
+        isEntryIdValid(entryId_);
+        return _sellerInfo[entryId_].contractAddress;
+    }
+
+    function sellerTimestamp(uint256 entryId_) public view returns (uint64) {
+        isEntryIdValid(entryId_);
+        return _sellerInfo[entryId_].timestamp;
+    }
+
+    function sellerTokenId(uint256 entryId_) public view returns (uint256) {
+        isEntryIdValid(entryId_);
+        return _sellerInfo[entryId_].tokenId;
+    }
+
+    function sellerHowMuchToSell(uint256 entryId_) public view returns (uint256) {
+        isEntryIdValid(entryId_);
+        return _sellerInfo[entryId_].howMuchToSell;
+    }
+
+    function sellerSelectedBidId(uint256 entryId_) public view returns (uint256) {
+        isEntryIdValid(entryId_);
+        return _sellerInfo[entryId_].selectedBidId;
+    }
 
     struct BuyerInfo {
         bool isSelected;
@@ -64,6 +100,41 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
     // bidId -> BuyerInfo
     mapping(uint256 => BuyerInfo) public _buyerInfo;
+
+    function buyerIsSelected(uint256 bidId_) public view returns (bool) {
+        isBidIdValid(bidId_);
+        return _buyerInfo[bidId_].isSelected;
+    }
+
+    function buyerAddress(uint256 bidId_) public view returns (address) {
+        isBidIdValid(bidId_);
+        return _buyerInfo[bidId_].buyerAddress;
+    }
+
+    function buyerTimestamp(uint256 bidId_) public view returns (uint64) {
+        isBidIdValid(bidId_);
+        return _buyerInfo[bidId_].timestamp;
+    }
+
+    function buyerBidPrice(uint256 bidId_) public view returns (uint256) {
+        isBidIdValid(bidId_);
+        return _buyerInfo[bidId_].bidPrice;
+    }
+
+    function buyerEntryId(uint256 bidId_) public view returns (uint256) {
+        isBidIdValid(bidId_);
+        return _buyerInfo[bidId_].entryId;
+    }
+
+    function buyerPricePaid(uint256 bidId_) public view returns (uint256) {
+        isBidIdValid(bidId_);
+        return _buyerInfo[bidId_].pricePaid;
+    }
+
+    function buyerWNFTTokenId(uint256 bidId_) public view returns (uint256) {
+        isBidIdValid(bidId_);
+        return _buyerInfo[bidId_].wnftTokenId;
+    }
 
     constructor(address owner_, address wnft_) Owned(owner_) {
         wnft = IWNFT(wnft_);
@@ -93,9 +164,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     function sell(
         address contractAddress_,
-        uint256 howMuchToSell_,
-        uint256 tokenId_
-    ) public {
+        uint256 tokenId_,
+        uint256 howMuchToSell_
+    ) public returns (uint256) {
         require(howMuchToSell_ != 0, "ProjectY: Invalid Price");
 
         uint64 blockTimestamp_ = uint64(block.timestamp);
@@ -118,7 +189,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
             selectedBidId: 0
         });
 
-        emit NFTLocked(_msgSender(), contractAddress_, tokenId_, blockTimestamp_);
+        emit Sell(_msgSender(), contractAddress_, tokenId_, entryId_, blockTimestamp_);
+        return entryId_;
     }
 
     function bid(uint256 entryId_, uint256 bidPrice_) public payable {
