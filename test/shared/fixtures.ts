@@ -53,6 +53,8 @@ export async function projectyFixture(): Promise<{
     wnft.address
   )) as ProjectY;
 
+  await wnft.connect(owner).setOwner(projecty.address);
+
   const { erc721 } = await mockERC721Fixture();
 
   return { wnft, projecty, erc721 };

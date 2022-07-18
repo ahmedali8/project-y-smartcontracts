@@ -18,7 +18,9 @@ contract WNFT is IWNFT, Owned, ERC4907 {
         address owner_,
         string memory name_,
         string memory symbol_
-    ) Owned(owner_) ERC4907(name_, symbol_) {}
+    ) Owned(owner_) ERC4907(name_, symbol_) {
+        // solhint-disable-previous-line no-empty-blocks
+    }
 
     /// @inheritdoc IWNFT
     function create(

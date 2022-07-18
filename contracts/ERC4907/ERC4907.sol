@@ -13,7 +13,9 @@ contract ERC4907 is IERC4907, ERC721Enumerable, ERC721URIStorage {
 
     mapping(uint256 => UserInfo) internal _users;
 
-    constructor(string memory name_, string memory symbol_) ERC721(name_, symbol_) {}
+    constructor(string memory name_, string memory symbol_) ERC721(name_, symbol_) {
+        // solhint-disable-previous-line no-empty-blocks
+    }
 
     /// @notice set the user and expires of a NFT
     /// @dev The zero address indicates there is no user

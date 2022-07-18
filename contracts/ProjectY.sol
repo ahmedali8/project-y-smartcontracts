@@ -36,6 +36,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint64 timestamp
     );
 
+    event BidSelected(uint256 indexed bidId, uint256 indexed entryId, uint256 wnftTokenId);
+
     enum InstallmentPhases {
         PhaseOne,
         PhaseTwo,
@@ -237,9 +239,17 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     function selectBid(uint256 bidId_, string memory wnftURI_) public {
         uint64 blockTimestamp_ = uint64(block.timestamp);
-        uint256 entryId_ = _buyerInfo[bidId_].entryId;
-
         isBidIdValid(bidId_);
+        uint256 entryId_ = _buyerInfo[bidId_].entryId;
+        isEntryIdValid(entryId_);
+
+        require(
+            _msgSender() == _sellerInfo[entryId_].sellerAddress,
+            "ProjectY: Caller must be seller"
+        );
+
+        require(bytes(wnftURI_).length > 0, "ProjectY: Invalid WNFT URI");
+
         require(
             blockTimestamp_ >= _sellerInfo[entryId_].timestamp + BIDDING_PERIOD,
             "ProjectY: Bidding period not over"
@@ -256,7 +266,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
         _sellerInfo[entryId_].selectedBidId = bidId_;
 
         // mint WNFT to buyer
-        wnft.create(_buyerInfo[bidId_].buyerAddress, expires_, wnftURI_);
+        uint256 wnftTokenId_ = wnft.create(_buyerInfo[bidId_].buyerAddress, expires_, wnftURI_);
+
+        emit BidSelected(bidId_, entryId_, wnftTokenId_);
     }
 
     function payInstallment(uint256 entryId_) public payable {
