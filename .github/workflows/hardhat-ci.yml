@@ -31,11 +31,24 @@ jobs:
       - name: "Install the dependencies"
         run: "yarn install --immutable"
 
+      - name: "Lint the code"
+        run: "yarn lint:sol"
+
+      - name: "Add lint summary"
+        run: |
+          echo "## Lint results" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
+
       - name: "Compile the contracts and generate TypeChain bindings"
         run: "yarn compile"
 
       - name: "Run the tests and generate coverage report"
         run: "yarn coverage"
+
+      - name: "Add test summary"
+        run: |
+          echo "## Test results" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
 
       - name: "Upload the coverage report to Coveralls"
         uses: "coverallsapp/github-action@master"
