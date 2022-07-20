@@ -9,27 +9,51 @@
 
 ### Imp points to note:
 
-1. NFT lock for 3 months
+1. NFT lock for:
+
+- 1 time ( 100% )
+- 3 months ( 34 + (2 \* 33) = 100% )
+- 6 months ( 17.5 + (5 \* 16.5) = 100% )
+- 9 months ( 12 + (8 \* 11) = 100%)
+
 2. All dealings in matic
 3. only erc721 standard supported
-4. factory pattern for wrapped version
-5. [ERC-4907](https://eips.ethereum.org/EIPS/eip-4907) for rental NFT i.e. wrapped NFT
+4. bidding period: 7 days
 
 ### Steps/Notes:
 
 - seller locks his NFT
-  - kitny ki bechni he -> != 0
+  - preffered selling price -> != 0
+  - preffered installment period -> valid
   - contract address -> valid
   - token id -> valid
 - sari locked nfts bidding k liay available hongi
-  - three Installment (34% + 33% + 33%)
-- buyers aa k bid krskty hain aur 34% of their bid lock krwaingy
+  - 1 time ( 100% )
+  - 3 months ( 34 + (2 \* 33) = 100% )
+  - 6 months ( 17.5 + (5 \* 16.5) = 100% )
+  - 9 months ( 12 + (8 \* 11) = 100%)
+- buyers aa k bid krskty hain:
+  - installment plan
+  - price
+  - down payment
 - seller aa kr bid select kryga aur baki sari bids k paisy unlock hojaingy jisy respective bidders a k claim krskyga
-- jiski bid select hogai he uske paisy contract me lock hojaingy aur NFT ka wrapped version usy mint hojayga jo transferrable nhi hoga
-- slashing logic
+- jiski bid select hogai he uske paisy contract me lock hojaingy
+- incentivisation mechanism:
+  - if a user is unable to pay their installment, their position is liquidated and a new buyer will be selected by the previous buyer.
+  - new buyer wo khud aa kr position khareedlyga 5% less pe (95% pay kryga)
 
-(1&2 -> nft refund to seller; all 3 -> installment waly matic 1 month baad unlock and wrapped version burn)
+### Scenario:
 
-1. agr buyer doosri installment nhi depata to pehli wali installment slash ho k seller ko chalijaygi
-2. agr buyer teesri installment nhi depata to ek pehli wali seller ko aur doosri wali buyer ko chalijaygi
-3. teeno installment k baad nft buyer ko transfer hojaygi aur wrapped burn hojaygi
+seller: 100 eth
+
+buyer: 90 eth
+
+- 3 month installment
+- down payment: 90\*34% = 30.6 eth
+- remaining: 59.4 eth (29.7 eth each month)
+- if 2nd is not done and new buyer comes in: // (90\*5% = 4.5 eth) (90-4.5 = 85.5 eth)
+  - 30.6 \* 5% = 1.53 eth
+  - 30.6 - 1.53 = 29.07 eth (new buyer will send to old buyer) (old buyer ka talluq khtm)
+  - 2nd payment bhi bharyga
+- if 3rd is not done and new buyer comes in:
+  - ab tk jitni payment hogai he uska 95% new buyer dyga old buyer ko aur baki ki installment exactly puri bharyga
