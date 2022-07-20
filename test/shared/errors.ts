@@ -31,7 +31,6 @@ export enum ProjectY__Errors {
   InvalidPrice = "ProjectY: Invalid Price",
   InvalidEntryId = "ProjectY: Invalid entryId",
   InvalidBidId = "ProjectY: Invalid bidId",
-  InvalidWNFTURI = "ProjectY: Invalid WNFT URI",
   ValueMustBe34PercentOfBidPrice = "ProjectY: value must be 34% of BidPrice",
   BiddingPeriodOver = "ProjectY: Bidding period over",
   BiddingPeriodNotOver = "ProjectY: Bidding period not over",

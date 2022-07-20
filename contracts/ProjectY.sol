@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.15;
 
-import "./WNFT/IWNFT.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
@@ -19,8 +18,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
     uint64 public constant ONE_MONTH = 30 days;
     uint64 public constant BIDDING_PERIOD = 7 days;
 
-    IWNFT public immutable wnft;
-
     event Sell(
         address indexed seller,
         address indexed contractAddress,
@@ -36,7 +33,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint64 timestamp
     );
 
-    event BidSelected(uint256 indexed bidId, uint256 indexed entryId, uint256 wnftTokenId);
+    event BidSelected(uint256 indexed bidId, uint256 indexed entryId);
 
     enum InstallmentPhases {
         PhaseOne,
@@ -104,7 +101,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 bidPrice;
         uint256 entryId;
         uint256 pricePaid; // initially 34% of bidPrice
-        uint256 wnftTokenId;
     }
     // bidId -> BuyerInfo
     mapping(uint256 => BuyerInfo) public _buyerInfo;
@@ -139,13 +135,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
         return _buyerInfo[bidId_].pricePaid;
     }
 
-    function buyerWNFTTokenId(uint256 bidId_) public view returns (uint256) {
-        isBidIdValid(bidId_);
-        return _buyerInfo[bidId_].wnftTokenId;
-    }
-
-    constructor(address owner_, address wnft_) Owned(owner_) {
-        wnft = IWNFT(wnft_);
+    constructor(address owner_) Owned(owner_) {
+        // solhint-disable-previous-line no-empty-blocks
     }
 
     function totalEntryIds() public view returns (uint256) {
@@ -227,8 +218,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
             timestamp: blockTimestamp_,
             bidPrice: bidPrice_,
             entryId: entryId_,
-            pricePaid: value_,
-            wnftTokenId: 0
+            pricePaid: value_
         });
 
         _sellerInfo[entryId_].totalBids += 1;
@@ -237,7 +227,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         return bidId_;
     }
 
-    function selectBid(uint256 bidId_, string memory wnftURI_) public {
+    function selectBid(uint256 bidId_) public {
         uint64 blockTimestamp_ = uint64(block.timestamp);
         isBidIdValid(bidId_);
         uint256 entryId_ = _buyerInfo[bidId_].entryId;
@@ -247,8 +237,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
             _msgSender() == _sellerInfo[entryId_].sellerAddress,
             "ProjectY: Caller must be seller"
         );
-
-        require(bytes(wnftURI_).length > 0, "ProjectY: Invalid WNFT URI");
 
         require(
             blockTimestamp_ >= _sellerInfo[entryId_].timestamp + BIDDING_PERIOD,
@@ -266,9 +254,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
         _sellerInfo[entryId_].selectedBidId = bidId_;
 
         // mint WNFT to buyer
-        uint256 wnftTokenId_ = wnft.create(_buyerInfo[bidId_].buyerAddress, expires_, wnftURI_);
 
-        emit BidSelected(bidId_, entryId_, wnftTokenId_);
+        emit BidSelected(bidId_, entryId_);
     }
 
     function payInstallment(uint256 entryId_) public payable {
@@ -313,7 +300,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 _msgSender(),
                 _sellerInfo[entryId_].tokenId
             );
-            wnft.burn(_buyerInfo[bidId_].wnftTokenId);
         }
     }
 
@@ -368,7 +354,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 _sellerInfo[entryId_].sellerAddress,
                 _sellerInfo[entryId_].tokenId
             );
-            wnft.burn(_buyerInfo[bidId_].wnftTokenId);
         }
     }
 

@@ -1,8 +1,7 @@
 import type { BigNumber } from "@ethersproject/bignumber";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { ethers, testUtils } from "hardhat";
+import { testUtils } from "hardhat";
 
-import type { WNFT } from "../../../../src/types/contracts/WNFT/WNFT";
 import { toWei } from "../../../../utils/format";
 import { ProjectY__Errors } from "../../../shared/errors";
 import { expect } from "../../../shared/expect";
@@ -17,7 +16,7 @@ export default function shouldBehaveLikeSelectBid(): void {
   context("when bidId is not valid", function () {
     it("reverts", async function () {
       await expect(
-        this.contracts.projecty.connect(this.signers.accounts[1]).selectBid(4, "helloURI")
+        this.contracts.projecty.connect(this.signers.accounts[1]).selectBid(4)
       ).to.be.revertedWith(ProjectY__Errors.InvalidBidId);
     });
   });
@@ -29,14 +28,10 @@ export default function shouldBehaveLikeSelectBid(): void {
     const sellingPrice: BigNumber = toWei("10");
 
     let erc721Address: string;
-    let wnftAddress: string;
     let seller: SignerWithAddress;
     let buyer: SignerWithAddress;
-    let wnft: WNFT;
 
     before(async function () {
-      wnftAddress = await this.contracts.projecty.wnft();
-      wnft = await ethers.getContractAt("WNFT", wnftAddress);
       erc721Address = this.mocks.erc721.address;
       seller = this.signers.accounts[0];
       buyer = this.signers.accounts[1];
@@ -55,24 +50,16 @@ export default function shouldBehaveLikeSelectBid(): void {
     context("when caller is not seller", function () {
       it("reverts", async function () {
         await expect(
-          this.contracts.projecty.connect(this.signers.accounts[9]).selectBid(bidId, "uri")
+          this.contracts.projecty.connect(this.signers.accounts[9]).selectBid(bidId)
         ).to.be.revertedWith(ProjectY__Errors.CallerMustBeSeller);
-      });
-    });
-
-    context("when wnft uri is invalid", function () {
-      it("reverts", async function () {
-        await expect(
-          this.contracts.projecty.connect(seller).selectBid(bidId, "")
-        ).to.be.revertedWith(ProjectY__Errors.InvalidWNFTURI);
       });
     });
 
     context("when bidding period is not over", function () {
       it("reverts", async function () {
-        await expect(
-          this.contracts.projecty.connect(seller).selectBid(bidId, "uri")
-        ).to.be.revertedWith(ProjectY__Errors.BiddingPeriodNotOver);
+        await expect(this.contracts.projecty.connect(seller).selectBid(bidId)).to.be.revertedWith(
+          ProjectY__Errors.BiddingPeriodNotOver
+        );
       });
     });
 
@@ -81,31 +68,17 @@ export default function shouldBehaveLikeSelectBid(): void {
         await time.increase(time.duration.days(8));
       });
 
-      it("emits BidSelected and WNFTCreated event", async function () {
-        await expect(this.contracts.projecty.connect(seller).selectBid(bidId, "wnftURI"))
+      it("emits BidSelected event", async function () {
+        await expect(this.contracts.projecty.connect(seller).selectBid(bidId))
           .to.emit(this.contracts.projecty, "BidSelected")
-          .withArgs(bidId, entryId, 1)
-          .to.emit(wnft, "WNFTCreated")
-          .withArgs(1, buyer.address, "wnftURI");
-      });
-
-      it("mints and rents WNFT to buyer", async function () {
-        const blockTimestamp = await time.latest();
-        await this.contracts.projecty.connect(seller).selectBid(bidId, "uri");
-
-        expect(await wnft.ownerOf(1)).to.equal(buyer.address);
-        expect(await wnft.userOf(1)).to.equal(buyer.address);
-        expect(await wnft.userExpires(1)).to.approximately(
-          blockTimestamp + time.duration.days(90),
-          1
-        );
+          .withArgs(bidId, entryId);
       });
 
       it("updates buyer info", async function () {
         const blockTimestamp = await time.latest();
         expect(await this.contracts.projecty.buyerTimestamp(bidId)).to.not.equal(blockTimestamp);
 
-        await this.contracts.projecty.connect(seller).selectBid(bidId, "uri");
+        await this.contracts.projecty.connect(seller).selectBid(bidId);
 
         expect(await this.contracts.projecty.buyerIsSelected(bidId)).to.equal(true);
         expect(await this.contracts.projecty.buyerTimestamp(bidId)).to.approximately(

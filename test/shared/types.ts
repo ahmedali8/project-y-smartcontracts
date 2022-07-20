@@ -1,7 +1,6 @@
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 
 import type { ProjectY } from "../../src/types/contracts/ProjectY";
-import type { WNFT } from "../../src/types/contracts/WNFT/WNFT";
 import type { MockERC721 } from "../../src/types/contracts/test/MockERC721";
 
 type Fixture<T> = () => Promise<T>;
@@ -16,7 +15,6 @@ declare module "mocha" {
 }
 
 export interface Contracts {
-  wnft: WNFT;
   projecty: ProjectY;
 }
 

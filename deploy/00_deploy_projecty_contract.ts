@@ -1,23 +1,23 @@
-import { DeployFunction, DeployResult } from "hardhat-deploy/types";
-import { HardhatRuntimeEnvironment } from "hardhat/types";
+import type { DeployFunction, DeployResult } from "hardhat-deploy/types";
+import type { HardhatRuntimeEnvironment } from "hardhat/types";
 
-import { WNFT_NAME, WNFT_SYMBOL } from "../helpers/constants";
 import { preDeploy } from "../utils/contracts";
 import { verifyContract } from "../utils/verify";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { getNamedAccounts, getChainId, deployments } = hre;
-  const { deploy } = deployments;
+  const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  const CONTRACT_NAME = "WNFT";
+  const CONTRACT_NAME = "ProjectY";
 
   await preDeploy({ signerAddress: deployer, contractName: CONTRACT_NAME });
   const deployResult: DeployResult = await deploy(CONTRACT_NAME, {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    args: [deployer, WNFT_NAME, WNFT_SYMBOL],
+    contract: CONTRACT_NAME,
+    args: [deployer],
     log: true,
     // waitConfirmations: 5,
   });
@@ -34,4 +34,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 };
 
 export default func;
-func.tags = ["all", "WNFT"];
+func.tags = ["all", "ProjectY"];

@@ -4,7 +4,6 @@ import { ethers } from "hardhat";
 
 import type { Contracts, MockContracts, Signers } from "../shared/types";
 import { testProjectY } from "./projecty/ProjectY";
-import { testWNFT } from "./wnft/WNFT";
 
 describe("Unit tests", () => {
   before(async function () {
@@ -19,6 +18,5 @@ describe("Unit tests", () => {
     this.loadFixture = loadFixture;
   });
 
-  // testWNFT();
   testProjectY();
 });

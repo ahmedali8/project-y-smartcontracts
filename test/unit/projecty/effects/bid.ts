@@ -103,7 +103,6 @@ export default function shouldBehaveLikeBid(): void {
         expect(await this.contracts.projecty.buyerBidPrice(bidId)).to.equal(bidPrice);
         expect(await this.contracts.projecty.buyerEntryId(bidId)).to.equal(entryId);
         expect(await this.contracts.projecty.buyerPricePaid(bidId)).to.equal(value);
-        expect(await this.contracts.projecty.buyerWNFTTokenId(bidId)).to.equal(0);
       });
 
       it("emits Bid event", async function () {
@@ -229,7 +228,6 @@ export default function shouldBehaveLikeBid(): void {
           expect(await this.contracts.projecty.buyerBidPrice(b.bidId)).to.equal(b.bid);
           expect(await this.contracts.projecty.buyerEntryId(b.bidId)).to.equal(s.entryId);
           expect(await this.contracts.projecty.buyerPricePaid(b.bidId)).to.equal(b.value);
-          expect(await this.contracts.projecty.buyerWNFTTokenId(b.bidId)).to.equal(0);
 
           expect(await this.contracts.projecty.sellerTotalBids(s.entryId)).to.equal(1);
         }
