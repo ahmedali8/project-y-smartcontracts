@@ -518,16 +518,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         uint64 blockTimestamp_ = uint64(block.timestamp);
 
-        uint256 secondMonthTimestamp_ = boughtBlockTimestamp_ + ONE_MONTH;
-        uint256 thirdMonthTimestamp_ = boughtBlockTimestamp_ + (2 * ONE_MONTH);
-        uint256 fourthMonthTimestamp_ = boughtBlockTimestamp_ + (3 * ONE_MONTH);
-        uint256 fifthMonthTimestamp_ = boughtBlockTimestamp_ + (4 * ONE_MONTH);
-        uint256 sixthMonthTimestamp_ = boughtBlockTimestamp_ + (5 * ONE_MONTH);
-        uint256 seventhMonthTimestamp_ = boughtBlockTimestamp_ + (6 * ONE_MONTH);
-        uint256 eighthMonthTimestamp_ = boughtBlockTimestamp_ + (7 * ONE_MONTH);
-        uint256 ninthMonthTimestamp_ = boughtBlockTimestamp_ + (8 * ONE_MONTH);
-
         if (installment_ == InstallmentPlan.ThreeMonths) {
+            uint256 secondMonthTimestamp_ = boughtBlockTimestamp_ + ONE_MONTH;
+            uint256 thirdMonthTimestamp_ = boughtBlockTimestamp_ + (2 * ONE_MONTH);
+
             // missed 2nd installment and 67% not paid
             // or
             // missed 3rd installment and 100% not paid
@@ -547,6 +541,12 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 Address.sendValue(payable(oldbuyer_), priceToBePaidByLiquidator_);
             }
         } else if (installment_ == InstallmentPlan.SixMonths) {
+            uint256 secondMonthTimestamp_ = boughtBlockTimestamp_ + ONE_MONTH;
+            uint256 thirdMonthTimestamp_ = boughtBlockTimestamp_ + (2 * ONE_MONTH);
+            uint256 fourthMonthTimestamp_ = boughtBlockTimestamp_ + (3 * ONE_MONTH);
+            uint256 fifthMonthTimestamp_ = boughtBlockTimestamp_ + (4 * ONE_MONTH);
+            uint256 sixthMonthTimestamp_ = boughtBlockTimestamp_ + (5 * ONE_MONTH);
+
             // missed 2nd installment and 34% not paid
             // or
             // missed 3rd installment and 50.5% not paid
@@ -578,6 +578,15 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 Address.sendValue(payable(oldbuyer_), priceToBePaidByLiquidator_);
             }
         } else if (installment_ == InstallmentPlan.NineMonths) {
+            uint256 secondMonthTimestamp_ = boughtBlockTimestamp_ + ONE_MONTH;
+            uint256 thirdMonthTimestamp_ = boughtBlockTimestamp_ + (2 * ONE_MONTH);
+            uint256 fourthMonthTimestamp_ = boughtBlockTimestamp_ + (3 * ONE_MONTH);
+            uint256 fifthMonthTimestamp_ = boughtBlockTimestamp_ + (4 * ONE_MONTH);
+            uint256 sixthMonthTimestamp_ = boughtBlockTimestamp_ + (5 * ONE_MONTH);
+            uint256 seventhMonthTimestamp_ = boughtBlockTimestamp_ + (6 * ONE_MONTH);
+            uint256 eighthMonthTimestamp_ = boughtBlockTimestamp_ + (7 * ONE_MONTH);
+            uint256 ninthMonthTimestamp_ = boughtBlockTimestamp_ + (8 * ONE_MONTH);
+
             // missed 2nd installment and 23% not paid
             // or
             // missed 3rd installment and 34% not paid
