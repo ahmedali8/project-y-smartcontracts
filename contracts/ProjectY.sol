@@ -18,6 +18,54 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     uint64 public biddingPeriod = 7 days;
 
+    enum InstallmentPlan {
+        None, // no installment
+        ThreeMonths,
+        SixMonths,
+        NineMonths
+    }
+
+    enum InstallmentPhase {
+        None,
+        First,
+        Second,
+        Third,
+        Fourth,
+        Fifth,
+        Sixth,
+        Seventh,
+        Eighth,
+        Ninth
+    }
+
+    struct SellerInfo {
+        bool onSale;
+        address sellerAddress;
+        address contractAddress;
+        uint64 timestamp;
+        uint256 tokenId;
+        uint256 sellingPrice;
+        uint256 totalBids;
+        uint256 selectedBidId;
+        InstallmentPlan installment;
+    }
+
+    struct BuyerInfo {
+        bool isSelected;
+        address buyerAddress;
+        uint64 timestamp;
+        uint256 bidPrice;
+        uint256 entryId;
+        uint256 pricePaid; // initially equal to downpayment
+        InstallmentPlan bidInstallment;
+    }
+
+    // entryId -> SellerInfo
+    mapping(uint256 => SellerInfo) internal _sellerInfo;
+
+    // bidId -> BuyerInfo
+    mapping(uint256 => BuyerInfo) public _buyerInfo;
+
     event Sell(
         address indexed seller,
         address indexed contractAddress,
@@ -35,26 +83,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     event BidSelected(uint256 indexed bidId, uint256 indexed entryId);
 
-    enum InstallmentPlan {
-        None, // no installment
-        ThreeMonths,
-        SixMonths,
-        NineMonths
+    constructor(address owner_) Owned(owner_) {
+        // solhint-disable-previous-line no-empty-blocks
     }
-
-    struct SellerInfo {
-        bool onSale;
-        address sellerAddress;
-        address contractAddress;
-        uint64 timestamp;
-        uint256 tokenId;
-        uint256 sellingPrice;
-        uint256 totalBids;
-        uint256 selectedBidId;
-        InstallmentPlan installment;
-    }
-    // entryId -> SellerInfo
-    mapping(uint256 => SellerInfo) internal _sellerInfo;
 
     function sellerOnSale(uint256 entryId_) public view returns (bool) {
         isEntryIdValid(entryId_);
@@ -101,67 +132,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
         return _sellerInfo[entryId_].installment;
     }
 
-    struct BuyerInfo {
-        bool isSelected;
-        address buyerAddress;
-        uint64 timestamp;
-        uint256 bidPrice;
-        uint256 entryId;
-        uint256 pricePaid; // initially equal to downpayment
-        InstallmentPlan bidInstallment;
-    }
-    // bidId -> BuyerInfo
-    mapping(uint256 => BuyerInfo) public _buyerInfo;
-
-    function downPayment(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
-        isEntryIdValid(entryId_);
-        isBidIdValid(bidId_);
-
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
-
-        require(buyerInfo_.pricePaid == 0, "ProjectY: Down payment done");
-
-        InstallmentPlan installment_ = buyerInfo_.bidInstallment;
-        uint256 bidPrice_ = buyerInfo_.bidPrice;
-
-        if (installment_ == InstallmentPlan.ThreeMonths) {
-            return (bidPrice_ * 34) / 100; // 34%
-        } else if (installment_ == InstallmentPlan.SixMonths) {
-            return (bidPrice_ * 175) / 1000; // 17.5%
-        } else if (installment_ == InstallmentPlan.NineMonths) {
-            return (bidPrice_ * 12) / 100; // 12%
-        } else {
-            return bidPrice_;
-        }
-    }
-
-    function currentInstallmentToBePaid(uint256 entryId_) public view returns (uint256) {
-        isEntryIdValid(entryId_);
-        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
-
-        uint256 bidId_ = sellerInfo_.selectedBidId;
-        isBidIdValid(bidId_);
-
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
-
-        if (buyerInfo_.bidPrice == buyerInfo_.pricePaid) {
-            return 0;
-        }
-
-        InstallmentPlan installment_ = buyerInfo_.bidInstallment;
-        uint256 bidPrice_ = buyerInfo_.bidPrice;
-
-        if (installment_ == InstallmentPlan.ThreeMonths) {
-            return (bidPrice_ * 33) / 100; // 33%
-        } else if (installment_ == InstallmentPlan.SixMonths) {
-            return (bidPrice_ * 165) / 1000; // 16.5%
-        } else if (installment_ == InstallmentPlan.NineMonths) {
-            return (bidPrice_ * 11) / 100; // 11%
-        } else {
-            return 0; // InstallmentPlan.None
-        }
-    }
-
     function buyerIsSelected(uint256 bidId_) public view returns (bool) {
         isBidIdValid(bidId_);
         return _buyerInfo[bidId_].isSelected;
@@ -195,10 +165,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function buyerBidInstallment(uint256 bidId_) public view returns (InstallmentPlan) {
         isBidIdValid(bidId_);
         return _buyerInfo[bidId_].bidInstallment;
-    }
-
-    constructor(address owner_) Owned(owner_) {
-        // solhint-disable-previous-line no-empty-blocks
     }
 
     function totalEntryIds() public view returns (uint256) {
@@ -329,6 +295,148 @@ contract ProjectY is Context, Owned, ERC721Holder {
         emit BidSelected(bidId_, entryId_);
     }
 
+    function downPayment(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
+        isEntryIdValid(entryId_);
+        isBidIdValid(bidId_);
+
+        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+
+        require(buyerInfo_.pricePaid == 0, "ProjectY: Down payment done");
+
+        InstallmentPlan installment_ = buyerInfo_.bidInstallment;
+        uint256 bidPrice_ = buyerInfo_.bidPrice;
+
+        if (installment_ == InstallmentPlan.ThreeMonths) {
+            return (bidPrice_ * 34) / 100; // 34%
+        } else if (installment_ == InstallmentPlan.SixMonths) {
+            return (bidPrice_ * 175) / 1000; // 17.5%
+        } else if (installment_ == InstallmentPlan.NineMonths) {
+            return (bidPrice_ * 12) / 100; // 12%
+        } else {
+            return bidPrice_;
+        }
+    }
+
+    function currentInstallmentToBePaid(uint256 entryId_) public view returns (uint256) {
+        isEntryIdValid(entryId_);
+        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
+
+        uint256 bidId_ = sellerInfo_.selectedBidId;
+        isBidIdValid(bidId_);
+
+        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+
+        if (buyerInfo_.bidPrice == buyerInfo_.pricePaid) {
+            return 0;
+        }
+
+        InstallmentPlan installment_ = buyerInfo_.bidInstallment;
+        uint256 bidPrice_ = buyerInfo_.bidPrice;
+
+        if (installment_ == InstallmentPlan.ThreeMonths) {
+            return (bidPrice_ * 33) / 100; // 33%
+        } else if (installment_ == InstallmentPlan.SixMonths) {
+            return (bidPrice_ * 165) / 1000; // 16.5%
+        } else if (installment_ == InstallmentPlan.NineMonths) {
+            return (bidPrice_ * 11) / 100; // 11%
+        } else {
+            return 0; // InstallmentPlan.None
+        }
+    }
+
+    function getInstallmentPhase(uint256 bidId_) public view returns (InstallmentPhase) {
+        // assuming no revert
+
+        uint64 blockTimestamp_ = uint64(block.timestamp);
+        uint64 firstMonthTimestamp_ = _buyerInfo[bidId_].timestamp;
+        InstallmentPlan installment_ = _buyerInfo[bidId_].bidInstallment;
+
+        uint256 secondMonthTimestamp_ = firstMonthTimestamp_ + ONE_MONTH;
+        uint256 thirdMonthTimestamp_ = firstMonthTimestamp_ + (2 * ONE_MONTH);
+        uint256 fourthMonthTimestamp_ = firstMonthTimestamp_ + (3 * ONE_MONTH);
+        uint256 fifthMonthTimestamp_ = firstMonthTimestamp_ + (4 * ONE_MONTH);
+        uint256 sixthMonthTimestamp_ = firstMonthTimestamp_ + (5 * ONE_MONTH);
+        uint256 seventhMonthTimestamp_ = firstMonthTimestamp_ + (6 * ONE_MONTH);
+        uint256 eighthMonthTimestamp_ = firstMonthTimestamp_ + (7 * ONE_MONTH);
+        uint256 ninthMonthTimestamp_ = firstMonthTimestamp_ + (8 * ONE_MONTH);
+
+        if (installment_ == InstallmentPlan.ThreeMonths) {
+            if (blockTimestamp_ > thirdMonthTimestamp_) {
+                return InstallmentPhase.Third;
+            }
+
+            if (blockTimestamp_ > secondMonthTimestamp_) {
+                return InstallmentPhase.Second;
+            }
+
+            if (blockTimestamp_ > firstMonthTimestamp_) {
+                return InstallmentPhase.First;
+            }
+        } else if (installment_ == InstallmentPlan.SixMonths) {
+            if (blockTimestamp_ > sixthMonthTimestamp_) {
+                return InstallmentPhase.Sixth;
+            }
+
+            if (blockTimestamp_ > fifthMonthTimestamp_) {
+                return InstallmentPhase.Fifth;
+            }
+
+            if (blockTimestamp_ > fourthMonthTimestamp_) {
+                return InstallmentPhase.Fourth;
+            }
+
+            if (blockTimestamp_ > thirdMonthTimestamp_) {
+                return InstallmentPhase.Third;
+            }
+
+            if (blockTimestamp_ > secondMonthTimestamp_) {
+                return InstallmentPhase.Second;
+            }
+
+            if (blockTimestamp_ > firstMonthTimestamp_) {
+                return InstallmentPhase.First;
+            }
+        } else if (installment_ == InstallmentPlan.NineMonths) {
+            if (blockTimestamp_ > ninthMonthTimestamp_) {
+                return InstallmentPhase.Ninth;
+            }
+
+            if (blockTimestamp_ > eighthMonthTimestamp_) {
+                return InstallmentPhase.Eighth;
+            }
+
+            if (blockTimestamp_ > seventhMonthTimestamp_) {
+                return InstallmentPhase.Seventh;
+            }
+
+            if (blockTimestamp_ > sixthMonthTimestamp_) {
+                return InstallmentPhase.Sixth;
+            }
+
+            if (blockTimestamp_ > fifthMonthTimestamp_) {
+                return InstallmentPhase.Fifth;
+            }
+
+            if (blockTimestamp_ > fourthMonthTimestamp_) {
+                return InstallmentPhase.Fourth;
+            }
+
+            if (blockTimestamp_ > thirdMonthTimestamp_) {
+                return InstallmentPhase.Third;
+            }
+
+            if (blockTimestamp_ > secondMonthTimestamp_) {
+                return InstallmentPhase.Second;
+            }
+
+            if (blockTimestamp_ > firstMonthTimestamp_) {
+                return InstallmentPhase.First;
+            }
+        }
+
+        return InstallmentPhase.None;
+    }
+
     function payInstallment(uint256 entryId_) public payable {
         uint256 value_ = msg.value;
 
@@ -336,110 +444,15 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         uint256 bidId_ = _sellerInfo[entryId_].selectedBidId;
         require(bidId_ != 0, "ProjectY: BidId not selected");
+
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
         require(buyerInfo_.buyerAddress == _msgSender(), "ProjectY: Buyer must be caller");
 
-        InstallmentPlan installment_ = buyerInfo_.bidInstallment;
         uint256 bidPrice_ = buyerInfo_.bidPrice;
         uint256 pricePaid_ = buyerInfo_.pricePaid;
-        uint64 boughtBlockTimestamp_ = buyerInfo_.timestamp;
-        uint64 blockTimestamp_ = uint64(block.timestamp);
 
         require(pricePaid_ != bidPrice_, "ProjectY: installment complete");
-
-        uint256 secondMonthTimestamp_ = boughtBlockTimestamp_ + ONE_MONTH;
-        uint256 thirdMonthTimestamp_ = boughtBlockTimestamp_ + (2 * ONE_MONTH);
-        uint256 fourthMonthTimestamp_ = boughtBlockTimestamp_ + (3 * ONE_MONTH);
-        uint256 fifthMonthTimestamp_ = boughtBlockTimestamp_ + (4 * ONE_MONTH);
-        uint256 sixthMonthTimestamp_ = boughtBlockTimestamp_ + (5 * ONE_MONTH);
-        uint256 seventhMonthTimestamp_ = boughtBlockTimestamp_ + (6 * ONE_MONTH);
-        uint256 eighthMonthTimestamp_ = boughtBlockTimestamp_ + (7 * ONE_MONTH);
-        uint256 ninthMonthTimestamp_ = boughtBlockTimestamp_ + (8 * ONE_MONTH);
-
-        // if (installment_ == InstallmentPlan.ThreeMonths) {
-        //     // missed 2nd installment and 67% not paid
-        //     // or
-        //     // missed 3rd installment and 100% not paid
-        //     if (
-        //         (blockTimestamp_ > secondMonthTimestamp_ &&
-        //             blockTimestamp_ < thirdMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 67) / 100) ||
-        //         (blockTimestamp_ > thirdMonthTimestamp_ && pricePaid_ != bidPrice_)
-        //     ) {
-        //         // revert
-        //         revert("projectY: ");
-        //     }
-        // } else if (installment_ == InstallmentPlan.SixMonths) {
-        //     // missed 2nd installment and 34% not paid
-        //     // or
-        //     // missed 3rd installment and 50.5% not paid
-        //     // or
-        //     // missed 4th installment and 67% not paid
-        //     // or
-        //     // missed 5th installment and 83.5% not paid
-        //     // or
-        //     // missed 6th installment and 100% not paid
-        //     if (
-        //         (blockTimestamp_ > secondMonthTimestamp_ &&
-        //             blockTimestamp_ < thirdMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 34) / 100) ||
-        //         (blockTimestamp_ > thirdMonthTimestamp_ &&
-        //             blockTimestamp_ < fourthMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 505) / 1000) ||
-        //         (blockTimestamp_ > fourthMonthTimestamp_ &&
-        //             blockTimestamp_ < fifthMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 67) / 100) ||
-        //         (blockTimestamp_ > fifthMonthTimestamp_ &&
-        //             blockTimestamp_ < sixthMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 835) / 1000) ||
-        //         (blockTimestamp_ > sixthMonthTimestamp_ && pricePaid_ != bidPrice_)
-        //     ) {
-        //         // revert
-        //     }
-        // } else if (installment_ == InstallmentPlan.NineMonths) {
-        //     // missed 2nd installment and 23% not paid
-        //     // or
-        //     // missed 3rd installment and 34% not paid
-        //     // or
-        //     // missed 4th installment and 45% not paid
-        //     // or
-        //     // missed 5th installment and 56% not paid
-        //     // or
-        //     // missed 6th installment and 67% not paid
-        //     // or
-        //     // missed 7th installment and 78% not paid
-        //     // or
-        //     // missed 8th installment and 89% not paid
-        //     // or
-        //     // missed 9th installment and 100% not paid
-        //     if (
-        //         (blockTimestamp_ > secondMonthTimestamp_ &&
-        //             blockTimestamp_ < thirdMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 23) / 100) ||
-        //         (blockTimestamp_ > thirdMonthTimestamp_ &&
-        //             blockTimestamp_ < fourthMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 34) / 100) ||
-        //         (blockTimestamp_ > fourthMonthTimestamp_ &&
-        //             blockTimestamp_ < fifthMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 45) / 100) ||
-        //         (blockTimestamp_ > fifthMonthTimestamp_ &&
-        //             blockTimestamp_ < sixthMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 56) / 100) ||
-        //         (blockTimestamp_ > sixthMonthTimestamp_ &&
-        //             blockTimestamp_ < seventhMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 67) / 100) ||
-        //         (blockTimestamp_ > seventhMonthTimestamp_ &&
-        //             blockTimestamp_ < eighthMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 78) / 100) ||
-        //         (blockTimestamp_ > eighthMonthTimestamp_ &&
-        //             blockTimestamp_ < ninthMonthTimestamp_ &&
-        //             pricePaid_ != (bidPrice_ * 89) / 100) ||
-        //         (blockTimestamp_ > ninthMonthTimestamp_ && pricePaid_ != bidPrice_)
-        //     ) {
-        //         // revert
-        //     }
-        // }
 
         uint256 installmentPayment_ = currentInstallmentToBePaid(entryId_);
 
@@ -488,24 +501,36 @@ contract ProjectY is Context, Owned, ERC721Holder {
         Address.sendValue(payable(buyer_), pricePaid_);
     }
 
+    function getPaymentOfPhase(
+        uint256 entryId_,
+        uint256 bidId_,
+        InstallmentPhase installmentPhase_
+    ) public view returns (uint256) {
+        return
+            downPayment(entryId_, bidId_) +
+            (uint256(installmentPhase_) * currentInstallmentToBePaid(entryId_));
+    }
+
     function liquidate(uint256 entryId_) public payable {
         uint256 value_ = msg.value;
+
         isEntryIdValid(entryId_);
         SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
 
         uint256 bidId_ = sellerInfo_.selectedBidId;
         isBidIdValid(bidId_);
-
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
-        uint64 boughtBlockTimestamp_ = buyerInfo_.timestamp;
-        InstallmentPlan installment_ = buyerInfo_.bidInstallment;
-        uint256 bidPrice_ = buyerInfo_.bidPrice;
-        uint256 pricePaid_ = buyerInfo_.pricePaid;
+        InstallmentPhase installmentPhase_ = getInstallmentPhase(bidId_);
         address oldbuyer_ = buyerInfo_.buyerAddress;
-        uint256 priceToBePaidByLiquidator_ = (pricePaid_ * 95) / 100;
-
+        uint256 priceToBePaidByLiquidator_ = (buyerInfo_.pricePaid * 95) / 100;
         uint256 currentInstallmentToBePaid_ = currentInstallmentToBePaid(entryId_);
+
+        // second phase me agr second payment done nhi he
+        uint256 paymentOfPhase_ = getPaymentOfPhase(entryId_, bidId_, installmentPhase_);
+
+        require(paymentOfPhase_ != buyerInfo_.pricePaid, "ProjectY: Phase price paid");
+
         require(
             currentInstallmentToBePaid_ != 0,
             "ProjectY: no liquidate opportunity as no installment left"
@@ -516,123 +541,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
             "ProjectY: value must be equal to 95% pricePaid by old buyer"
         );
 
-        uint64 blockTimestamp_ = uint64(block.timestamp);
+        // update new buyer
+        _buyerInfo[bidId_].buyerAddress = _msgSender();
 
-        if (installment_ == InstallmentPlan.ThreeMonths) {
-            uint256 secondMonthTimestamp_ = boughtBlockTimestamp_ + ONE_MONTH;
-            uint256 thirdMonthTimestamp_ = boughtBlockTimestamp_ + (2 * ONE_MONTH);
-
-            // missed 2nd installment and 67% not paid
-            // or
-            // missed 3rd installment and 100% not paid
-            if (
-                // missed 2nd installment and 67% not paid
-                (blockTimestamp_ > secondMonthTimestamp_ &&
-                    blockTimestamp_ < thirdMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 67) / 100) ||
-                // or
-                // missed 3rd installment and 100% not paid
-                (blockTimestamp_ > thirdMonthTimestamp_ && pricePaid_ != bidPrice_)
-            ) {
-                // update new buyer
-                _buyerInfo[bidId_].buyerAddress = _msgSender();
-
-                // transfer 95% of pricePaid to old buyer
-                Address.sendValue(payable(oldbuyer_), priceToBePaidByLiquidator_);
-            }
-        } else if (installment_ == InstallmentPlan.SixMonths) {
-            uint256 secondMonthTimestamp_ = boughtBlockTimestamp_ + ONE_MONTH;
-            uint256 thirdMonthTimestamp_ = boughtBlockTimestamp_ + (2 * ONE_MONTH);
-            uint256 fourthMonthTimestamp_ = boughtBlockTimestamp_ + (3 * ONE_MONTH);
-            uint256 fifthMonthTimestamp_ = boughtBlockTimestamp_ + (4 * ONE_MONTH);
-            uint256 sixthMonthTimestamp_ = boughtBlockTimestamp_ + (5 * ONE_MONTH);
-
-            // missed 2nd installment and 34% not paid
-            // or
-            // missed 3rd installment and 50.5% not paid
-            // or
-            // missed 4th installment and 67% not paid
-            // or
-            // missed 5th installment and 83.5% not paid
-            // or
-            // missed 6th installment and 100% not paid
-            if (
-                (blockTimestamp_ > secondMonthTimestamp_ &&
-                    blockTimestamp_ < thirdMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 34) / 100) ||
-                (blockTimestamp_ > thirdMonthTimestamp_ &&
-                    blockTimestamp_ < fourthMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 505) / 1000) ||
-                (blockTimestamp_ > fourthMonthTimestamp_ &&
-                    blockTimestamp_ < fifthMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 67) / 100) ||
-                (blockTimestamp_ > fifthMonthTimestamp_ &&
-                    blockTimestamp_ < sixthMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 835) / 1000) ||
-                (blockTimestamp_ > sixthMonthTimestamp_ && pricePaid_ != bidPrice_)
-            ) {
-                // update new buyer
-                _buyerInfo[bidId_].buyerAddress = _msgSender();
-
-                // transfer 95% of pricePaid to old buyer
-                Address.sendValue(payable(oldbuyer_), priceToBePaidByLiquidator_);
-            }
-        } else if (installment_ == InstallmentPlan.NineMonths) {
-            uint256 secondMonthTimestamp_ = boughtBlockTimestamp_ + ONE_MONTH;
-            uint256 thirdMonthTimestamp_ = boughtBlockTimestamp_ + (2 * ONE_MONTH);
-            uint256 fourthMonthTimestamp_ = boughtBlockTimestamp_ + (3 * ONE_MONTH);
-            uint256 fifthMonthTimestamp_ = boughtBlockTimestamp_ + (4 * ONE_MONTH);
-            uint256 sixthMonthTimestamp_ = boughtBlockTimestamp_ + (5 * ONE_MONTH);
-            uint256 seventhMonthTimestamp_ = boughtBlockTimestamp_ + (6 * ONE_MONTH);
-            uint256 eighthMonthTimestamp_ = boughtBlockTimestamp_ + (7 * ONE_MONTH);
-            uint256 ninthMonthTimestamp_ = boughtBlockTimestamp_ + (8 * ONE_MONTH);
-
-            // missed 2nd installment and 23% not paid
-            // or
-            // missed 3rd installment and 34% not paid
-            // or
-            // missed 4th installment and 45% not paid
-            // or
-            // missed 5th installment and 56% not paid
-            // or
-            // missed 6th installment and 67% not paid
-            // or
-            // missed 7th installment and 78% not paid
-            // or
-            // missed 8th installment and 89% not paid
-            // or
-            // missed 9th installment and 100% not paid
-            if (
-                (blockTimestamp_ > secondMonthTimestamp_ &&
-                    blockTimestamp_ < thirdMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 23) / 100) ||
-                (blockTimestamp_ > thirdMonthTimestamp_ &&
-                    blockTimestamp_ < fourthMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 34) / 100) ||
-                (blockTimestamp_ > fourthMonthTimestamp_ &&
-                    blockTimestamp_ < fifthMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 45) / 100) ||
-                (blockTimestamp_ > fifthMonthTimestamp_ &&
-                    blockTimestamp_ < sixthMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 56) / 100) ||
-                (blockTimestamp_ > sixthMonthTimestamp_ &&
-                    blockTimestamp_ < seventhMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 67) / 100) ||
-                (blockTimestamp_ > seventhMonthTimestamp_ &&
-                    blockTimestamp_ < eighthMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 78) / 100) ||
-                (blockTimestamp_ > eighthMonthTimestamp_ &&
-                    blockTimestamp_ < ninthMonthTimestamp_ &&
-                    pricePaid_ != (bidPrice_ * 89) / 100) ||
-                (blockTimestamp_ > ninthMonthTimestamp_ && pricePaid_ != bidPrice_)
-            ) {
-                // update new buyer
-                _buyerInfo[bidId_].buyerAddress = _msgSender();
-
-                // transfer 95% of pricePaid to old buyer
-                Address.sendValue(payable(oldbuyer_), priceToBePaidByLiquidator_);
-            }
-        }
+        // transfer 95% of pricePaid to old buyer
+        Address.sendValue(payable(oldbuyer_), priceToBePaidByLiquidator_);
     }
 
     function setBiddingPeriod(uint64 biddingPeriod_) public onlyOwner {
