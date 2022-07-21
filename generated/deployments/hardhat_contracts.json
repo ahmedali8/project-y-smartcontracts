@@ -1,11 +1,11 @@
 {
-  "31337": [
+  "4": [
     {
-      "name": "hardhat",
-      "chainId": "31337",
+      "name": "rinkeby",
+      "chainId": "4",
       "contracts": {
         "ProjectY": {
-          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          "address": "0xe827d6d46e4171A281351eAb5d59093586c97f9F",
           "abi": [
             {
               "inputs": [
@@ -126,32 +126,6 @@
             },
             {
               "inputs": [],
-              "name": "BIDDING_PERIOD",
-              "outputs": [
-                {
-                  "internalType": "uint64",
-                  "name": "",
-                  "type": "uint64"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "NFT_LOCKING_PERIOD",
-              "outputs": [
-                {
-                  "internalType": "uint64",
-                  "name": "",
-                  "type": "uint64"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [],
               "name": "ONE_MONTH",
               "outputs": [
                 {
@@ -202,6 +176,11 @@
                   "internalType": "uint256",
                   "name": "pricePaid",
                   "type": "uint256"
+                },
+                {
+                  "internalType": "enum ProjectY.InstallmentPlan",
+                  "name": "bidInstallment",
+                  "type": "uint8"
                 }
               ],
               "stateMutability": "view",
@@ -218,6 +197,11 @@
                   "internalType": "uint256",
                   "name": "bidPrice_",
                   "type": "uint256"
+                },
+                {
+                  "internalType": "enum ProjectY.InstallmentPlan",
+                  "name": "installment_",
+                  "type": "uint8"
                 }
               ],
               "name": "bid",
@@ -229,6 +213,19 @@
                 }
               ],
               "stateMutability": "payable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "biddingPeriod",
+              "outputs": [
+                {
+                  "internalType": "uint64",
+                  "name": "",
+                  "type": "uint64"
+                }
+              ],
+              "stateMutability": "view",
               "type": "function"
             },
             {
@@ -245,6 +242,25 @@
                   "internalType": "address",
                   "name": "",
                   "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "bidId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "buyerBidInstallment",
+              "outputs": [
+                {
+                  "internalType": "enum ProjectY.InstallmentPlan",
+                  "name": "",
+                  "type": "uint8"
                 }
               ],
               "stateMutability": "view",
@@ -349,6 +365,97 @@
               "inputs": [
                 {
                   "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "currentInstallmentToBePaid",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "bidId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "downPayment",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "bidId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getInstallmentPhase",
+              "outputs": [
+                {
+                  "internalType": "enum ProjectY.InstallmentPhase",
+                  "name": "",
+                  "type": "uint8"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "bidId_",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "enum ProjectY.InstallmentPhase",
+                  "name": "installmentPhase_",
+                  "type": "uint8"
+                }
+              ],
+              "name": "getPaymentOfPhase",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
                   "name": "bidId_",
                   "type": "uint256"
                 }
@@ -381,6 +488,19 @@
                 }
               ],
               "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "liquidate",
+              "outputs": [],
+              "stateMutability": "payable",
               "type": "function"
             },
             {
@@ -472,6 +592,11 @@
                   "internalType": "uint256",
                   "name": "sellingPrice_",
                   "type": "uint256"
+                },
+                {
+                  "internalType": "enum ProjectY.InstallmentPlan",
+                  "name": "installment_",
+                  "type": "uint8"
                 }
               ],
               "name": "sell",
@@ -518,6 +643,25 @@
                   "internalType": "address",
                   "name": "",
                   "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "sellerInstallment",
+              "outputs": [
+                {
+                  "internalType": "enum ProjectY.InstallmentPlan",
+                  "name": "",
+                  "type": "uint8"
                 }
               ],
               "stateMutability": "view",
@@ -640,12 +784,12 @@
             {
               "inputs": [
                 {
-                  "internalType": "address",
-                  "name": "newOwner",
-                  "type": "address"
+                  "internalType": "uint64",
+                  "name": "biddingPeriod_",
+                  "type": "uint64"
                 }
               ],
-              "name": "setOwner",
+              "name": "setBiddingPeriod",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
@@ -653,12 +797,12 @@
             {
               "inputs": [
                 {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
+                  "internalType": "address",
+                  "name": "newOwner",
+                  "type": "address"
                 }
               ],
-              "name": "slash",
+              "name": "setOwner",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
@@ -693,11 +837,11 @@
               "inputs": [
                 {
                   "internalType": "uint256",
-                  "name": "entryId_",
+                  "name": "bidId_",
                   "type": "uint256"
                 }
               ],
-              "name": "withdraw",
+              "name": "withdrawBid",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
