@@ -12,21 +12,56 @@ contract Utils is Test {
         return user;
     }
 
-    // create users with 100 ETH balance each
-    function createUsers(uint256 userNum) external returns (address payable[] memory) {
+    /// @dev create user with `bal` balance
+    function createUser(uint256 bal) public returns (address payable) {
+        address payable user = this.getNextUserAddress();
+        vm.deal(user, bal);
+        return user;
+    }
+
+    /// @dev create user with 100 eth balance
+    function createUser() public returns (address payable) {
+        return this.createUser(100 ether);
+    }
+
+    /// @dev create named user with `bal` balance
+    function createNamedUser(string memory name, uint256 bal) public returns (address payable) {
+        address payable user = payable(
+            address(uint160(uint256(keccak256(abi.encodePacked(name)))))
+        );
+        vm.label(user, name);
+        vm.deal(user, bal);
+        return user;
+    }
+
+    /// @dev create named user with 100 eth balance
+    function createNamedUser(string memory name) public returns (address payable) {
+        return this.createNamedUser(name, 100 ether);
+    }
+
+    /// @dev create users with 100 ETH balance each
+    function createUsers(uint256 userNum) public returns (address payable[] memory) {
         address payable[] memory users = new address payable[](userNum);
         for (uint256 i = 0; i < userNum; i++) {
-            address payable user = this.getNextUserAddress();
-            vm.deal(user, 100 ether);
-            users[i] = user;
+            users[i] = this.createUser();
         }
 
         return users;
     }
 
-    // move block.number forward by a given number of blocks
+    /// @dev move block.number forward by a given number of blocks
     function mineBlocks(uint256 numBlocks) external {
         uint256 targetBlock = block.number + numBlocks;
         vm.roll(targetBlock);
+    }
+
+    /// @dev to wei converter
+    function toWei(uint256 value) public pure returns (uint256) {
+        return value * 1e18;
+    }
+
+    /// @dev to wei converter with custom 'decimals'
+    function toWei(uint256 value, uint256 decimals) public pure returns (uint256) {
+        return value * 1**decimals;
     }
 }
