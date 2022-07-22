@@ -9,20 +9,6 @@ export enum ERC721__Errors {
   CallerIsNotTokenOwnerNorApproved = "ERC721: caller is not token owner nor approved",
 }
 
-export enum ERC721Enumerable__Errors {
-  OwnerIndexOutOfBounds = "ERC721Enumerable: owner index out of bounds",
-  GlobalIndexOutOfBounds = "ERC721Enumerable: global index out of bounds",
-}
-
-export enum ERC4907__Errors {
-  InvalidExpires = "ERC4907: Invalid expires",
-}
-
-export enum WNFT__Errors {
-  NotAllowedToTransferToken = "WNFT: Not allowed to transfer token",
-  CannotBurnBeforeExpires = "WNFT: Cannot burn before expires",
-}
-
 export enum Owned__Errors {
   Unauthorized = "UNAUTHORIZED",
 }

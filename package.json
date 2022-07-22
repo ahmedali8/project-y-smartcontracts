@@ -79,7 +79,6 @@
     "chai": "4.3.6",
     "chalk": "^4.1.2",
     "child_process": "^1.0.2",
-    "commander": "^9.4.0",
     "commitizen": "^4.2.5",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
