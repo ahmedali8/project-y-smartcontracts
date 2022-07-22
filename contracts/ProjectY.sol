@@ -17,6 +17,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
     uint64 public constant ONE_MONTH = 30 days;
 
     uint64 public biddingPeriod = 7 days;
+    uint64 public gracePeriod = 7 days;
 
     enum InstallmentPlan {
         None, // no installment
@@ -25,23 +26,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
         NineMonths
     }
 
-    enum InstallmentPhase {
-        None,
-        First,
-        Second,
-        Third,
-        Fourth,
-        Fifth,
-        Sixth,
-        Seventh,
-        Eighth,
-        Ninth
-    }
-
     struct SellerInfo {
         bool onSale;
         address sellerAddress;
         address contractAddress;
+        uint8 installmentsPaid;
         uint64 timestamp;
         uint256 tokenId;
         uint256 sellingPrice;
@@ -87,91 +76,96 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // solhint-disable-previous-line no-empty-blocks
     }
 
-    function sellerOnSale(uint256 entryId_) public view returns (bool) {
+    function getSellerOnSale(uint256 entryId_) public view returns (bool) {
         isEntryIdValid(entryId_);
         return _sellerInfo[entryId_].onSale;
     }
 
-    function sellerAddress(uint256 entryId_) public view returns (address) {
+    function getSellerAddress(uint256 entryId_) public view returns (address) {
         isEntryIdValid(entryId_);
         return _sellerInfo[entryId_].sellerAddress;
     }
 
-    function sellerContractAddress(uint256 entryId_) public view returns (address) {
+    function getSellerContractAddress(uint256 entryId_) public view returns (address) {
         isEntryIdValid(entryId_);
         return _sellerInfo[entryId_].contractAddress;
     }
 
-    function sellerTimestamp(uint256 entryId_) public view returns (uint64) {
+    function getSellerTimestamp(uint256 entryId_) public view returns (uint64) {
         isEntryIdValid(entryId_);
         return _sellerInfo[entryId_].timestamp;
     }
 
-    function sellerTokenId(uint256 entryId_) public view returns (uint256) {
+    function getSellerTokenId(uint256 entryId_) public view returns (uint256) {
         isEntryIdValid(entryId_);
         return _sellerInfo[entryId_].tokenId;
     }
 
-    function sellerSellingPrice(uint256 entryId_) public view returns (uint256) {
+    function getSellerSellingPrice(uint256 entryId_) public view returns (uint256) {
         isEntryIdValid(entryId_);
         return _sellerInfo[entryId_].sellingPrice;
     }
 
-    function sellerTotalBids(uint256 entryId_) public view returns (uint256) {
+    function getSellerTotalBids(uint256 entryId_) public view returns (uint256) {
         isEntryIdValid(entryId_);
         return _sellerInfo[entryId_].totalBids;
     }
 
-    function sellerSelectedBidId(uint256 entryId_) public view returns (uint256) {
+    function getSellerSelectedBidId(uint256 entryId_) public view returns (uint256) {
         isEntryIdValid(entryId_);
         return _sellerInfo[entryId_].selectedBidId;
     }
 
-    function sellerInstallment(uint256 entryId_) public view returns (InstallmentPlan) {
+    function getSellerInstallmentsPaid(uint256 entryId_) public view returns (uint8) {
+        isEntryIdValid(entryId_);
+        return _sellerInfo[entryId_].installmentsPaid;
+    }
+
+    function getSellerInstallment(uint256 entryId_) public view returns (InstallmentPlan) {
         isEntryIdValid(entryId_);
         return _sellerInfo[entryId_].installment;
     }
 
-    function buyerIsSelected(uint256 bidId_) public view returns (bool) {
+    function getBuyerIsSelected(uint256 bidId_) public view returns (bool) {
         isBidIdValid(bidId_);
         return _buyerInfo[bidId_].isSelected;
     }
 
-    function buyerAddress(uint256 bidId_) public view returns (address) {
+    function getBuyerAddress(uint256 bidId_) public view returns (address) {
         isBidIdValid(bidId_);
         return _buyerInfo[bidId_].buyerAddress;
     }
 
-    function buyerTimestamp(uint256 bidId_) public view returns (uint64) {
+    function getBuyerTimestamp(uint256 bidId_) public view returns (uint64) {
         isBidIdValid(bidId_);
         return _buyerInfo[bidId_].timestamp;
     }
 
-    function buyerBidPrice(uint256 bidId_) public view returns (uint256) {
+    function getBuyerBidPrice(uint256 bidId_) public view returns (uint256) {
         isBidIdValid(bidId_);
         return _buyerInfo[bidId_].bidPrice;
     }
 
-    function buyerEntryId(uint256 bidId_) public view returns (uint256) {
+    function getBuyerEntryId(uint256 bidId_) public view returns (uint256) {
         isBidIdValid(bidId_);
         return _buyerInfo[bidId_].entryId;
     }
 
-    function buyerPricePaid(uint256 bidId_) public view returns (uint256) {
+    function getBuyerPricePaid(uint256 bidId_) public view returns (uint256) {
         isBidIdValid(bidId_);
         return _buyerInfo[bidId_].pricePaid;
     }
 
-    function buyerBidInstallment(uint256 bidId_) public view returns (InstallmentPlan) {
+    function getBuyerBidInstallment(uint256 bidId_) public view returns (InstallmentPlan) {
         isBidIdValid(bidId_);
         return _buyerInfo[bidId_].bidInstallment;
     }
 
-    function totalEntryIds() public view returns (uint256) {
+    function getTotalEntryIds() public view returns (uint256) {
         return _entryIdTracker.current();
     }
 
-    function totalBidIds() public view returns (uint256) {
+    function getTotalBidIds() public view returns (uint256) {
         return _bidIdTracker.current();
     }
 
@@ -187,6 +181,84 @@ contract ProjectY is Context, Owned, ERC721Holder {
             isValid_ = (_buyerInfo[bidId_].buyerAddress != address(0)),
             "ProjectY: Invalid bidId"
         );
+    }
+
+    function getDownPayment(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
+        isEntryIdValid(entryId_);
+        isBidIdValid(bidId_);
+
+        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+
+        require(buyerInfo_.pricePaid == 0, "ProjectY: Down payment done");
+
+        InstallmentPlan installment_ = buyerInfo_.bidInstallment;
+        uint256 bidPrice_ = buyerInfo_.bidPrice;
+
+        if (installment_ == InstallmentPlan.ThreeMonths) {
+            return (bidPrice_ * 34) / 100; // 34%
+        } else if (installment_ == InstallmentPlan.SixMonths) {
+            return (bidPrice_ * 175) / 1000; // 17.5%
+        } else if (installment_ == InstallmentPlan.NineMonths) {
+            return (bidPrice_ * 12) / 100; // 12%
+        } else {
+            return bidPrice_; // InstallmentPlan.None
+        }
+    }
+
+    function getInstallmentPerMonth(uint256 entryId_) public view returns (uint256) {
+        isEntryIdValid(entryId_);
+        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
+
+        uint256 bidId_ = sellerInfo_.selectedBidId;
+        isBidIdValid(bidId_);
+
+        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+
+        InstallmentPlan installment_ = buyerInfo_.bidInstallment;
+
+        if (buyerInfo_.bidPrice == buyerInfo_.pricePaid) {
+            return 0;
+        }
+
+        if (installment_ == InstallmentPlan.ThreeMonths) {
+            return (buyerInfo_.bidPrice * 33) / 100; // 33%
+        } else if (installment_ == InstallmentPlan.SixMonths) {
+            return (buyerInfo_.bidPrice * 165) / 1000; // 16.5%
+        } else if (installment_ == InstallmentPlan.NineMonths) {
+            return (buyerInfo_.bidPrice * 11) / 100; // 11%
+        } else {
+            return 0; // InstallmentPlan.None
+        }
+    }
+
+    function getInstallmentPercentageOf(
+        uint256 entryId_,
+        uint256 bidId_,
+        uint256 installmentNumber_
+    ) public view returns (uint256) {
+        return
+            getDownPayment(entryId_, bidId_) +
+            (installmentNumber_ * getInstallmentPerMonth(entryId_));
+    }
+
+    function getInstallmentPaid(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
+        isEntryIdValid(entryId_);
+        isBidIdValid(bidId_);
+
+        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
+        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+
+        return
+            getInstallmentPercentageOf(entryId_, bidId_, sellerInfo_.installmentsPaid) *
+            buyerInfo_.bidPrice;
+    }
+
+    function getInstallmentMonthTimestamp(uint256 bidId_, uint64 installmentNumber_)
+        public
+        view
+        returns (uint64)
+    {
+        return _buyerInfo[bidId_].timestamp + ((installmentNumber_ - 1) * ONE_MONTH);
     }
 
     function sell(
@@ -207,17 +279,14 @@ contract ProjectY is Context, Owned, ERC721Holder {
         IERC721(contractAddress_).safeTransferFrom(_msgSender(), address(this), tokenId_);
 
         // update mapping
-        _sellerInfo[entryId_] = SellerInfo({
-            onSale: true,
-            sellerAddress: _msgSender(),
-            contractAddress: contractAddress_,
-            timestamp: blockTimestamp_,
-            tokenId: tokenId_,
-            sellingPrice: sellingPrice_,
-            totalBids: 0,
-            selectedBidId: 0,
-            installment: installment_
-        });
+
+        _sellerInfo[entryId_].onSale = true;
+        _sellerInfo[entryId_].sellerAddress = _msgSender();
+        _sellerInfo[entryId_].contractAddress = contractAddress_;
+        _sellerInfo[entryId_].timestamp = blockTimestamp_;
+        _sellerInfo[entryId_].tokenId = tokenId_;
+        _sellerInfo[entryId_].sellingPrice = sellingPrice_;
+        _sellerInfo[entryId_].installment = installment_;
 
         emit Sell(_msgSender(), contractAddress_, tokenId_, entryId_, blockTimestamp_);
         return entryId_;
@@ -237,7 +306,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         _buyerInfo[bidId_].buyerAddress = _msgSender();
 
-        uint256 downPayment_ = downPayment(entryId_, bidId_);
+        uint256 downPayment_ = getDownPayment(entryId_, bidId_);
 
         require(
             value_ != 0 && value_ == downPayment_,
@@ -249,15 +318,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
             "ProjectY: Bidding period over"
         );
 
-        _buyerInfo[bidId_] = BuyerInfo({
-            isSelected: false,
-            buyerAddress: _msgSender(),
-            timestamp: blockTimestamp_,
-            bidPrice: bidPrice_,
-            entryId: entryId_,
-            pricePaid: value_,
-            bidInstallment: installment_
-        });
+        // update buyer info mapping
+        _buyerInfo[bidId_].buyerAddress = _msgSender();
+        _buyerInfo[bidId_].timestamp = blockTimestamp_;
+        _buyerInfo[bidId_].bidPrice = bidPrice_;
+        _buyerInfo[bidId_].entryId = entryId_;
+        _buyerInfo[bidId_].pricePaid = value_;
+        _buyerInfo[bidId_].bidInstallment = installment_;
 
         _sellerInfo[entryId_].totalBids += 1;
 
@@ -268,173 +335,47 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function selectBid(uint256 bidId_) public {
         uint64 blockTimestamp_ = uint64(block.timestamp);
         isBidIdValid(bidId_);
+
         uint256 entryId_ = _buyerInfo[bidId_].entryId;
         isEntryIdValid(entryId_);
 
-        require(
-            _msgSender() == _sellerInfo[entryId_].sellerAddress,
-            "ProjectY: Caller must be seller"
-        );
+        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
+        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
+        require(_msgSender() == sellerInfo_.sellerAddress, "ProjectY: Caller must be seller");
         require(
-            blockTimestamp_ >= _sellerInfo[entryId_].timestamp + biddingPeriod,
+            blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,
             "ProjectY: Bidding period not over"
         );
+        require(sellerInfo_.selectedBidId == 0, "ProjectY: Cannot re select bid");
 
-        // update buyer info
-        _buyerInfo[bidId_].isSelected = true;
-        _buyerInfo[bidId_].timestamp = blockTimestamp_;
+        // if installment plan is none so transfer the nft on selection of bid
+        if (buyerInfo_.bidInstallment == InstallmentPlan.None) {
+            IERC721(sellerInfo_.contractAddress).safeTransferFrom(
+                address(this),
+                buyerInfo_.buyerAddress,
+                sellerInfo_.tokenId
+            );
 
-        // make NFT onSale off and set selected bidId
-        _sellerInfo[entryId_].onSale = false;
-        _sellerInfo[entryId_].selectedBidId = bidId_;
+            // delete seller
+            delete _sellerInfo[entryId_];
+            // delete bid
+            delete _buyerInfo[bidId_];
+        } else {
+            // update buyer info
+            _buyerInfo[bidId_].isSelected = true;
+            _buyerInfo[bidId_].timestamp = blockTimestamp_;
 
-        _sellerInfo[entryId_].installment = _buyerInfo[bidId_].bidInstallment;
-        _sellerInfo[entryId_].sellingPrice = _buyerInfo[bidId_].bidPrice;
+            // make NFT onSale off and set selected bidId
+            _sellerInfo[entryId_].onSale = false;
+            _sellerInfo[entryId_].selectedBidId = bidId_;
+
+            _sellerInfo[entryId_].installment = buyerInfo_.bidInstallment;
+            _sellerInfo[entryId_].sellingPrice = buyerInfo_.bidPrice;
+            _sellerInfo[entryId_].installmentsPaid = 1;
+        }
 
         emit BidSelected(bidId_, entryId_);
-    }
-
-    function downPayment(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
-        isEntryIdValid(entryId_);
-        isBidIdValid(bidId_);
-
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
-
-        require(buyerInfo_.pricePaid == 0, "ProjectY: Down payment done");
-
-        InstallmentPlan installment_ = buyerInfo_.bidInstallment;
-        uint256 bidPrice_ = buyerInfo_.bidPrice;
-
-        if (installment_ == InstallmentPlan.ThreeMonths) {
-            return (bidPrice_ * 34) / 100; // 34%
-        } else if (installment_ == InstallmentPlan.SixMonths) {
-            return (bidPrice_ * 175) / 1000; // 17.5%
-        } else if (installment_ == InstallmentPlan.NineMonths) {
-            return (bidPrice_ * 12) / 100; // 12%
-        } else {
-            return bidPrice_;
-        }
-    }
-
-    function currentInstallmentToBePaid(uint256 entryId_) public view returns (uint256) {
-        isEntryIdValid(entryId_);
-        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
-
-        uint256 bidId_ = sellerInfo_.selectedBidId;
-        isBidIdValid(bidId_);
-
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
-
-        if (buyerInfo_.bidPrice == buyerInfo_.pricePaid) {
-            return 0;
-        }
-
-        InstallmentPlan installment_ = buyerInfo_.bidInstallment;
-        uint256 bidPrice_ = buyerInfo_.bidPrice;
-
-        if (installment_ == InstallmentPlan.ThreeMonths) {
-            return (bidPrice_ * 33) / 100; // 33%
-        } else if (installment_ == InstallmentPlan.SixMonths) {
-            return (bidPrice_ * 165) / 1000; // 16.5%
-        } else if (installment_ == InstallmentPlan.NineMonths) {
-            return (bidPrice_ * 11) / 100; // 11%
-        } else {
-            return 0; // InstallmentPlan.None
-        }
-    }
-
-    function getInstallmentPhase(uint256 bidId_) public view returns (InstallmentPhase) {
-        // assuming no revert
-
-        uint64 blockTimestamp_ = uint64(block.timestamp);
-        uint64 firstMonthTimestamp_ = _buyerInfo[bidId_].timestamp;
-        InstallmentPlan installment_ = _buyerInfo[bidId_].bidInstallment;
-
-        uint256 secondMonthTimestamp_ = firstMonthTimestamp_ + ONE_MONTH;
-        uint256 thirdMonthTimestamp_ = firstMonthTimestamp_ + (2 * ONE_MONTH);
-        uint256 fourthMonthTimestamp_ = firstMonthTimestamp_ + (3 * ONE_MONTH);
-        uint256 fifthMonthTimestamp_ = firstMonthTimestamp_ + (4 * ONE_MONTH);
-        uint256 sixthMonthTimestamp_ = firstMonthTimestamp_ + (5 * ONE_MONTH);
-        uint256 seventhMonthTimestamp_ = firstMonthTimestamp_ + (6 * ONE_MONTH);
-        uint256 eighthMonthTimestamp_ = firstMonthTimestamp_ + (7 * ONE_MONTH);
-        uint256 ninthMonthTimestamp_ = firstMonthTimestamp_ + (8 * ONE_MONTH);
-
-        if (installment_ == InstallmentPlan.ThreeMonths) {
-            if (blockTimestamp_ > thirdMonthTimestamp_) {
-                return InstallmentPhase.Third;
-            }
-
-            if (blockTimestamp_ > secondMonthTimestamp_) {
-                return InstallmentPhase.Second;
-            }
-
-            if (blockTimestamp_ > firstMonthTimestamp_) {
-                return InstallmentPhase.First;
-            }
-        } else if (installment_ == InstallmentPlan.SixMonths) {
-            if (blockTimestamp_ > sixthMonthTimestamp_) {
-                return InstallmentPhase.Sixth;
-            }
-
-            if (blockTimestamp_ > fifthMonthTimestamp_) {
-                return InstallmentPhase.Fifth;
-            }
-
-            if (blockTimestamp_ > fourthMonthTimestamp_) {
-                return InstallmentPhase.Fourth;
-            }
-
-            if (blockTimestamp_ > thirdMonthTimestamp_) {
-                return InstallmentPhase.Third;
-            }
-
-            if (blockTimestamp_ > secondMonthTimestamp_) {
-                return InstallmentPhase.Second;
-            }
-
-            if (blockTimestamp_ > firstMonthTimestamp_) {
-                return InstallmentPhase.First;
-            }
-        } else if (installment_ == InstallmentPlan.NineMonths) {
-            if (blockTimestamp_ > ninthMonthTimestamp_) {
-                return InstallmentPhase.Ninth;
-            }
-
-            if (blockTimestamp_ > eighthMonthTimestamp_) {
-                return InstallmentPhase.Eighth;
-            }
-
-            if (blockTimestamp_ > seventhMonthTimestamp_) {
-                return InstallmentPhase.Seventh;
-            }
-
-            if (blockTimestamp_ > sixthMonthTimestamp_) {
-                return InstallmentPhase.Sixth;
-            }
-
-            if (blockTimestamp_ > fifthMonthTimestamp_) {
-                return InstallmentPhase.Fifth;
-            }
-
-            if (blockTimestamp_ > fourthMonthTimestamp_) {
-                return InstallmentPhase.Fourth;
-            }
-
-            if (blockTimestamp_ > thirdMonthTimestamp_) {
-                return InstallmentPhase.Third;
-            }
-
-            if (blockTimestamp_ > secondMonthTimestamp_) {
-                return InstallmentPhase.Second;
-            }
-
-            if (blockTimestamp_ > firstMonthTimestamp_) {
-                return InstallmentPhase.First;
-            }
-        }
-
-        return InstallmentPhase.None;
     }
 
     function payInstallment(uint256 entryId_) public payable {
@@ -443,7 +384,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         isEntryIdValid(entryId_);
 
         uint256 bidId_ = _sellerInfo[entryId_].selectedBidId;
-        require(bidId_ != 0, "ProjectY: BidId not selected");
+        isBidIdValid(bidId_);
 
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
@@ -452,19 +393,20 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 bidPrice_ = buyerInfo_.bidPrice;
         uint256 pricePaid_ = buyerInfo_.pricePaid;
 
-        require(pricePaid_ != bidPrice_, "ProjectY: installment complete");
+        if (bidPrice_ != pricePaid_) {
+            uint256 installmentPayment_ = getInstallmentPerMonth(entryId_);
 
-        uint256 installmentPayment_ = currentInstallmentToBePaid(entryId_);
+            require(
+                installmentPayment_ == value_ && value_ != 0 && installmentPayment_ != 0,
+                "ProjectY: invalid value"
+            );
 
-        require(
-            installmentPayment_ == value_ && value_ != 0 && installmentPayment_ != 0,
-            "ProjectY: value must be equal to installment payment and non-zero"
-        );
-
-        _buyerInfo[bidId_].pricePaid += value_;
+            _buyerInfo[bidId_].pricePaid += value_;
+            _sellerInfo[entryId_].installmentsPaid++;
+        }
 
         // all installments done so transfer NFT to buyer
-        if (_buyerInfo[bidId_].bidPrice == _buyerInfo[bidId_].pricePaid) {
+        if (bidPrice_ == pricePaid_) {
             IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(
                 address(this),
                 _msgSender(),
@@ -484,31 +426,19 @@ contract ProjectY is Context, Owned, ERC721Holder {
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
         uint256 entryId_ = buyerInfo_.entryId;
-        address buyer_ = buyerInfo_.buyerAddress;
-        uint256 pricePaid_ = buyerInfo_.pricePaid;
 
         require(
             uint64(block.timestamp) >= _sellerInfo[entryId_].timestamp + biddingPeriod,
             "ProjectY: Bidding period not over"
         );
-
         require(!buyerInfo_.isSelected, "ProjectY: Bidder should not be selected");
+        require(_msgSender() == buyerInfo_.buyerAddress, "ProjectY: Buyer must be caller");
 
         // delete bid
         delete _buyerInfo[bidId_];
 
         // return the price paid
-        Address.sendValue(payable(buyer_), pricePaid_);
-    }
-
-    function getPaymentOfPhase(
-        uint256 entryId_,
-        uint256 bidId_,
-        InstallmentPhase installmentPhase_
-    ) public view returns (uint256) {
-        return
-            downPayment(entryId_, bidId_) +
-            (uint256(installmentPhase_) * currentInstallmentToBePaid(entryId_));
+        Address.sendValue(payable(buyerInfo_.buyerAddress), buyerInfo_.pricePaid);
     }
 
     function liquidate(uint256 entryId_) public payable {
@@ -521,20 +451,28 @@ contract ProjectY is Context, Owned, ERC721Holder {
         isBidIdValid(bidId_);
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
-        InstallmentPhase installmentPhase_ = getInstallmentPhase(bidId_);
+        uint256 installmentPerMonth_ = getInstallmentPerMonth(entryId_);
+
+        // None or Installments paid
+        require(
+            installmentPerMonth_ != 0 || (buyerInfo_.bidPrice == buyerInfo_.pricePaid),
+            "ProjectY: no installment left"
+        );
+
+        // get timestamp of next payment
+        uint256 installmentMonthTimestamp_ = getInstallmentMonthTimestamp(
+            bidId_,
+            sellerInfo_.installmentsPaid + 1
+        );
+
+        // if timestamp of next payment + gracePeriod is passed then liquidate otherwise stop execution
+        require(
+            uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),
+            "ProjectY: Installment on track"
+        );
+
         address oldbuyer_ = buyerInfo_.buyerAddress;
         uint256 priceToBePaidByLiquidator_ = (buyerInfo_.pricePaid * 95) / 100;
-        uint256 currentInstallmentToBePaid_ = currentInstallmentToBePaid(entryId_);
-
-        // second phase me agr second payment done nhi he
-        uint256 paymentOfPhase_ = getPaymentOfPhase(entryId_, bidId_, installmentPhase_);
-
-        require(paymentOfPhase_ != buyerInfo_.pricePaid, "ProjectY: Phase price paid");
-
-        require(
-            currentInstallmentToBePaid_ != 0,
-            "ProjectY: no liquidate opportunity as no installment left"
-        );
 
         require(
             priceToBePaidByLiquidator_ == value_,
@@ -551,5 +489,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function setBiddingPeriod(uint64 biddingPeriod_) public onlyOwner {
         require(biddingPeriod_ != 0, "ProjectY: Invalid bidding period");
         biddingPeriod = biddingPeriod_;
+    }
+
+    function setGracePeriod(uint64 gracePeriod_) public onlyOwner {
+        require(gracePeriod_ != 0, "ProjectY: Invalid grace period");
+        gracePeriod = gracePeriod_;
     }
 }
