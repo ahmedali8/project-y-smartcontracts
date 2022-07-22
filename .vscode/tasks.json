@@ -6,10 +6,12 @@
     {
       "label": "Generate Header",
       "type": "shell",
-      "command": "headers ${input:header}",
+      "command": "yarn sol-headers ${input:header}",
+      "detail": "sol-headers",
       "presentation": {
         "reveal": "never"
-      }
+      },
+      "problemMatcher": []
     }
   ],
   "inputs": [
