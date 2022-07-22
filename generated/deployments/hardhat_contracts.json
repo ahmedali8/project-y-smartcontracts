@@ -1,11 +1,11 @@
 {
-  "4": [
+  "80001": [
     {
-      "name": "rinkeby",
-      "chainId": "4",
+      "name": "polygon-mumbai",
+      "chainId": "80001",
       "contracts": {
         "ProjectY": {
-          "address": "0xe827d6d46e4171A281351eAb5d59093586c97f9F",
+          "address": "0xD3D6372cACfBdD49DF33306c3D188D617a4c04A1",
           "abi": [
             {
               "inputs": [
@@ -236,7 +236,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "buyerAddress",
+              "name": "getBuyerAddress",
               "outputs": [
                 {
                   "internalType": "address",
@@ -255,7 +255,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "buyerBidInstallment",
+              "name": "getBuyerBidInstallment",
               "outputs": [
                 {
                   "internalType": "enum ProjectY.InstallmentPlan",
@@ -274,7 +274,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "buyerBidPrice",
+              "name": "getBuyerBidPrice",
               "outputs": [
                 {
                   "internalType": "uint256",
@@ -293,7 +293,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "buyerEntryId",
+              "name": "getBuyerEntryId",
               "outputs": [
                 {
                   "internalType": "uint256",
@@ -312,7 +312,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "buyerIsSelected",
+              "name": "getBuyerIsSelected",
               "outputs": [
                 {
                   "internalType": "bool",
@@ -331,7 +331,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "buyerPricePaid",
+              "name": "getBuyerPricePaid",
               "outputs": [
                 {
                   "internalType": "uint256",
@@ -350,7 +350,279 @@
                   "type": "uint256"
                 }
               ],
-              "name": "buyerTimestamp",
+              "name": "getBuyerTimestamp",
+              "outputs": [
+                {
+                  "internalType": "uint64",
+                  "name": "",
+                  "type": "uint64"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "bidId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getDownPayment",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "bidId_",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "installmentNumber_",
+                  "type": "uint64"
+                }
+              ],
+              "name": "getInstallmentMonthTimestamp",
+              "outputs": [
+                {
+                  "internalType": "uint64",
+                  "name": "",
+                  "type": "uint64"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "bidId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getInstallmentPaid",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getInstallmentPerMonth",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "bidId_",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "installmentNumber_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getInstallmentPercentageOf",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getSellerAddress",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getSellerContractAddress",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getSellerInstallment",
+              "outputs": [
+                {
+                  "internalType": "enum ProjectY.InstallmentPlan",
+                  "name": "",
+                  "type": "uint8"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getSellerInstallmentsPaid",
+              "outputs": [
+                {
+                  "internalType": "uint8",
+                  "name": "",
+                  "type": "uint8"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getSellerOnSale",
+              "outputs": [
+                {
+                  "internalType": "bool",
+                  "name": "",
+                  "type": "bool"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getSellerSelectedBidId",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getSellerSellingPrice",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "entryId_",
+                  "type": "uint256"
+                }
+              ],
+              "name": "getSellerTimestamp",
               "outputs": [
                 {
                   "internalType": "uint64",
@@ -369,7 +641,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "currentInstallmentToBePaid",
+              "name": "getSellerTokenId",
               "outputs": [
                 {
                   "internalType": "uint256",
@@ -386,14 +658,9 @@
                   "internalType": "uint256",
                   "name": "entryId_",
                   "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "bidId_",
-                  "type": "uint256"
                 }
               ],
-              "name": "downPayment",
+              "name": "getSellerTotalBids",
               "outputs": [
                 {
                   "internalType": "uint256",
@@ -405,48 +672,39 @@
               "type": "function"
             },
             {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "bidId_",
-                  "type": "uint256"
-                }
-              ],
-              "name": "getInstallmentPhase",
+              "inputs": [],
+              "name": "getTotalBidIds",
               "outputs": [
                 {
-                  "internalType": "enum ProjectY.InstallmentPhase",
+                  "internalType": "uint256",
                   "name": "",
-                  "type": "uint8"
+                  "type": "uint256"
                 }
               ],
               "stateMutability": "view",
               "type": "function"
             },
             {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "bidId_",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "enum ProjectY.InstallmentPhase",
-                  "name": "installmentPhase_",
-                  "type": "uint8"
-                }
-              ],
-              "name": "getPaymentOfPhase",
+              "inputs": [],
+              "name": "getTotalEntryIds",
               "outputs": [
                 {
                   "internalType": "uint256",
                   "name": "",
                   "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "gracePeriod",
+              "outputs": [
+                {
+                  "internalType": "uint64",
+                  "name": "",
+                  "type": "uint64"
                 }
               ],
               "stateMutability": "view",
@@ -613,183 +871,25 @@
             {
               "inputs": [
                 {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
-                }
-              ],
-              "name": "sellerAddress",
-              "outputs": [
-                {
-                  "internalType": "address",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
-                }
-              ],
-              "name": "sellerContractAddress",
-              "outputs": [
-                {
-                  "internalType": "address",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
-                }
-              ],
-              "name": "sellerInstallment",
-              "outputs": [
-                {
-                  "internalType": "enum ProjectY.InstallmentPlan",
-                  "name": "",
-                  "type": "uint8"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
-                }
-              ],
-              "name": "sellerOnSale",
-              "outputs": [
-                {
-                  "internalType": "bool",
-                  "name": "",
-                  "type": "bool"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
-                }
-              ],
-              "name": "sellerSelectedBidId",
-              "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
-                }
-              ],
-              "name": "sellerSellingPrice",
-              "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
-                }
-              ],
-              "name": "sellerTimestamp",
-              "outputs": [
-                {
-                  "internalType": "uint64",
-                  "name": "",
-                  "type": "uint64"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
-                }
-              ],
-              "name": "sellerTokenId",
-              "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "entryId_",
-                  "type": "uint256"
-                }
-              ],
-              "name": "sellerTotalBids",
-              "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
                   "internalType": "uint64",
                   "name": "biddingPeriod_",
                   "type": "uint64"
                 }
               ],
               "name": "setBiddingPeriod",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint64",
+                  "name": "gracePeriod_",
+                  "type": "uint64"
+                }
+              ],
+              "name": "setGracePeriod",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
@@ -805,32 +905,6 @@
               "name": "setOwner",
               "outputs": [],
               "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "totalBidIds",
-              "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "totalEntryIds",
-              "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "stateMutability": "view",
               "type": "function"
             },
             {
