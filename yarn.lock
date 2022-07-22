@@ -36,7 +36,7 @@ __metadata:
     "@primitivefi/hardhat-dodoc": ^0.2.3
     "@rari-capital/solmate": ^6.4.0
     "@trivago/prettier-plugin-sort-imports": ^3.3.0
-    "@truffle/dashboard": ^0.1.9
+    "@truffle/dashboard": ^0.1.10
     "@typechain/ethers-v5": ^10.1.0
     "@typechain/hardhat": ^6.1.2
     "@types/chai": ^4.3.1
@@ -74,7 +74,6 @@ __metadata:
     mocha-chai-jest-snapshot: ^1.1.4
     prettier: ^2.7.1
     prettier-plugin-solidity: ^1.0.0-beta.19
-    shelljs: ^0.8.5
     shx: 0.3.4
     sol-headers: ^1.0.0
     solhint: 3.3.7
@@ -2858,19 +2857,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@truffle/dashboard-message-bus-client@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "@truffle/dashboard-message-bus-client@npm:0.1.2"
+"@truffle/dashboard-message-bus-client@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@truffle/dashboard-message-bus-client@npm:0.1.3"
   dependencies:
     "@truffle/dashboard-message-bus-common": ^0.1.2
-    "@truffle/promise-tracker": ^0.1.0
-    axios: ^0.24.0
+    "@truffle/promise-tracker": ^0.1.1
+    axios: 0.27.2
     debug: ^4.3.1
     delay: ^5.0.0
     isomorphic-ws: ^4.0.1
     tiny-typed-emitter: ^2.1.0
     ws: ^7.2.0
-  checksum: df45f4ce427b6c18a8790e391acf746988211ef46e180201e3f9530063e0642388b5e44e1aab5906409e22e8e99c4f48996053a2cfd0d59f6d014b8b9596c108
+  checksum: 3d58c9f1fc0b8883e94f3435a09d8c99432df0edaa3be7323e8bee96b6f064432856ee6cabd2e2cbda0f01f13e02a5a6a937e220a52b4f8e76b428a2089519ac
   languageName: node
   linkType: hard
 
@@ -2895,12 +2894,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@truffle/dashboard@npm:^0.1.9":
-  version: 0.1.9
-  resolution: "@truffle/dashboard@npm:0.1.9"
+"@truffle/dashboard@npm:^0.1.10":
+  version: 0.1.10
+  resolution: "@truffle/dashboard@npm:0.1.10"
   dependencies:
     "@truffle/dashboard-message-bus": ^0.1.6
-    "@truffle/dashboard-message-bus-client": ^0.1.2
+    "@truffle/dashboard-message-bus-client": ^0.1.3
     "@truffle/dashboard-message-bus-common": ^0.1.2
     cors: ^2.8.5
     debug: ^4.3.2
@@ -2909,7 +2908,7 @@ __metadata:
     isomorphic-ws: ^4.0.1
     open: ^8.4.0
     ws: ^7.2.0
-  checksum: e1d04d22c09ce8100f926f6367c127cbfdc5473376ffff06306c9dd3f857d7e69cc1c7e1d7c9bd80b159b0469cc5f77e7817f16ea1b39564ae28139c0fa49241
+  checksum: 78d485ae6258d8a82d42a79e5b7fee72a335f7cf6d4869e180166e77e8a4c2fca5d8907fe99c5cdc6a18d0750a8862a4e7950398f640ee5e8e1de792e4ea8c81
   languageName: node
   linkType: hard
 
@@ -2945,10 +2944,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@truffle/promise-tracker@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@truffle/promise-tracker@npm:0.1.0"
-  checksum: 22a10c4b553e7d801e35394781532ba8bc129de7e8dd1a2f7e42b0618c96fbca70e4c405ecffe6ea22687a89c6f3ab59dc1fcfe988ddda76fd93b0be968f0ad0
+"@truffle/promise-tracker@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@truffle/promise-tracker@npm:0.1.1"
+  checksum: 88318c420e746601bf18de7d318d68a36d10adadca1122bff0a23efb93b98ae7a277b366acadc4e8dfb6abc590ea60e765d71901a3ef8abf7ec5e1daef2a03a8
   languageName: node
   linkType: hard
 
@@ -4067,21 +4066,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axios@npm:0.27.2":
+  version: 0.27.2
+  resolution: "axios@npm:0.27.2"
+  dependencies:
+    follow-redirects: ^1.14.9
+    form-data: ^4.0.0
+  checksum: 38cb7540465fe8c4102850c4368053c21683af85c5fdf0ea619f9628abbcb59415d1e22ebc8a6390d2bbc9b58a9806c874f139767389c862ec9b772235f06854
+  languageName: node
+  linkType: hard
+
 "axios@npm:^0.21.1":
   version: 0.21.4
   resolution: "axios@npm:0.21.4"
   dependencies:
     follow-redirects: ^1.14.0
   checksum: 44245f24ac971e7458f3120c92f9d66d1fc695e8b97019139de5b0cc65d9b8104647db01e5f46917728edfc0cfd88eb30fc4c55e6053eef4ace76768ce95ff3c
-  languageName: node
-  linkType: hard
-
-"axios@npm:^0.24.0":
-  version: 0.24.0
-  resolution: "axios@npm:0.24.0"
-  dependencies:
-    follow-redirects: ^1.14.4
-  checksum: 468cf496c08a6aadfb7e699bebdac02851e3043d4e7d282350804ea8900e30d368daa6e3cd4ab83b8ddb5a3b1e17a5a21ada13fc9cebd27b74828f47a4236316
   languageName: node
   linkType: hard
 
@@ -7630,7 +7630,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.14.4":
+"follow-redirects@npm:^1.14.9":
   version: 1.15.1
   resolution: "follow-redirects@npm:1.15.1"
   peerDependenciesMeta:
