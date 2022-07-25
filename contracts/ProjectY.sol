@@ -53,7 +53,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
     mapping(uint256 => SellerInfo) internal _sellerInfo;
 
     // bidId -> BuyerInfo
-    mapping(uint256 => BuyerInfo) public _buyerInfo;
+    mapping(uint256 => BuyerInfo) internal _buyerInfo;
 
     event Sell(
         address indexed seller,
@@ -76,89 +76,92 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // solhint-disable-previous-line no-empty-blocks
     }
 
-    function getSellerOnSale(uint256 entryId_) public view returns (bool) {
-        isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].onSale;
+    // some additional getters for front-end start
+
+    function getNFTsOpenForSale() public view returns (SellerInfo[] memory nftsOpenForSale_) {
+        uint256 totalEntryIds_ = getTotalEntryIds();
+
+        // Storing this outside the loop saves gas per iteration.
+        SellerInfo memory sellerInfo_;
+
+        for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
+            sellerInfo_ = _sellerInfo[i_];
+
+            if (sellerInfo_.onSale) {
+                nftsOpenForSale_[i_] = sellerInfo_;
+            }
+
+            // An array can't have a total length
+            // larger than the max uint256 value.
+            unchecked {
+                ++i_;
+            }
+        }
     }
 
-    function getSellerAddress(uint256 entryId_) public view returns (address) {
-        isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].sellerAddress;
+    function getAllBidsOnNFT(uint256 _entryId)
+        public
+        view
+        returns (BuyerInfo[] memory allBidsOnNFT_)
+    {
+        uint256 totalBidIds_ = getTotalBidIds();
+
+        for (uint256 i_ = 0; i_ < totalBidIds_; ) {
+            if (_buyerInfo[i_].entryId == _entryId) {
+                allBidsOnNFT_[i_] = _buyerInfo[i_];
+            }
+
+            // An array can't have a total length
+            // larger than the max uint256 value.
+            unchecked {
+                ++i_;
+            }
+        }
     }
 
-    function getSellerContractAddress(uint256 entryId_) public view returns (address) {
-        isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].contractAddress;
+    function getUserNFTsOpenForSale(address user_)
+        public
+        view
+        returns (SellerInfo[] memory userNFTsOpenForSale_)
+    {
+        uint256 totalEntryIds_ = getTotalEntryIds();
+
+        // Storing this outside the loop saves gas per iteration.
+        SellerInfo memory sellerInfo_;
+
+        for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
+            sellerInfo_ = _sellerInfo[i_];
+
+            if (sellerInfo_.onSale && sellerInfo_.sellerAddress == user_) {
+                userNFTsOpenForSale_[i_] = sellerInfo_;
+            }
+
+            // An array can't have a total length
+            // larger than the max uint256 value.
+            unchecked {
+                ++i_;
+            }
+        }
     }
 
-    function getSellerTimestamp(uint256 entryId_) public view returns (uint64) {
-        isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].timestamp;
+    // some additional getters for front-end end
+
+    function isEntryIdValid(uint256 entryId_) public view returns (bool isValid_) {
+        require(isValid_ = (_sellerInfo[entryId_].sellerAddress != address(0)), "INVALID_ENTRY_ID");
     }
 
-    function getSellerTokenId(uint256 entryId_) public view returns (uint256) {
-        isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].tokenId;
+    function isBidIdValid(uint256 bidId_) public view returns (bool isValid_) {
+        require(isValid_ = (_buyerInfo[bidId_].buyerAddress != address(0)), "INVALID_BID_ID");
     }
 
-    function getSellerSellingPrice(uint256 entryId_) public view returns (uint256) {
+    function getSellerInfo(uint256 entryId_) public view returns (SellerInfo memory) {
         isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].sellingPrice;
+        return _sellerInfo[entryId_];
     }
 
-    function getSellerTotalBids(uint256 entryId_) public view returns (uint256) {
-        isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].totalBids;
-    }
-
-    function getSellerSelectedBidId(uint256 entryId_) public view returns (uint256) {
-        isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].selectedBidId;
-    }
-
-    function getSellerInstallmentsPaid(uint256 entryId_) public view returns (uint8) {
-        isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].installmentsPaid;
-    }
-
-    function getSellerInstallment(uint256 entryId_) public view returns (InstallmentPlan) {
-        isEntryIdValid(entryId_);
-        return _sellerInfo[entryId_].installment;
-    }
-
-    function getBuyerIsSelected(uint256 bidId_) public view returns (bool) {
+    function getBuyerInfo(uint256 bidId_) public view returns (BuyerInfo memory) {
         isBidIdValid(bidId_);
-        return _buyerInfo[bidId_].isSelected;
-    }
-
-    function getBuyerAddress(uint256 bidId_) public view returns (address) {
-        isBidIdValid(bidId_);
-        return _buyerInfo[bidId_].buyerAddress;
-    }
-
-    function getBuyerTimestamp(uint256 bidId_) public view returns (uint64) {
-        isBidIdValid(bidId_);
-        return _buyerInfo[bidId_].timestamp;
-    }
-
-    function getBuyerBidPrice(uint256 bidId_) public view returns (uint256) {
-        isBidIdValid(bidId_);
-        return _buyerInfo[bidId_].bidPrice;
-    }
-
-    function getBuyerEntryId(uint256 bidId_) public view returns (uint256) {
-        isBidIdValid(bidId_);
-        return _buyerInfo[bidId_].entryId;
-    }
-
-    function getBuyerPricePaid(uint256 bidId_) public view returns (uint256) {
-        isBidIdValid(bidId_);
-        return _buyerInfo[bidId_].pricePaid;
-    }
-
-    function getBuyerBidInstallment(uint256 bidId_) public view returns (InstallmentPlan) {
-        isBidIdValid(bidId_);
-        return _buyerInfo[bidId_].bidInstallment;
+        return _buyerInfo[bidId_];
     }
 
     function getTotalEntryIds() public view returns (uint256) {
@@ -167,14 +170,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     function getTotalBidIds() public view returns (uint256) {
         return _bidIdTracker.current();
-    }
-
-    function isEntryIdValid(uint256 entryId_) public view returns (bool isValid_) {
-        require(isValid_ = (_sellerInfo[entryId_].sellerAddress != address(0)), "INVALID_ENTRY_ID");
-    }
-
-    function isBidIdValid(uint256 bidId_) public view returns (bool isValid_) {
-        require(isValid_ = (_buyerInfo[bidId_].buyerAddress != address(0)), "INVALID_BID_ID");
     }
 
     function getDownPayment(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
