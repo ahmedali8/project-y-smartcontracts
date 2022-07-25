@@ -381,10 +381,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         if (bidPrice_ != pricePaid_) {
             uint256 installmentPayment_ = getInstallmentPerMonth(entryId_);
 
-            require(
-                installmentPayment_ == value_ && value_ != 0 && installmentPayment_ != 0,
-                "INVALID_INSTALLMENT_VALUE"
-            );
+            require(installmentPayment_ == value_ && value_ != 0, "INVALID_INSTALLMENT_VALUE");
 
             _buyerInfo[bidId_].pricePaid += value_;
             _sellerInfo[entryId_].installmentsPaid++;
