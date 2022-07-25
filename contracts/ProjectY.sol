@@ -170,17 +170,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
 
     function isEntryIdValid(uint256 entryId_) public view returns (bool isValid_) {
-        require(
-            isValid_ = (_sellerInfo[entryId_].sellerAddress != address(0)),
-            "ProjectY: Invalid entryId"
-        );
+        require(isValid_ = (_sellerInfo[entryId_].sellerAddress != address(0)), "INVALID_ENTRY_ID");
     }
 
     function isBidIdValid(uint256 bidId_) public view returns (bool isValid_) {
-        require(
-            isValid_ = (_buyerInfo[bidId_].buyerAddress != address(0)),
-            "ProjectY: Invalid bidId"
-        );
+        require(isValid_ = (_buyerInfo[bidId_].buyerAddress != address(0)), "INVALID_BID_ID");
     }
 
     function getDownPayment(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
@@ -189,7 +183,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
-        require(buyerInfo_.pricePaid == 0, "ProjectY: Down payment done");
+        require(buyerInfo_.pricePaid == 0, "DOWN_PAYMENT_DONE");
 
         InstallmentPlan installment_ = buyerInfo_.bidInstallment;
         uint256 bidPrice_ = buyerInfo_.bidPrice;
@@ -267,7 +261,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 sellingPrice_,
         InstallmentPlan installment_
     ) public returns (uint256) {
-        require(sellingPrice_ != 0, "ProjectY: Invalid Price");
+        require(sellingPrice_ != 0, "INVALID_PRICE");
 
         uint64 blockTimestamp_ = uint64(block.timestamp);
 
@@ -279,7 +273,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
         IERC721(contractAddress_).safeTransferFrom(_msgSender(), address(this), tokenId_);
 
         // update mapping
-
         _sellerInfo[entryId_].onSale = true;
         _sellerInfo[entryId_].sellerAddress = _msgSender();
         _sellerInfo[entryId_].contractAddress = contractAddress_;
@@ -308,14 +301,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         uint256 downPayment_ = getDownPayment(entryId_, bidId_);
 
-        require(
-            value_ != 0 && value_ == downPayment_,
-            "ProjectY: value must be equal to down payment"
-        );
+        require(value_ != 0 && value_ == downPayment_, "VALUE_NOT_EQUAL_TO_DOWN_PAYMENT");
 
         require(
             blockTimestamp_ <= _sellerInfo[entryId_].timestamp + biddingPeriod,
-            "ProjectY: Bidding period over"
+            "BIDDING_PERIOD_OVER"
         );
 
         // update buyer info mapping
@@ -342,12 +332,12 @@ contract ProjectY is Context, Owned, ERC721Holder {
         SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
-        require(_msgSender() == sellerInfo_.sellerAddress, "ProjectY: Caller must be seller");
+        require(_msgSender() == sellerInfo_.sellerAddress, "CALLER_NOT_SELLER");
         require(
             blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,
-            "ProjectY: Bidding period not over"
+            "BIDDING_PERIOD_NOT_OVER"
         );
-        require(sellerInfo_.selectedBidId == 0, "ProjectY: Cannot re select bid");
+        require(sellerInfo_.selectedBidId == 0, "CANNOT_RESELECT_BID");
 
         // if installment plan is none so transfer the nft on selection of bid
         if (buyerInfo_.bidInstallment == InstallmentPlan.None) {
@@ -388,7 +378,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
-        require(buyerInfo_.buyerAddress == _msgSender(), "ProjectY: Buyer must be caller");
+        require(buyerInfo_.buyerAddress == _msgSender(), "CALLER_NOT_BUYER");
 
         uint256 bidPrice_ = buyerInfo_.bidPrice;
         uint256 pricePaid_ = buyerInfo_.pricePaid;
@@ -398,7 +388,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
             require(
                 installmentPayment_ == value_ && value_ != 0 && installmentPayment_ != 0,
-                "ProjectY: invalid value"
+                "INVALID_INSTALLMENT_VALUE"
             );
 
             _buyerInfo[bidId_].pricePaid += value_;
@@ -429,10 +419,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         require(
             uint64(block.timestamp) >= _sellerInfo[entryId_].timestamp + biddingPeriod,
-            "ProjectY: Bidding period not over"
+            "BIDDING_PERIOD_NOT_OVER"
         );
-        require(!buyerInfo_.isSelected, "ProjectY: Bidder should not be selected");
-        require(_msgSender() == buyerInfo_.buyerAddress, "ProjectY: Buyer must be caller");
+        require(!buyerInfo_.isSelected, "BIDDER_SHOULD_NOT_BE_SELECTED");
+        require(_msgSender() == buyerInfo_.buyerAddress, "CALLER_NOT_BUYER");
 
         // delete bid
         delete _buyerInfo[bidId_];
@@ -456,7 +446,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // None or Installments paid
         require(
             installmentPerMonth_ != 0 || (buyerInfo_.bidPrice == buyerInfo_.pricePaid),
-            "ProjectY: no installment left"
+            "NO_INSTALLMENT_LEFT"
         );
 
         // get timestamp of next payment
@@ -468,16 +458,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // if timestamp of next payment + gracePeriod is passed then liquidate otherwise stop execution
         require(
             uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),
-            "ProjectY: Installment on track"
+            "INSTALLMENT_ON_TRACK"
         );
 
         address oldbuyer_ = buyerInfo_.buyerAddress;
         uint256 priceToBePaidByLiquidator_ = (buyerInfo_.pricePaid * 95) / 100;
 
-        require(
-            priceToBePaidByLiquidator_ == value_,
-            "ProjectY: value must be equal to 95% pricePaid by old buyer"
-        );
+        require(priceToBePaidByLiquidator_ == value_, "INVALID_LIQUIDATION_VALUE");
 
         // update new buyer
         _buyerInfo[bidId_].buyerAddress = _msgSender();
@@ -487,12 +474,12 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
 
     function setBiddingPeriod(uint64 biddingPeriod_) public onlyOwner {
-        require(biddingPeriod_ != 0, "ProjectY: Invalid bidding period");
+        require(biddingPeriod_ != 0, "INVALID_BIDDING_PERIOD");
         biddingPeriod = biddingPeriod_;
     }
 
     function setGracePeriod(uint64 gracePeriod_) public onlyOwner {
-        require(gracePeriod_ != 0, "ProjectY: Invalid grace period");
+        require(gracePeriod_ != 0, "INVALID_GRACE_PERIOD");
         gracePeriod = gracePeriod_;
     }
 }

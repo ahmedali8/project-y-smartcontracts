@@ -11,13 +11,14 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const chainId = await getChainId();
 
   const CONTRACT_NAME = "ProjectY";
+  const OWNER = deployer;
 
   await preDeploy({ signerAddress: deployer, contractName: CONTRACT_NAME });
   const deployResult: DeployResult = await deploy(CONTRACT_NAME, {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     contract: CONTRACT_NAME,
-    args: [deployer],
+    args: [OWNER],
     log: true,
     // waitConfirmations: 5,
   });

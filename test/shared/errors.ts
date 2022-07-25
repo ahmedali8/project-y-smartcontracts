@@ -1,4 +1,4 @@
-export enum ERC721__Errors {
+export enum ERC721Errors {
   AddressZeroIsNotAValidOwner = "ERC721: address zero is not a valid owner",
   ApproveToCaller = "ERC721: approve to caller",
   InvalidTokenId = "ERC721: invalid token ID",
@@ -9,16 +9,26 @@ export enum ERC721__Errors {
   CallerIsNotTokenOwnerNorApproved = "ERC721: caller is not token owner nor approved",
 }
 
-export enum Owned__Errors {
+export enum OwnedErrors {
   Unauthorized = "UNAUTHORIZED",
 }
 
-export enum ProjectY__Errors {
-  InvalidPrice = "ProjectY: Invalid Price",
-  InvalidEntryId = "ProjectY: Invalid entryId",
-  InvalidBidId = "ProjectY: Invalid bidId",
-  ValueMustBe34PercentOfBidPrice = "ProjectY: value must be 34% of BidPrice",
-  BiddingPeriodOver = "ProjectY: Bidding period over",
-  BiddingPeriodNotOver = "ProjectY: Bidding period not over",
-  CallerMustBeSeller = "ProjectY: Caller must be seller",
+export enum ProjectYErrors {
+  InvalidEntryId = "INVALID_ENTRY_ID",
+  InvalidBidId = "INVALID_BID_ID",
+  DownPaymentDone = "DOWN_PAYMENT_DONE",
+  InvalidPrice = "INVALID_PRICE",
+  ValueNotEqualToDownPayment = "VALUE_NOT_EQUAL_TO_DOWN_PAYMENT",
+  BiddingPeriodOver = "BIDDING_PERIOD_OVER",
+  CallerNotSeller = "CALLER_NOT_SELLER",
+  BiddingPeriodNotOver = "BIDDING_PERIOD_NOT_OVER",
+  CannotReselectBid = "CANNOT_RESELECT_BID",
+  CallerNotBuyer = "CALLER_NOT_BUYER",
+  InvalidInstallmentValue = "INVALID_INSTALLMENT_VALUE",
+  BidderShouldNotBeSelected = "BIDDER_SHOULD_NOT_BE_SELECTED",
+  NoInstallmentLeft = "NO_INSTALLMENT_LEFT",
+  InstallmentOnTrack = "INSTALLMENT_ON_TRACK",
+  InvalidLiquidationValue = "INVALID_LIQUIDATION_VALUE",
+  InvalidBiddingPrice = "INVALID_BIDDING_PERIOD",
+  InvalidGracePeriod = "INVALID_GRACE_PERIOD",
 }
