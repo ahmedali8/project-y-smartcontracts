@@ -26,6 +26,8 @@ export enum ProjectYErrors {
   CallerNotBuyer = "CALLER_NOT_BUYER",
   InvalidInstallmentValue = "INVALID_INSTALLMENT_VALUE",
   BidderShouldNotBeSelected = "BIDDER_SHOULD_NOT_BE_SELECTED",
+  NoPaymentAvailable = "NO_PAYMENT_AVAILABLE",
+  CannotReclaimPayment = "CANNOT_RECLAIM_PAYMENT",
   NoInstallmentLeft = "NO_INSTALLMENT_LEFT",
   InstallmentOnTrack = "INSTALLMENT_ON_TRACK",
   InvalidLiquidationValue = "INVALID_LIQUIDATION_VALUE",

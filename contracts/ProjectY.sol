@@ -31,6 +31,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         address sellerAddress;
         address contractAddress;
         uint8 installmentsPaid;
+        uint8 paymentsClaimed;
         uint64 timestamp;
         uint256 tokenId;
         uint256 sellingPrice;
@@ -172,7 +173,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         return _bidIdTracker.current();
     }
 
-    function getDownPayment(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
+    function getDownPaymentAmount(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
         isEntryIdValid(entryId_);
         isBidIdValid(bidId_);
 
@@ -194,7 +195,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         }
     }
 
-    function getInstallmentPerMonth(uint256 entryId_) public view returns (uint256) {
+    function getInstallmentAmountPerMonth(uint256 entryId_) public view returns (uint256) {
         isEntryIdValid(entryId_);
         SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
 
@@ -220,26 +221,18 @@ contract ProjectY is Context, Owned, ERC721Holder {
         }
     }
 
-    function getInstallmentPercentageOf(
+    // get installment amount of specific installment number
+    function getInstallmentAmountOf(
         uint256 entryId_,
         uint256 bidId_,
         uint256 installmentNumber_
     ) public view returns (uint256) {
-        return
-            getDownPayment(entryId_, bidId_) +
-            (installmentNumber_ * getInstallmentPerMonth(entryId_));
-    }
+        // if first installment number is 1 then it means it's downpayment
+        if (installmentNumber_ == 1) {
+            return getDownPaymentAmount(entryId_, bidId_);
+        }
 
-    function getInstallmentPaid(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
-        isEntryIdValid(entryId_);
-        isBidIdValid(bidId_);
-
-        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
-
-        return
-            getInstallmentPercentageOf(entryId_, bidId_, sellerInfo_.installmentsPaid) *
-            buyerInfo_.bidPrice;
+        return installmentNumber_ * getInstallmentAmountPerMonth(entryId_);
     }
 
     function getInstallmentMonthTimestamp(uint256 bidId_, uint64 installmentNumber_)
@@ -292,9 +285,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
         _bidIdTracker.increment();
         uint256 bidId_ = _bidIdTracker.current();
 
+        // update buyer address so that bid id gets validated
         _buyerInfo[bidId_].buyerAddress = _msgSender();
 
-        uint256 downPayment_ = getDownPayment(entryId_, bidId_);
+        uint256 downPayment_ = getDownPaymentAmount(entryId_, bidId_);
 
         require(value_ != 0 && value_ == downPayment_, "VALUE_NOT_EQUAL_TO_DOWN_PAYMENT");
 
@@ -304,7 +298,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
         );
 
         // update buyer info mapping
-        _buyerInfo[bidId_].buyerAddress = _msgSender();
         _buyerInfo[bidId_].timestamp = blockTimestamp_;
         _buyerInfo[bidId_].bidPrice = bidPrice_;
         _buyerInfo[bidId_].entryId = entryId_;
@@ -379,7 +372,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 pricePaid_ = buyerInfo_.pricePaid;
 
         if (bidPrice_ != pricePaid_) {
-            uint256 installmentPayment_ = getInstallmentPerMonth(entryId_);
+            uint256 installmentPayment_ = getInstallmentAmountPerMonth(entryId_);
 
             require(installmentPayment_ == value_ && value_ != 0, "INVALID_INSTALLMENT_VALUE");
 
@@ -423,6 +416,38 @@ contract ProjectY is Context, Owned, ERC721Holder {
         Address.sendValue(payable(buyerInfo_.buyerAddress), buyerInfo_.pricePaid);
     }
 
+    function withdrawPayment(uint256 entryId_) public {
+        isEntryIdValid(entryId_);
+        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
+        isBidIdValid(sellerInfo_.selectedBidId);
+
+        require(_msgSender() == sellerInfo_.sellerAddress, "CALLER_NOT_SELLER");
+        require(sellerInfo_.paymentsClaimed != 0, "NO_PAYMENT_AVAILABLE");
+
+        uint8 secondLastInstallmentPaid_ = sellerInfo_.installmentsPaid - 1;
+
+        // payments claimed should be one less than installmentsPaid
+        // no other check required as installmentsPaid will increase after a month
+        require(
+            sellerInfo_.paymentsClaimed == secondLastInstallmentPaid_,
+            "CANNOT_RECLAIM_PAYMENT"
+        );
+
+        // if installmentsPaid is 5 that means payments of 5 months is done
+        // so unlock payment of 4 to seller
+        uint256 secondLastInstallmentAmount_ = getInstallmentAmountOf(
+            entryId_,
+            sellerInfo_.selectedBidId,
+            secondLastInstallmentPaid_
+        );
+
+        // update paymentsClaimed
+        _sellerInfo[entryId_].paymentsClaimed++;
+
+        // transfer amount to seller
+        Address.sendValue(payable(sellerInfo_.sellerAddress), secondLastInstallmentAmount_);
+    }
+
     function liquidate(uint256 entryId_) public payable {
         uint256 value_ = msg.value;
 
@@ -433,7 +458,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         isBidIdValid(bidId_);
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
-        uint256 installmentPerMonth_ = getInstallmentPerMonth(entryId_);
+        uint256 installmentPerMonth_ = getInstallmentAmountPerMonth(entryId_);
 
         // None or Installments paid
         require(
