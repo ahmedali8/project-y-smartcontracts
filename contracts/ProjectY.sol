@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@rari-capital/solmate/src/auth/Owned.sol";
 
+import "hardhat/console.sol";
+
 contract ProjectY is Context, Owned, ERC721Holder {
     using Counters for Counters.Counter;
 
@@ -81,12 +83,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     function getNFTsOpenForSale() public view returns (SellerInfo[] memory nftsOpenForSale_) {
         uint256 totalEntryIds_ = getTotalEntryIds();
+        nftsOpenForSale_ = new SellerInfo[](totalEntryIds_);
 
         // Storing this outside the loop saves gas per iteration.
         SellerInfo memory sellerInfo_;
 
-        for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
-            sellerInfo_ = _sellerInfo[i_];
+        for (uint256 i_; i_ < totalEntryIds_; ) {
+            sellerInfo_ = _sellerInfo[i_ + 1];
 
             if (sellerInfo_.onSale) {
                 nftsOpenForSale_[i_] = sellerInfo_;
@@ -98,6 +101,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 ++i_;
             }
         }
+
+        return nftsOpenForSale_;
     }
 
     function getAllBidsOnNFT(uint256 _entryId)
@@ -106,10 +111,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
         returns (BuyerInfo[] memory allBidsOnNFT_)
     {
         uint256 totalBidIds_ = getTotalBidIds();
+        allBidsOnNFT_ = new BuyerInfo[](totalBidIds_);
 
         for (uint256 i_ = 0; i_ < totalBidIds_; ) {
             if (_buyerInfo[i_].entryId == _entryId) {
-                allBidsOnNFT_[i_] = _buyerInfo[i_];
+                allBidsOnNFT_[i_] = _buyerInfo[i_ + 1];
             }
 
             // An array can't have a total length
@@ -126,12 +132,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
         returns (SellerInfo[] memory userNFTsOpenForSale_)
     {
         uint256 totalEntryIds_ = getTotalEntryIds();
+        userNFTsOpenForSale_ = new SellerInfo[](totalEntryIds_);
 
         // Storing this outside the loop saves gas per iteration.
         SellerInfo memory sellerInfo_;
 
         for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
-            sellerInfo_ = _sellerInfo[i_];
+            sellerInfo_ = _sellerInfo[i_ + 1];
 
             if (sellerInfo_.onSale && sellerInfo_.sellerAddress == user_) {
                 userNFTsOpenForSale_[i_] = sellerInfo_;
