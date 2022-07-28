@@ -9,6 +9,8 @@ import { INSTALLMENT_PLAN_VALUES, InstallmentPlan } from "../../../shared/consta
 import { ProjectYErrors } from "../../../shared/errors";
 import { createRandomSigner, getDownPayment } from "../../../shared/utils";
 
+// Todo: eth balance on receiving bids
+
 export default function shouldBehaveLikeBid(): void {
   context("when entryId is not valid", function () {
     it("reverts", async function () {

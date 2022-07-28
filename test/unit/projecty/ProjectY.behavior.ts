@@ -1,4 +1,5 @@
 import shouldBehaveLikeBid from "./effects/bid";
+import shouldBehaveLikeSelectBid from "./effects/selectBid";
 import shouldBehaveLikeSell from "./effects/sell";
 
 export function shouldBehaveLikeProjectY(): void {
@@ -10,8 +11,11 @@ export function shouldBehaveLikeProjectY(): void {
     // describe("#sell", function () {
     //   shouldBehaveLikeSell();
     // });
-    describe("#bid", function () {
-      shouldBehaveLikeBid();
+    // describe("#bid", function () {
+    //   shouldBehaveLikeBid();
+    // });
+    describe("#selectBid", function () {
+      shouldBehaveLikeSelectBid();
     });
   });
 }

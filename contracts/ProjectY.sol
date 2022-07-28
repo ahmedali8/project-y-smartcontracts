@@ -335,7 +335,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
             blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,
             "BIDDING_PERIOD_NOT_OVER"
         );
-        require(sellerInfo_.selectedBidId == 0, "CANNOT_RESELECT_BID");
+        require(sellerInfo_.selectedBidId == 0 && !buyerInfo_.isSelected, "CANNOT_RESELECT_BID"); // will be tested in other than none scenario
 
         // if installment plan is none so transfer the nft on selection of bid
         if (buyerInfo_.bidInstallment == InstallmentPlan.None) {
@@ -344,6 +344,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 buyerInfo_.buyerAddress,
                 sellerInfo_.tokenId
             );
+
+            // send value to seller
+            Address.sendValue(payable(sellerInfo_.sellerAddress), buyerInfo_.pricePaid);
 
             // delete seller
             delete _sellerInfo[entryId_];
@@ -426,20 +429,22 @@ contract ProjectY is Context, Owned, ERC721Holder {
         Address.sendValue(payable(buyerInfo_.buyerAddress), buyerInfo_.pricePaid);
     }
 
+    // if Installment.None then seller should be able to withdraw immediately
     function withdrawPayment(uint256 entryId_) public {
         isEntryIdValid(entryId_);
         SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
         isBidIdValid(sellerInfo_.selectedBidId);
 
         require(_msgSender() == sellerInfo_.sellerAddress, "CALLER_NOT_SELLER");
-        require(sellerInfo_.paymentsClaimed != 0, "NO_PAYMENT_AVAILABLE");
+        // require(sellerInfo_.paymentsClaimed != 0, "NO_PAYMENT_AVAILABLE"); // ?
 
         uint8 secondLastInstallmentPaid_ = sellerInfo_.installmentsPaid - 1;
 
         // payments claimed should be one less than installmentsPaid
         // no other check required as installmentsPaid will increase after a month
         require(
-            sellerInfo_.paymentsClaimed == secondLastInstallmentPaid_,
+            (sellerInfo_.paymentsClaimed == secondLastInstallmentPaid_) ||
+                (sellerInfo_.installment != InstallmentPlan.None),
             "CANNOT_RECLAIM_PAYMENT"
         );
 
