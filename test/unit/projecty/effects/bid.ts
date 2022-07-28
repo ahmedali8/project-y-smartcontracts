@@ -1,17 +1,13 @@
-import { getAddress } from "@ethersproject/address";
 import { Zero } from "@ethersproject/constants";
-import { keccak256 } from "@ethersproject/solidity";
-import { computeAddress } from "@ethersproject/transactions";
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
-import { impersonateAccount, setBalance, time } from "@nomicfoundation/hardhat-network-helpers";
+import { time } from "@nomicfoundation/hardhat-network-helpers";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { assert, expect } from "chai";
-import { ethers } from "hardhat";
 
 import { toWei } from "../../../../utils/format";
 import { INSTALLMENT_PLAN_VALUES, InstallmentPlan } from "../../../shared/constants";
 import { ProjectYErrors } from "../../../shared/errors";
-import { getDownPayment } from "../../../shared/utils";
+import { createRandomSigner, getDownPayment } from "../../../shared/utils";
 
 export default function shouldBehaveLikeBid(): void {
   context("when entryId is not valid", function () {
@@ -112,12 +108,7 @@ export default function shouldBehaveLikeBid(): void {
       context("when bidder has not enough funds", function () {
         it("InvalidInputError: sender doesn't have enough funds to send tx.", async function () {
           try {
-            const unknownBuyerAddress: string = getAddress(
-              computeAddress(keccak256(["string"], ["beaf"]))
-            );
-            await impersonateAccount(unknownBuyerAddress);
-            await setBalance(unknownBuyerAddress, toWei("1"));
-            const unknownBuyer = await ethers.getSigner(unknownBuyerAddress);
+            const unknownBuyer: SignerWithAddress = await createRandomSigner("beaf", toWei("1"));
 
             const bidPrice = toWei("3.5");
             const buyingInstallment = InstallmentPlan.None;
