@@ -180,8 +180,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         return _bidIdTracker.current();
     }
 
-    function getDownPaymentAmount(uint256 entryId_, uint256 bidId_) public view returns (uint256) {
-        isEntryIdValid(entryId_);
+    function getDownPaymentAmount(uint256 bidId_) public view returns (uint256) {
         isBidIdValid(bidId_);
 
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
@@ -236,7 +235,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
     ) public view returns (uint256) {
         // if first installment number is 1 then it means it's downpayment
         if (installmentNumber_ == 1) {
-            return getDownPaymentAmount(entryId_, bidId_);
+            return getDownPaymentAmount(bidId_);
         }
 
         return installmentNumber_ * getInstallmentAmountPerMonth(entryId_);
@@ -285,35 +284,39 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 bidPrice_,
         InstallmentPlan installment_
     ) public payable returns (uint256) {
+        isEntryIdValid(entryId_);
+
         uint256 value_ = msg.value;
         uint64 blockTimestamp_ = uint64(block.timestamp);
-
-        // create unique bidId
-        _bidIdTracker.increment();
-        uint256 bidId_ = _bidIdTracker.current();
-
-        // update buyer address so that bid id gets validated
-        _buyerInfo[bidId_].buyerAddress = _msgSender();
-
-        uint256 downPayment_ = getDownPaymentAmount(entryId_, bidId_);
-
-        require(value_ != 0 && value_ == downPayment_, "VALUE_NOT_EQUAL_TO_DOWN_PAYMENT");
 
         require(
             blockTimestamp_ <= _sellerInfo[entryId_].timestamp + biddingPeriod,
             "BIDDING_PERIOD_OVER"
         );
 
+        // create unique bidId
+        _bidIdTracker.increment();
+        uint256 bidId_ = _bidIdTracker.current();
+
         // update buyer info mapping
+        _buyerInfo[bidId_].buyerAddress = _msgSender();
+        _buyerInfo[bidId_].bidInstallment = installment_;
         _buyerInfo[bidId_].timestamp = blockTimestamp_;
         _buyerInfo[bidId_].bidPrice = bidPrice_;
         _buyerInfo[bidId_].entryId = entryId_;
-        _buyerInfo[bidId_].pricePaid = value_;
-        _buyerInfo[bidId_].bidInstallment = installment_;
 
+        // update total bids for this entry id
         _sellerInfo[entryId_].totalBids += 1;
 
+        uint256 downPayment_ = getDownPaymentAmount(bidId_);
+
+        require(value_ != 0 && value_ == downPayment_, "VALUE_NOT_EQUAL_TO_DOWN_PAYMENT");
+
+        // update price paid
+        _buyerInfo[bidId_].pricePaid = value_;
+
         emit Bid(_msgSender(), entryId_, bidId_, blockTimestamp_);
+
         return bidId_;
     }
 

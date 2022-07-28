@@ -7,6 +7,13 @@ export enum InstallmentPlan {
   NineMonths,
 }
 
+/**
+ * Array of all the installment plan values
+ */
+export const INSTALLMENT_PLAN_VALUES: InstallmentPlan[] = Object.keys(InstallmentPlan).filter(
+  (i) => !isNaN(Number(i))
+) as unknown as InstallmentPlan[];
+
 export const ONE_MONTH: number = time.duration.days(30);
 
 export const THREE_MONTHTS_DOWN_PAYMENT_PERCENTAGE: number = 34; // 34%

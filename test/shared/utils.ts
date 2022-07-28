@@ -19,7 +19,7 @@ export function getDownPayment(installmentPlan: InstallmentPlan, bidPrice: BigNu
   } else if (installmentPlan == InstallmentPlan.NineMonths) {
     return bidPrice.mul(NINE_MONTHTS_DOWN_PAYMENT_PERCENTAGE).div(100);
   } else {
-    return toBN("0");
+    return bidPrice; // InstallmentPlan.None
   }
 }
 
