@@ -75,6 +75,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     event BidSelected(uint256 indexed bidId, uint256 indexed entryId);
 
+    event InstallmentPaid(address buyer, uint256 entryId, uint256 bidId, uint256 installmentNumber);
+
     constructor(address owner_) Owned(owner_) {
         // solhint-disable-previous-line no-empty-blocks
     }
@@ -335,7 +337,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
             blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,
             "BIDDING_PERIOD_NOT_OVER"
         );
-        require(sellerInfo_.selectedBidId == 0 && !buyerInfo_.isSelected, "CANNOT_RESELECT_BID"); // will be tested in other than none scenario
+
+        // will be tested in other than none scenario
+        require(sellerInfo_.selectedBidId == 0 && !buyerInfo_.isSelected, "CANNOT_RESELECT_BID");
 
         // if installment plan is none so transfer the nft on selection of bid
         if (buyerInfo_.bidInstallment == InstallmentPlan.None) {
@@ -372,10 +376,12 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function payInstallment(uint256 entryId_) public payable {
         uint256 value_ = msg.value;
 
+        // if InstallmentPlan.None so entryId is not validated as it was deleted
         isEntryIdValid(entryId_);
 
         uint256 bidId_ = _sellerInfo[entryId_].selectedBidId;
-        isBidIdValid(bidId_);
+
+        require(bidId_ != 0, "NO_BID_ID_SELECTED");
 
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
@@ -384,10 +390,39 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 bidPrice_ = buyerInfo_.bidPrice;
         uint256 pricePaid_ = buyerInfo_.pricePaid;
 
-        if (bidPrice_ != pricePaid_) {
-            uint256 installmentPayment_ = getInstallmentAmountPerMonth(entryId_);
+        uint8 installmentsPaid_ = _sellerInfo[entryId_].installmentsPaid;
 
-            require(installmentPayment_ == value_ && value_ != 0, "INVALID_INSTALLMENT_VALUE");
+        if (bidPrice_ != pricePaid_) {
+            uint256 installmentPerMonth_ = getInstallmentAmountPerMonth(entryId_);
+
+            // Installments paid
+            require(installmentPerMonth_ != 0, "NO_INSTALLMENT_LEFT"); // left
+
+            require(installmentPerMonth_ == value_, "INVALID_INSTALLMENT_VALUE");
+
+            // get timestamp of installment paid
+            uint256 installmentPaidTimestamp_ = getInstallmentMonthTimestamp(
+                bidId_,
+                installmentsPaid_
+            );
+
+            // current timestamp should be greater than installmentPaidTimestamp_
+            require(
+                uint64(block.timestamp) > installmentPaidTimestamp_,
+                "PAY_AFTER_APPROPRIATE_TIME"
+            );
+
+            // get timestamp of next payment
+            uint256 installmentMonthTimestamp_ = getInstallmentMonthTimestamp(
+                bidId_,
+                installmentsPaid_ + 1 // the installment number that needs to be paid
+            );
+
+            // if current timestamp is greater then timestamp of next payment + gracePeriod then stop execution
+            require(
+                !(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),
+                "DUE_DATE_PASSED"
+            );
 
             _buyerInfo[bidId_].pricePaid += value_;
             _sellerInfo[entryId_].installmentsPaid++;
@@ -406,6 +441,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
             // delete bid
             delete _buyerInfo[bidId_];
         }
+
+        emit InstallmentPaid(_msgSender(), entryId_, bidId_, installmentsPaid_ + 1);
     }
 
     function withdrawBid(uint256 bidId_) public {

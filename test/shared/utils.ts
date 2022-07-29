@@ -9,12 +9,12 @@ import { ethers } from "hardhat";
 import { toBN } from "../../utils/format";
 import {
   InstallmentPlan,
-  NINE_MONTHTS_DOWN_PAYMENT_PERCENTAGE,
-  NINE_MONTHTS_MONTHLY_PERCENTAGE,
-  SIX_MONTHTS_DOWN_PAYMENT_PERCENTAGE,
-  SIX_MONTHTS_MONTHLY_PERCENTAGE,
-  THREE_MONTHTS_DOWN_PAYMENT_PERCENTAGE,
-  THREE_MONTHTS_MONTHLY_PERCENTAGE,
+  NINE_MONTHS_DOWN_PAYMENT_PERCENTAGE,
+  NINE_MONTHS_MONTHLY_PERCENTAGE,
+  SIX_MONTHS_DOWN_PAYMENT_PERCENTAGE,
+  SIX_MONTHS_MONTHLY_PERCENTAGE,
+  THREE_MONTHS_DOWN_PAYMENT_PERCENTAGE,
+  THREE_MONTHS_MONTHLY_PERCENTAGE,
 } from "./constants";
 
 export async function createRandomSigner(salt: string, bal: BigNumber): Promise<SignerWithAddress> {
@@ -31,11 +31,11 @@ export async function createRandomSigner(salt: string, bal: BigNumber): Promise<
 
 export function getDownPayment(installmentPlan: InstallmentPlan, bidPrice: BigNumber): BigNumber {
   if (installmentPlan == InstallmentPlan.ThreeMonths) {
-    return bidPrice.mul(THREE_MONTHTS_DOWN_PAYMENT_PERCENTAGE).div(100);
+    return bidPrice.mul(THREE_MONTHS_DOWN_PAYMENT_PERCENTAGE).div(100);
   } else if (installmentPlan == InstallmentPlan.SixMonths) {
-    return bidPrice.mul(SIX_MONTHTS_DOWN_PAYMENT_PERCENTAGE).div(1000);
+    return bidPrice.mul(SIX_MONTHS_DOWN_PAYMENT_PERCENTAGE).div(1000);
   } else if (installmentPlan == InstallmentPlan.NineMonths) {
-    return bidPrice.mul(NINE_MONTHTS_DOWN_PAYMENT_PERCENTAGE).div(100);
+    return bidPrice.mul(NINE_MONTHS_DOWN_PAYMENT_PERCENTAGE).div(100);
   } else {
     return bidPrice; // InstallmentPlan.None
   }
@@ -46,11 +46,11 @@ export function getInstallmentPerMonth(
   bidPrice: BigNumber
 ): BigNumber {
   if (installmentPlan == InstallmentPlan.ThreeMonths) {
-    return bidPrice.mul(THREE_MONTHTS_MONTHLY_PERCENTAGE).div(100);
+    return bidPrice.mul(THREE_MONTHS_MONTHLY_PERCENTAGE).div(100);
   } else if (installmentPlan == InstallmentPlan.SixMonths) {
-    return bidPrice.mul(SIX_MONTHTS_MONTHLY_PERCENTAGE).div(1000);
+    return bidPrice.mul(SIX_MONTHS_MONTHLY_PERCENTAGE).div(1000);
   } else if (installmentPlan == InstallmentPlan.NineMonths) {
-    return bidPrice.mul(NINE_MONTHTS_MONTHLY_PERCENTAGE).div(100);
+    return bidPrice.mul(NINE_MONTHS_MONTHLY_PERCENTAGE).div(100);
   } else {
     return toBN("0");
   }
@@ -64,4 +64,20 @@ export function getInstallmentPercentageOf(
   return getDownPayment(installmentPlan, bidPrice).add(
     getInstallmentPerMonth(installmentPlan, bidPrice).mul(installmentNumber)
   );
+}
+
+export function getTotalInstallments(installmentPlan: InstallmentPlan): number {
+  switch (installmentPlan) {
+    case InstallmentPlan.ThreeMonths:
+      return 3;
+
+    case InstallmentPlan.SixMonths:
+      return 6;
+
+    case InstallmentPlan.NineMonths:
+      return 9;
+
+    default:
+      return 1;
+  }
 }

@@ -33,4 +33,7 @@ export enum ProjectYErrors {
   InvalidLiquidationValue = "INVALID_LIQUIDATION_VALUE",
   InvalidBiddingPrice = "INVALID_BIDDING_PERIOD",
   InvalidGracePeriod = "INVALID_GRACE_PERIOD",
+  DueDatePassed = "DUE_DATE_PASSED",
+  NoBidIdSelected = "NO_BID_ID_SELECTED",
+  PayAfterAppropriateTime = "PAY_AFTER_APPROPRIATE_TIME",
 }
