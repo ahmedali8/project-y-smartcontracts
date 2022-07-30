@@ -132,12 +132,6 @@ export default function shouldBehaveLikePayInstallment(): void {
         });
       });
 
-      // context('when all installments are done', function () {
-      //   it('reverts', async function () {
-      //     // TODO
-      //   });
-      // });
-
       context("when value is invalid", function () {
         it("reverts", async function () {
           await expect(
@@ -226,7 +220,7 @@ export default function shouldBehaveLikePayInstallment(): void {
         });
       });
 
-      context("when buyer pays last installment", function () {
+      context("when buyer pays last installment (all installments complete)", function () {
         beforeEach(async function () {
           const totalInstallments: number = getTotalInstallments(buyingInstallment);
 
@@ -239,11 +233,16 @@ export default function shouldBehaveLikePayInstallment(): void {
             // increase time to one month
             await time.increase(ONE_MONTH);
 
+            const installmentToBePaid = i + 2;
             const installmentPerMonth = getInstallmentPerMonth(buyingInstallment, bidPrice);
 
-            await this.contracts.projecty
-              .connect(buyer)
-              .payInstallment(entryId, { value: installmentPerMonth });
+            await expect(
+              this.contracts.projecty
+                .connect(buyer)
+                .payInstallment(entryId, { value: installmentPerMonth })
+            )
+              .to.emit(this.contracts.projecty, "InstallmentPaid")
+              .withArgs(buyer.address, entryId, bidId, installmentToBePaid);
           }
         });
 
