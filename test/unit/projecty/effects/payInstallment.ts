@@ -228,12 +228,7 @@ export default function shouldBehaveLikePayInstallment(): void {
 
       context("when buyer pays last installment", function () {
         beforeEach(async function () {
-          // const installmentsPaid = (await this.contracts.projecty.getSellerInfo(entryId))
-          //   .installmentsPaid;
-          // console.log("installmentsPaid: ", installmentsPaid);
-
           const totalInstallments: number = getTotalInstallments(buyingInstallment);
-          // console.log("totalInstallments: ", totalInstallments);
 
           // ensure owner of nft is projecty
           expect(await this.mocks.erc721.ownerOf(tokenId)).to.equal(
