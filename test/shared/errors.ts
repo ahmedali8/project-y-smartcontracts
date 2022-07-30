@@ -36,4 +36,5 @@ export enum ProjectYErrors {
   DueDatePassed = "DUE_DATE_PASSED",
   NoBidIdSelected = "NO_BID_ID_SELECTED",
   PayAfterAppropriateTime = "PAY_AFTER_APPROPRIATE_TIME",
+  ClaimAfterAppropriateTime = "CLAIM_AFTER_APPROPRIATE_TIME",
 }

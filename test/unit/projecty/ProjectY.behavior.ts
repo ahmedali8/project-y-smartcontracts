@@ -3,6 +3,7 @@ import shouldBehaveLikePayInstallment from "./effects/payInstallment";
 import shouldBehaveLikeSelectBid from "./effects/selectBid";
 import shouldBehaveLikeSell from "./effects/sell";
 import { shouldBehaveLikeWithdrawBid } from "./effects/withdrawBid";
+import shouldBehaveLikeWithdrawPayment from "./effects/withdrawPayment";
 
 export function shouldBehaveLikeProjectY(): void {
   describe("View Functions", function () {
@@ -22,8 +23,11 @@ export function shouldBehaveLikeProjectY(): void {
     // describe("#payInstallment", function () {
     //   shouldBehaveLikePayInstallment();
     // });
-    describe("#withdrawBid", function () {
-      shouldBehaveLikeWithdrawBid();
+    // describe("#withdrawBid", function () {
+    //   shouldBehaveLikeWithdrawBid();
+    // });
+    describe("#withdrawPayment", function () {
+      shouldBehaveLikeWithdrawPayment();
     });
   });
 }
