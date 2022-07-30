@@ -15,11 +15,11 @@ export function shouldBehaveLikeProjectY(): void {
     // describe("#bid", function () {
     //   shouldBehaveLikeBid();
     // });
-    // describe("#selectBid", function () {
-    //   shouldBehaveLikeSelectBid();
-    // });
-    describe("#payInstallment", function () {
-      shouldBehaveLikePayInstallment();
+    describe("#selectBid", function () {
+      shouldBehaveLikeSelectBid();
     });
+    // describe("#payInstallment", function () {
+    //   shouldBehaveLikePayInstallment();
+    // });
   });
 }
