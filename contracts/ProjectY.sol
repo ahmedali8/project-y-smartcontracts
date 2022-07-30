@@ -77,6 +77,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     event InstallmentPaid(address buyer, uint256 entryId, uint256 bidId, uint256 installmentNumber);
 
+    event BidWithdrawn(uint256 bidId, uint256 entryId, uint256 value);
+
     constructor(address owner_) Owned(owner_) {
         // solhint-disable-previous-line no-empty-blocks
     }
@@ -450,20 +452,20 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
-        uint256 entryId_ = buyerInfo_.entryId;
-
+        require(buyerInfo_.buyerAddress == _msgSender(), "CALLER_NOT_BUYER");
         require(
-            uint64(block.timestamp) >= _sellerInfo[entryId_].timestamp + biddingPeriod,
+            uint64(block.timestamp) >= _sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,
             "BIDDING_PERIOD_NOT_OVER"
         );
         require(!buyerInfo_.isSelected, "BIDDER_SHOULD_NOT_BE_SELECTED");
-        require(_msgSender() == buyerInfo_.buyerAddress, "CALLER_NOT_BUYER");
 
         // delete bid
         delete _buyerInfo[bidId_];
 
         // return the price paid
         Address.sendValue(payable(buyerInfo_.buyerAddress), buyerInfo_.pricePaid);
+
+        emit BidWithdrawn(bidId_, buyerInfo_.entryId, buyerInfo_.pricePaid);
     }
 
     // if Installment.None then seller should be able to withdraw immediately
