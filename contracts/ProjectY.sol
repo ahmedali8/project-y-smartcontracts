@@ -219,9 +219,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         InstallmentPlan installment_ = buyerInfo_.bidInstallment;
 
-        if (buyerInfo_.bidPrice == buyerInfo_.pricePaid) {
-            return 0;
-        }
+        // if (buyerInfo_.bidPrice == buyerInfo_.pricePaid) {
+        //     return 0;
+        // }
 
         if (installment_ == InstallmentPlan.ThreeMonths) {
             return (buyerInfo_.bidPrice * 33) / 100; // 33%
@@ -411,9 +411,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
         if (bidPrice_ != pricePaid_) {
             uint256 installmentPerMonth_ = getInstallmentAmountPerMonth(entryId_);
 
-            // Installments paid
-            require(installmentPerMonth_ != 0, "NO_INSTALLMENT_LEFT"); // left
-
             require(installmentPerMonth_ == value_, "INVALID_INSTALLMENT_VALUE");
 
             // get timestamp of installment paid
@@ -491,8 +488,23 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         uint8 secondLastInstallmentPaid_ = sellerInfo_.installmentsPaid - 1;
 
+        console.log("sellerInfo_.installmentsPaid: ", sellerInfo_.installmentsPaid);
         console.log("secondLastInstallmentPaid_: ", secondLastInstallmentPaid_);
         console.log("sellerInfo_.paymentsClaimed: ", sellerInfo_.paymentsClaimed);
+
+        // check if installment is done then revert
+        uint8 totalInstallments_;
+        if (_buyerInfo[sellerInfo_.selectedBidId].bidInstallment == InstallmentPlan.ThreeMonths) {
+            totalInstallments_ = 3;
+        } else if (
+            _buyerInfo[sellerInfo_.selectedBidId].bidInstallment == InstallmentPlan.SixMonths
+        ) {
+            totalInstallments_ = 6;
+        } else if (
+            _buyerInfo[sellerInfo_.selectedBidId].bidInstallment == InstallmentPlan.NineMonths
+        ) {
+            totalInstallments_ = 9;
+        }
 
         // // get timestamp of next payment
         // uint64 nextInstallmentTimestamp_ = getInstallmentMonthTimestamp(
@@ -508,11 +520,17 @@ contract ProjectY is Context, Owned, ERC721Holder {
         //     "CLAIM_AFTER_APPROPRIATE_TIME"
         // );
 
+        bool isLastClaimablePayment_ = totalInstallments_ == sellerInfo_.installmentsPaid &&
+            // if payments claimed is zero then it means only downpayment is done
+            sellerInfo_.paymentsClaimed != 0 &&
+            // if payments claimed and second last are equal this means this is last payment claiming
+            sellerInfo_.paymentsClaimed == secondLastInstallmentPaid_;
+
         // payments claimed should be one less than installmentsPaid
         // no other check required as installmentsPaid will increase after a month
         require(
-            (sellerInfo_.paymentsClaimed < secondLastInstallmentPaid_) &&
-                (sellerInfo_.installment != InstallmentPlan.None),
+            (((sellerInfo_.paymentsClaimed < secondLastInstallmentPaid_) &&
+                (sellerInfo_.installment != InstallmentPlan.None)) || (isLastClaimablePayment_)),
             "CANNOT_RECLAIM_PAYMENT"
         );
 
@@ -524,20 +542,38 @@ contract ProjectY is Context, Owned, ERC721Holder {
             paymentsClaimable_ = 1;
             amountClaimable_ = getDownPaymentAmount(sellerInfo_.selectedBidId);
         }
+
         // seller is claiming payment other than first
         if (sellerInfo_.paymentsClaimed != 0) {
             paymentsClaimable_ = secondLastInstallmentPaid_ - sellerInfo_.paymentsClaimed;
             amountClaimable_ = paymentsClaimable_ * getInstallmentAmountPerMonth(entryId_);
         }
 
+        // seller is claiming last payment
+        if (isLastClaimablePayment_) {
+            amountClaimable_ = getInstallmentAmountPerMonth(entryId_);
+        }
+
         console.log("paymentsClaimable_: ", paymentsClaimable_);
         console.log("amountClaimable_: ", amountClaimable_);
 
-        // update paymentsClaimed
-        _sellerInfo[entryId_].paymentsClaimed += paymentsClaimable_;
+        // if last payment then delete buyerInfo and sellerInfo
+        if (isLastClaimablePayment_) {
+            // delete seller
+            delete _sellerInfo[entryId_];
+            // delete bid
+            delete _buyerInfo[sellerInfo_.selectedBidId];
+        } else {
+            // update paymentsClaimed
+            _sellerInfo[entryId_].paymentsClaimed += paymentsClaimable_;
+        }
+
+        console.log("before txn contract balance: ", address(this).balance);
 
         // transfer amountClaimable_ to seller
         Address.sendValue(payable(sellerInfo_.sellerAddress), amountClaimable_);
+
+        console.log("after txn contract balance: ", address(this).balance);
     }
 
     function liquidate(uint256 entryId_) public payable {

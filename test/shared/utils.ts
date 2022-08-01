@@ -2,7 +2,7 @@ import { getAddress } from "@ethersproject/address";
 import type { BigNumber } from "@ethersproject/bignumber";
 import { keccak256 } from "@ethersproject/solidity";
 import { computeAddress } from "@ethersproject/transactions";
-import { impersonateAccount, setBalance } from "@nomicfoundation/hardhat-network-helpers";
+import { impersonateAccount, setBalance, time } from "@nomicfoundation/hardhat-network-helpers";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { ethers } from "hardhat";
 
@@ -27,6 +27,10 @@ export async function createRandomSigner(salt: string, bal: BigNumber): Promise<
 
   // hre.ethers
   return await ethers.getSigner(checksummedSignerAddress);
+}
+
+export async function increaseDays(days: number) {
+  await time.increase(time.duration.days(days));
 }
 
 export function getDownPayment(installmentPlan: InstallmentPlan, bidPrice: BigNumber): BigNumber {
