@@ -16,6 +16,10 @@ $ git submodule update --init --recursive
 $ yarn install
 ```
 
+```bash
+$ slither . --hardhat-cache-directory ./generated/cache/hardhat --hardhat-artifacts-directory ./generated/artifacts/hardhat --checklist --json ./slither/output.json --sarif ./slither/output.sarif
+```
+
 ### Note: refer to [hardhat-foundry-template](https://github.com/ahmedali8/foundry-hardhat-template) for more information and commands
 
 [gha]: https://github.com/ahmedali8/project-y-smartcontracts/actions

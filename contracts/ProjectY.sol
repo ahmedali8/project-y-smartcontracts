@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.15;
+pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
@@ -268,9 +268,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
         _entryIdTracker.increment();
         uint256 entryId_ = _entryIdTracker.current();
 
-        // transfer NFT to this contract
-        IERC721(contractAddress_).safeTransferFrom(_msgSender(), address(this), tokenId_);
-
         // update mapping
         _sellerInfo[entryId_].onSale = true;
         _sellerInfo[entryId_].sellerAddress = _msgSender();
@@ -279,6 +276,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
         _sellerInfo[entryId_].tokenId = tokenId_;
         _sellerInfo[entryId_].sellingPrice = sellingPrice_;
         _sellerInfo[entryId_].installment = installment_;
+
+        // transfer NFT to this contract
+        IERC721(contractAddress_).safeTransferFrom(_msgSender(), address(this), tokenId_);
 
         emit Sell(_msgSender(), contractAddress_, tokenId_, entryId_, blockTimestamp_);
         return entryId_;

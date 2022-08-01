@@ -1,0 +1,2225 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Slither",
+          "informationUri": "https://github.com/crytic/slither",
+          "version": "0.8.3",
+          "rules": [
+            {
+              "id": "1-1-reentrancy-no-eth",
+              "name": "reentrancy-no-eth",
+              "properties": {
+                "precision": "high",
+                "security-severity": "4.0"
+              },
+              "shortDescription": {
+                "text": "Reentrancy vulnerabilities"
+              },
+              "help": {
+                "text": "Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy)."
+              }
+            },
+            {
+              "id": "1-1-uninitialized-local",
+              "name": "uninitialized-local",
+              "properties": {
+                "precision": "high",
+                "security-severity": "4.0"
+              },
+              "shortDescription": {
+                "text": "Uninitialized local variables"
+              },
+              "help": {
+                "text": "Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero to improve code readability."
+              }
+            },
+            {
+              "id": "1-1-unused-return",
+              "name": "unused-return",
+              "properties": {
+                "precision": "high",
+                "security-severity": "4.0"
+              },
+              "shortDescription": {
+                "text": "Unused return"
+              },
+              "help": {
+                "text": "Ensure that all the return values of the function calls are used."
+              }
+            },
+            {
+              "id": "2-1-events-maths",
+              "name": "events-maths",
+              "properties": {
+                "precision": "high",
+                "security-severity": "3.0"
+              },
+              "shortDescription": {
+                "text": "Missing events arithmetic"
+              },
+              "help": {
+                "text": "Emit an event for critical parameter changes."
+              }
+            },
+            {
+              "id": "2-1-missing-zero-check",
+              "name": "missing-zero-check",
+              "properties": {
+                "precision": "high",
+                "security-severity": "3.0"
+              },
+              "shortDescription": {
+                "text": "Missing zero address validation"
+              },
+              "help": {
+                "text": "Check that the address is not zero."
+              }
+            },
+            {
+              "id": "2-0-variable-scope",
+              "name": "variable-scope",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "3.0"
+              },
+              "shortDescription": {
+                "text": "Pre-declaration usage of local variables"
+              },
+              "help": {
+                "text": "Move all variable declarations prior to any usage of the variable, and ensure that reaching a variable declaration does not depend on some conditional if it is used unconditionally."
+              }
+            },
+            {
+              "id": "2-1-reentrancy-benign",
+              "name": "reentrancy-benign",
+              "properties": {
+                "precision": "high",
+                "security-severity": "3.0"
+              },
+              "shortDescription": {
+                "text": "Reentrancy vulnerabilities"
+              },
+              "help": {
+                "text": "Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy)."
+              }
+            },
+            {
+              "id": "2-1-reentrancy-events",
+              "name": "reentrancy-events",
+              "properties": {
+                "precision": "high",
+                "security-severity": "3.0"
+              },
+              "shortDescription": {
+                "text": "Reentrancy vulnerabilities"
+              },
+              "help": {
+                "text": "Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy)."
+              }
+            },
+            {
+              "id": "2-1-timestamp",
+              "name": "timestamp",
+              "properties": {
+                "precision": "high",
+                "security-severity": "3.0"
+              },
+              "shortDescription": {
+                "text": "Block timestamp"
+              },
+              "help": {
+                "text": "Avoid relying on `block.timestamp`."
+              }
+            },
+            {
+              "id": "3-0-assembly",
+              "name": "assembly",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Assembly usage"
+              },
+              "help": {
+                "text": "Do not use `evm` assembly."
+              }
+            },
+            {
+              "id": "3-0-pragma",
+              "name": "pragma",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Different pragma directives are used"
+              },
+              "help": {
+                "text": "Use one Solidity version."
+              }
+            },
+            {
+              "id": "3-0-solc-version",
+              "name": "solc-version",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Incorrect versions of Solidity"
+              },
+              "help": {
+                "text": "\nDeploy with any of the following Solidity versions:\n- 0.5.16 - 0.5.17\n- 0.6.11 - 0.6.12\n- 0.7.5 - 0.7.6\n- 0.8.4 - 0.8.7\nUse a simple pragma version that allows any of these versions.\nConsider using the latest version of Solidity for testing."
+              }
+            },
+            {
+              "id": "3-0-low-level-calls",
+              "name": "low-level-calls",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Low-level calls"
+              },
+              "help": {
+                "text": "Avoid low-level calls. Check the call success. If the call is meant for a contract, check for code existence."
+              }
+            },
+            {
+              "id": "3-0-naming-convention",
+              "name": "naming-convention",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Conformance to Solidity naming conventions"
+              },
+              "help": {
+                "text": "Follow the Solidity [naming convention](https://solidity.readthedocs.io/en/v0.4.25/style-guide.html#naming-conventions)."
+              }
+            },
+            {
+              "id": "3-1-similar-names",
+              "name": "similar-names",
+              "properties": {
+                "precision": "high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Variable names too similar"
+              },
+              "help": {
+                "text": "Prevent variables from having similar names."
+              }
+            },
+            {
+              "id": "3-1-too-many-digits",
+              "name": "too-many-digits",
+              "properties": {
+                "precision": "high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Too many digits"
+              },
+              "help": {
+                "text": "\nUse:\n- [Ether suffix](https://solidity.readthedocs.io/en/latest/units-and-global-variables.html#ether-units),\n- [Time suffix](https://solidity.readthedocs.io/en/latest/units-and-global-variables.html#time-units), or\n- [The scientific notation](https://solidity.readthedocs.io/en/latest/types.html#rational-and-integer-literals)\n"
+              }
+            },
+            {
+              "id": "4-0-external-function",
+              "name": "external-function",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Public function that could be declared external"
+              },
+              "help": {
+                "text": "Use the `external` attribute for functions never called from the contract."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "1-1-reentrancy-no-eth",
+          "message": {
+            "text": "Reentrancy in ProjectY.selectBid(uint256) (contracts/ProjectY.sol#329-378):\n\tExternal calls:\n\t- IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId) (contracts/ProjectY.sol#350-354)\n\t- Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid) (contracts/ProjectY.sol#357)\n\tState variables written after the call(s):\n\t- delete _buyerInfo[bidId_] (contracts/ProjectY.sol#362)\n\t- delete _sellerInfo[entryId_] (contracts/ProjectY.sol#360)\n",
+            "markdown": "Reentrancy in [ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L329-L378):\n\tExternal calls:\n\t- [IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId)](contracts/ProjectY.sol#L350-L354)\n\t- [Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid)](contracts/ProjectY.sol#L357)\n\tState variables written after the call(s):\n\t- [delete _buyerInfo[bidId_]](contracts/ProjectY.sol#L362)\n\t- [delete _sellerInfo[entryId_]](contracts/ProjectY.sol#L360)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 329,
+                  "endLine": 378
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "54a67f26eeb0927fcc08a8a0f733d522585d39b4ed4a23d2e30d27f9ab8ef573"
+          }
+        },
+        {
+          "ruleId": "1-1-uninitialized-local",
+          "message": {
+            "text": "ProjectY.withdrawPayment(uint256).totalInstallments_ (contracts/ProjectY.sol#496) is a local variable never initialized\n",
+            "markdown": "[ProjectY.withdrawPayment(uint256).totalInstallments_](contracts/ProjectY.sol#L496) is a local variable never initialized\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 496,
+                  "endLine": 496
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "049815da2e76b79ad51e421c4206c11d5afd210485d12ee247bf4c0ec7984e19"
+          }
+        },
+        {
+          "ruleId": "1-1-uninitialized-local",
+          "message": {
+            "text": "ProjectY.withdrawPayment(uint256).amountClaimable_ (contracts/ProjectY.sol#538) is a local variable never initialized\n",
+            "markdown": "[ProjectY.withdrawPayment(uint256).amountClaimable_](contracts/ProjectY.sol#L538) is a local variable never initialized\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 538,
+                  "endLine": 538
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "2a1b83dc5617a7f000ad83b8f58f4c9e42709b195985d60178361416d5b0df07"
+          }
+        },
+        {
+          "ruleId": "1-1-uninitialized-local",
+          "message": {
+            "text": "ProjectY.getNFTsOpenForSale().i_ (contracts/ProjectY.sol#98) is a local variable never initialized\n",
+            "markdown": "[ProjectY.getNFTsOpenForSale().i_](contracts/ProjectY.sol#L98) is a local variable never initialized\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 98,
+                  "endLine": 98
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "83baaa6bac2d0828ed5ee2b340d525d4c681d11bd620bc488dc23c67f152c511"
+          }
+        },
+        {
+          "ruleId": "1-1-uninitialized-local",
+          "message": {
+            "text": "ProjectY.payInstallment(uint256).totalInstallments_ (contracts/ProjectY.sol#400) is a local variable never initialized\n",
+            "markdown": "[ProjectY.payInstallment(uint256).totalInstallments_](contracts/ProjectY.sol#L400) is a local variable never initialized\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 400,
+                  "endLine": 400
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "c7545524db52d095e85d48f7a38e9fa38e4b51a08e3639f3a1deacc78500fac1"
+          }
+        },
+        {
+          "ruleId": "1-1-uninitialized-local",
+          "message": {
+            "text": "ProjectY.withdrawPayment(uint256).paymentsClaimable_ (contracts/ProjectY.sol#537) is a local variable never initialized\n",
+            "markdown": "[ProjectY.withdrawPayment(uint256).paymentsClaimable_](contracts/ProjectY.sol#L537) is a local variable never initialized\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 537,
+                  "endLine": 537
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "f8d63f727d5799eb2dc627997e5df04fae59382e67f8807eea2c5eff334291e5"
+          }
+        },
+        {
+          "ruleId": "1-1-unused-return",
+          "message": {
+            "text": "ERC721._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) ignores return value by IERC721Receiver(to).onERC721Received(_msgSender(),from,tokenId,data) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#401-412)\n",
+            "markdown": "[ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) ignores return value by [IERC721Receiver(to).onERC721Received(_msgSender(),from,tokenId,data)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L401-L412)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 394,
+                  "endLine": 416
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "3cffe9ecf701f572a747af03bb26b5ac2e89dd363ce046fb252f30b8a418cb67"
+          }
+        },
+        {
+          "ruleId": "2-1-events-maths",
+          "message": {
+            "text": "ProjectY.setBiddingPeriod(uint64) (contracts/ProjectY.sol#621-624) should emit an event for: \n\t- biddingPeriod = biddingPeriod_ (contracts/ProjectY.sol#623) \n",
+            "markdown": "[ProjectY.setBiddingPeriod(uint64)](contracts/ProjectY.sol#L621-L624) should emit an event for: \n\t- [biddingPeriod = biddingPeriod_](contracts/ProjectY.sol#L623) \n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 621,
+                  "endLine": 624
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "8232eb993d130b374a9a08030147215e03a6bb7b403c5527221dfd1f0ce78c4b"
+          }
+        },
+        {
+          "ruleId": "2-1-events-maths",
+          "message": {
+            "text": "ProjectY.setGracePeriod(uint64) (contracts/ProjectY.sol#626-629) should emit an event for: \n\t- gracePeriod = gracePeriod_ (contracts/ProjectY.sol#628) \n",
+            "markdown": "[ProjectY.setGracePeriod(uint64)](contracts/ProjectY.sol#L626-L629) should emit an event for: \n\t- [gracePeriod = gracePeriod_](contracts/ProjectY.sol#L628) \n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 626,
+                  "endLine": 629
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "c8d8cde361d69915d193ef24de4c28bbe5cbe9a15e42712629f0717162299c8d"
+          }
+        },
+        {
+          "ruleId": "2-1-missing-zero-check",
+          "message": {
+            "text": "Owned.setOwner(address).newOwner (node_modules/@rari-capital/solmate/src/auth/Owned.sol#39) lacks a zero-check on :\n\t\t- owner = newOwner (node_modules/@rari-capital/solmate/src/auth/Owned.sol#40)\n",
+            "markdown": "[Owned.setOwner(address).newOwner](node_modules/@rari-capital/solmate/src/auth/Owned.sol#L39) lacks a zero-check on :\n\t\t- [owner = newOwner](node_modules/@rari-capital/solmate/src/auth/Owned.sol#L40)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@rari-capital/solmate/src/auth/Owned.sol"
+                },
+                "region": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "cf9991a908fb8002a5b1924e99cf2b3c0a2f5685dc44fee01a8c656ad4ba4206"
+          }
+        },
+        {
+          "ruleId": "2-0-variable-scope",
+          "message": {
+            "text": "Variable 'ERC721._checkOnERC721Received(address,address,uint256,bytes).retval (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#401)' in ERC721._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) potentially used before declaration: retval == IERC721Receiver.onERC721Received.selector (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#402)\n",
+            "markdown": "Variable '[ERC721._checkOnERC721Received(address,address,uint256,bytes).retval](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L401)' in [ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) potentially used before declaration: [retval == IERC721Receiver.onERC721Received.selector](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L402)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 401,
+                  "endLine": 401
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "1afefd2af0e1638b14bdf7f52386d52b536be937bf4a4f8e2e7c0361085c9ef7"
+          }
+        },
+        {
+          "ruleId": "2-0-variable-scope",
+          "message": {
+            "text": "Variable 'ERC721._checkOnERC721Received(address,address,uint256,bytes).reason (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#403)' in ERC721._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) potentially used before declaration: reason.length == 0 (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#404)\n",
+            "markdown": "Variable '[ERC721._checkOnERC721Received(address,address,uint256,bytes).reason](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L403)' in [ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) potentially used before declaration: [reason.length == 0](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L404)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 403,
+                  "endLine": 403
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "61e79b3675aa34bb83c666da84013c1a7a90e65e594957a1fd29c00082ccc2c0"
+          }
+        },
+        {
+          "ruleId": "2-0-variable-scope",
+          "message": {
+            "text": "Variable 'ERC721._checkOnERC721Received(address,address,uint256,bytes).reason (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#403)' in ERC721._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) potentially used before declaration: revert(uint256,uint256)(32 + reason,mload(uint256)(reason)) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#409)\n",
+            "markdown": "Variable '[ERC721._checkOnERC721Received(address,address,uint256,bytes).reason](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L403)' in [ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) potentially used before declaration: [revert(uint256,uint256)(32 + reason,mload(uint256)(reason))](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L409)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 403,
+                  "endLine": 403
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "f300f1b6d11a3850b26141eb77992515e6388818f7670a7cb4d1d40c27402bbb"
+          }
+        },
+        {
+          "ruleId": "2-1-reentrancy-benign",
+          "message": {
+            "text": "Reentrancy in ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#257-285):\n\tExternal calls:\n\t- IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_) (contracts/ProjectY.sol#272)\n\tState variables written after the call(s):\n\t- _sellerInfo[entryId_].onSale = true (contracts/ProjectY.sol#275)\n\t- _sellerInfo[entryId_].sellerAddress = _msgSender() (contracts/ProjectY.sol#276)\n\t- _sellerInfo[entryId_].contractAddress = contractAddress_ (contracts/ProjectY.sol#277)\n\t- _sellerInfo[entryId_].timestamp = blockTimestamp_ (contracts/ProjectY.sol#278)\n\t- _sellerInfo[entryId_].tokenId = tokenId_ (contracts/ProjectY.sol#279)\n\t- _sellerInfo[entryId_].sellingPrice = sellingPrice_ (contracts/ProjectY.sol#280)\n\t- _sellerInfo[entryId_].installment = installment_ (contracts/ProjectY.sol#281)\n",
+            "markdown": "Reentrancy in [ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L257-L285):\n\tExternal calls:\n\t- [IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_)](contracts/ProjectY.sol#L272)\n\tState variables written after the call(s):\n\t- [_sellerInfo[entryId_].onSale = true](contracts/ProjectY.sol#L275)\n\t- [_sellerInfo[entryId_].sellerAddress = _msgSender()](contracts/ProjectY.sol#L276)\n\t- [_sellerInfo[entryId_].contractAddress = contractAddress_](contracts/ProjectY.sol#L277)\n\t- [_sellerInfo[entryId_].timestamp = blockTimestamp_](contracts/ProjectY.sol#L278)\n\t- [_sellerInfo[entryId_].tokenId = tokenId_](contracts/ProjectY.sol#L279)\n\t- [_sellerInfo[entryId_].sellingPrice = sellingPrice_](contracts/ProjectY.sol#L280)\n\t- [_sellerInfo[entryId_].installment = installment_](contracts/ProjectY.sol#L281)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 257,
+                  "endLine": 285
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "c67258a4ce7047c890bac310e9fcd88264e5e373479db32809f7ef767ec65679"
+          }
+        },
+        {
+          "ruleId": "2-1-reentrancy-events",
+          "message": {
+            "text": "Reentrancy in ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#257-285):\n\tExternal calls:\n\t- IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_) (contracts/ProjectY.sol#272)\n\tEvent emitted after the call(s):\n\t- Sell(_msgSender(),contractAddress_,tokenId_,entryId_,blockTimestamp_) (contracts/ProjectY.sol#283)\n",
+            "markdown": "Reentrancy in [ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L257-L285):\n\tExternal calls:\n\t- [IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_)](contracts/ProjectY.sol#L272)\n\tEvent emitted after the call(s):\n\t- [Sell(_msgSender(),contractAddress_,tokenId_,entryId_,blockTimestamp_)](contracts/ProjectY.sol#L283)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 257,
+                  "endLine": 285
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "610c7cce1ea8f5f36fb19e98a7caa4f597d6ceb82a9c20dc6f2be2a73e533038"
+          }
+        },
+        {
+          "ruleId": "2-1-reentrancy-events",
+          "message": {
+            "text": "Reentrancy in ProjectY.withdrawBid(uint256) (contracts/ProjectY.sol#461-480):\n\tExternal calls:\n\t- Address.sendValue(address(buyerInfo_.buyerAddress),buyerInfo_.pricePaid) (contracts/ProjectY.sol#477)\n\tEvent emitted after the call(s):\n\t- BidWithdrawn(bidId_,buyerInfo_.entryId,buyerInfo_.pricePaid) (contracts/ProjectY.sol#479)\n",
+            "markdown": "Reentrancy in [ProjectY.withdrawBid(uint256)](contracts/ProjectY.sol#L461-L480):\n\tExternal calls:\n\t- [Address.sendValue(address(buyerInfo_.buyerAddress),buyerInfo_.pricePaid)](contracts/ProjectY.sol#L477)\n\tEvent emitted after the call(s):\n\t- [BidWithdrawn(bidId_,buyerInfo_.entryId,buyerInfo_.pricePaid)](contracts/ProjectY.sol#L479)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 461,
+                  "endLine": 480
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "86257120c0a757861443efef8ac38fcb80cf4ea26b4f27557830d32779ba3adb"
+          }
+        },
+        {
+          "ruleId": "2-1-reentrancy-events",
+          "message": {
+            "text": "Reentrancy in ProjectY.selectBid(uint256) (contracts/ProjectY.sol#329-378):\n\tExternal calls:\n\t- IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId) (contracts/ProjectY.sol#350-354)\n\t- Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid) (contracts/ProjectY.sol#357)\n\tEvent emitted after the call(s):\n\t- BidSelected(bidId_,entryId_) (contracts/ProjectY.sol#377)\n",
+            "markdown": "Reentrancy in [ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L329-L378):\n\tExternal calls:\n\t- [IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId)](contracts/ProjectY.sol#L350-L354)\n\t- [Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid)](contracts/ProjectY.sol#L357)\n\tEvent emitted after the call(s):\n\t- [BidSelected(bidId_,entryId_)](contracts/ProjectY.sol#L377)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 329,
+                  "endLine": 378
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "a5f80461f4d54e80096cadc3f82e05930fbae6f6e1b2bc7fc9518b7ff6eb2a69"
+          }
+        },
+        {
+          "ruleId": "2-1-reentrancy-events",
+          "message": {
+            "text": "Reentrancy in ProjectY.payInstallment(uint256) (contracts/ProjectY.sol#380-459):\n\tExternal calls:\n\t- IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(address(this),_msgSender(),_sellerInfo[entryId_].tokenId) (contracts/ProjectY.sol#446-450)\n\tEvent emitted after the call(s):\n\t- InstallmentPaid(_msgSender(),entryId_,bidId_,installmentsPaid_ + 1) (contracts/ProjectY.sol#458)\n",
+            "markdown": "Reentrancy in [ProjectY.payInstallment(uint256)](contracts/ProjectY.sol#L380-L459):\n\tExternal calls:\n\t- [IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(address(this),_msgSender(),_sellerInfo[entryId_].tokenId)](contracts/ProjectY.sol#L446-L450)\n\tEvent emitted after the call(s):\n\t- [InstallmentPaid(_msgSender(),entryId_,bidId_,installmentsPaid_ + 1)](contracts/ProjectY.sol#L458)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 380,
+                  "endLine": 459
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "ce605e5a1a8d2dce0b67fa70c5409ac1a385342d237ca71d860a738a879d59f1"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.payInstallment(uint256) (contracts/ProjectY.sol#380-459) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) > installmentPaidTimestamp_,PAY_AFTER_APPROPRIATE_TIME) (contracts/ProjectY.sol#423-426)\n\t- require(bool,string)(! (uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),DUE_DATE_PASSED) (contracts/ProjectY.sol#435-438)\n",
+            "markdown": "[ProjectY.payInstallment(uint256)](contracts/ProjectY.sol#L380-L459) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) > installmentPaidTimestamp_,PAY_AFTER_APPROPRIATE_TIME)](contracts/ProjectY.sol#L423-L426)\n\t- [require(bool,string)(! (uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),DUE_DATE_PASSED)](contracts/ProjectY.sol#L435-L438)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 380,
+                  "endLine": 459
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "430f3f1fd3100d600e37244e429ccb968e45812fbe53acb53460402fffcbfc8b"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#287-327) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(blockTimestamp_ <= _sellerInfo[entryId_].timestamp + biddingPeriod,BIDDING_PERIOD_OVER) (contracts/ProjectY.sol#297-300)\n",
+            "markdown": "[ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L287-L327) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(blockTimestamp_ <= _sellerInfo[entryId_].timestamp + biddingPeriod,BIDDING_PERIOD_OVER)](contracts/ProjectY.sol#L297-L300)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 287,
+                  "endLine": 327
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "592168eabb61d2f74d554e736eee8bf68355743238c9f96148d9db4e2b9d558f"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.selectBid(uint256) (contracts/ProjectY.sol#329-378) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#340-343)\n",
+            "markdown": "[ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L329-L378) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L340-L343)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 329,
+                  "endLine": 378
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "85caff9faac52d243da72e43712ac3828b196eebbf6e286643d0dd4e46984772"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.withdrawBid(uint256) (contracts/ProjectY.sol#461-480) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) >= _sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#467-470)\n",
+            "markdown": "[ProjectY.withdrawBid(uint256)](contracts/ProjectY.sol#L461-L480) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) >= _sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L467-L470)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 461,
+                  "endLine": 480
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "cad112f138fa7ee1646f637a0470c9edd3f4e790b9bd17818fe89beb6a58285a"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.liquidate(uint256) (contracts/ProjectY.sol#579-619) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),INSTALLMENT_ON_TRACK) (contracts/ProjectY.sol#604-607)\n",
+            "markdown": "[ProjectY.liquidate(uint256)](contracts/ProjectY.sol#L579-L619) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),INSTALLMENT_ON_TRACK)](contracts/ProjectY.sol#L604-L607)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 579,
+                  "endLine": 619
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "e699a5033d31298ab39fd4229dda26fe38c473559b8b73082e7b62750555013a"
+          }
+        },
+        {
+          "ruleId": "3-0-assembly",
+          "message": {
+            "text": "Address.verifyCallResult(bool,bytes,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#201-221) uses assembly\n\t- INLINE ASM (node_modules/@openzeppelin/contracts/utils/Address.sol#213-216)\n",
+            "markdown": "[Address.verifyCallResult(bool,bytes,string)](node_modules/@openzeppelin/contracts/utils/Address.sol#L201-L221) uses assembly\n\t- [INLINE ASM](node_modules/@openzeppelin/contracts/utils/Address.sol#L213-L216)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 201,
+                  "endLine": 221
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "35871747c525efe5aeed3ee6e6ac7d19de1404d80cba7ebe954161c30eced4d8"
+          }
+        },
+        {
+          "ruleId": "3-0-assembly",
+          "message": {
+            "text": "console._sendLogPayload(bytes) (node_modules/hardhat/console.sol#7-14) uses assembly\n\t- INLINE ASM (node_modules/hardhat/console.sol#10-13)\n",
+            "markdown": "[console._sendLogPayload(bytes)](node_modules/hardhat/console.sol#L7-L14) uses assembly\n\t- [INLINE ASM](node_modules/hardhat/console.sol#L10-L13)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/hardhat/console.sol"
+                },
+                "region": {
+                  "startLine": 7,
+                  "endLine": 14
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "4fce53bf556206137adc405854ca078387d01aa0dda0d58dd8aa9c3798d849bd"
+          }
+        },
+        {
+          "ruleId": "3-0-assembly",
+          "message": {
+            "text": "ERC721._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) uses assembly\n\t- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#408-410)\n",
+            "markdown": "[ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) uses assembly\n\t- [INLINE ASM](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L408-L410)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 394,
+                  "endLine": 416
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "d951a43933edc262a5c356683eb31aa19f3eab70cc08aafcb63b363c11da5799"
+          }
+        },
+        {
+          "ruleId": "3-0-pragma",
+          "message": {
+            "text": "Different versions of Solidity are used:\n\t- Version used: ['0.8.7', '>=0.4.22<0.9.0', '>=0.8.0', '^0.8.0', '^0.8.1']\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#4)\n\t- ^0.8.1 (node_modules/@openzeppelin/contracts/utils/Address.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Counters.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Strings.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)\n\t- >=0.8.0 (node_modules/@rari-capital/solmate/src/auth/Owned.sol#2)\n\t- 0.8.7 (contracts/ProjectY.sol#2)\n\t- ^0.8.0 (contracts/test/MockERC721.sol#2)\n\t- >=0.4.22<0.9.0 (node_modules/hardhat/console.sol#2)\n",
+            "markdown": "Different versions of Solidity are used:\n\t- Version used: ['0.8.7', '>=0.4.22<0.9.0', '>=0.8.0', '^0.8.0', '^0.8.1']\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#L4)\n\t- [^0.8.1](node_modules/@openzeppelin/contracts/utils/Address.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Context.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Counters.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Strings.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#L4)\n\t- [>=0.8.0](node_modules/@rari-capital/solmate/src/auth/Owned.sol#L2)\n\t- [0.8.7](contracts/ProjectY.sol#L2)\n\t- [^0.8.0](contracts/test/MockERC721.sol#L2)\n\t- [>=0.4.22<0.9.0](node_modules/hardhat/console.sol#L2)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "574a881c8aed2bc4f6e690f1acffb88a0b2e8d4ddc929abf8f2731b3af2521a5"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/utils/Context.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/Context.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Context.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "21c670e40e414a2f849413afbbdb25adb81dae6585c4f38fc83730c17377e60f"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/utils/Strings.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/Strings.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Strings.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "39bb6de244e9d295e9aa6c566b0b6e8f01ba481f4efc9e16952394697f339857"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "5106c52e320f91bc8dcdccc56e1a9bb1d7b604d42f94e56abd6d7c61d14525ee"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.1 (node_modules/@openzeppelin/contracts/utils/Address.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.1](node_modules/@openzeppelin/contracts/utils/Address.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "5906f1667ddb1546c744db1c5ec0714512ac2139194ac59714f6577a5008fe49"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "6fabd509aebe14594c28e3de3ecaafb01d6e44823f9c49af97b0e7e072bb4e1d"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "7c6257fc3179e015e3f50299b475376ddc0974a3a8d2751bd7480388339a3a73"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version>=0.8.0 (node_modules/@rari-capital/solmate/src/auth/Owned.sol#2) allows old versions\n",
+            "markdown": "Pragma version[>=0.8.0](node_modules/@rari-capital/solmate/src/auth/Owned.sol#L2) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@rari-capital/solmate/src/auth/Owned.sol"
+                },
+                "region": {
+                  "startLine": 2,
+                  "endLine": 2
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "7dad8a92c96597e170cbc967e3c9f18913e5d35a48d28b44880039c4a1e68a07"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/utils/Counters.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/Counters.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Counters.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "833c66ce7f52d0f775c7a2eefef742d581ed1692ac758436e22f77ceeb7c72be"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "9aa52b2df4a9eaed2367df9ba879f35420395b80d0a76764766ed12bb8d78d84"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (contracts/test/MockERC721.sol#2) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](contracts/test/MockERC721.sol#L2) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/test/MockERC721.sol"
+                },
+                "region": {
+                  "startLine": 2,
+                  "endLine": 2
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "abe4b0eb38b37d5b10a10d5f8fab88c87f7a95aaace20dac54a4db53e87704ca"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "b151eaea977ae1335b86997d4b8787b01ee7e82e48e1718232df668da82529e4"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "e50a4771b0aca0892aba1b2286dd748b1627baee6c6a691176bc873aa48c94f1"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "e62b242692791c00356654dbc791a38e9dc9c7b8d15788116f53347d05f7b953"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version>=0.4.22<0.9.0 (node_modules/hardhat/console.sol#2) is too complex\n",
+            "markdown": "Pragma version[>=0.4.22<0.9.0](node_modules/hardhat/console.sol#L2) is too complex\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/hardhat/console.sol"
+                },
+                "region": {
+                  "startLine": 2,
+                  "endLine": 2
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "f30cc00866ad4644a058066a785a40fc85920295b639d57c66467131996ae1a5"
+          }
+        },
+        {
+          "ruleId": "3-0-low-level-calls",
+          "message": {
+            "text": "Low level call in Address.sendValue(address,uint256) (node_modules/@openzeppelin/contracts/utils/Address.sol#60-65):\n\t- (success) = recipient.call{value: amount}() (node_modules/@openzeppelin/contracts/utils/Address.sol#63)\n",
+            "markdown": "Low level call in [Address.sendValue(address,uint256)](node_modules/@openzeppelin/contracts/utils/Address.sol#L60-L65):\n\t- [(success) = recipient.call{value: amount}()](node_modules/@openzeppelin/contracts/utils/Address.sol#L63)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 60,
+                  "endLine": 65
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "a45709b07c12b3e52a59e9b801f6f63b73382e5cec54b85cd8172ce2bc9d44b3"
+          }
+        },
+        {
+          "ruleId": "3-0-low-level-calls",
+          "message": {
+            "text": "Low level call in Address.functionCallWithValue(address,bytes,uint256,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#128-139):\n\t- (success,returndata) = target.call{value: value}(data) (node_modules/@openzeppelin/contracts/utils/Address.sol#137)\n",
+            "markdown": "Low level call in [Address.functionCallWithValue(address,bytes,uint256,string)](node_modules/@openzeppelin/contracts/utils/Address.sol#L128-L139):\n\t- [(success,returndata) = target.call{value: value}(data)](node_modules/@openzeppelin/contracts/utils/Address.sol#L137)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 128,
+                  "endLine": 139
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "b673e3527018708f76871ed62a1879b9035819e49d368aba92f27343cf591ab2"
+          }
+        },
+        {
+          "ruleId": "3-0-low-level-calls",
+          "message": {
+            "text": "Low level call in Address.functionStaticCall(address,bytes,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#157-166):\n\t- (success,returndata) = target.staticcall(data) (node_modules/@openzeppelin/contracts/utils/Address.sol#164)\n",
+            "markdown": "Low level call in [Address.functionStaticCall(address,bytes,string)](node_modules/@openzeppelin/contracts/utils/Address.sol#L157-L166):\n\t- [(success,returndata) = target.staticcall(data)](node_modules/@openzeppelin/contracts/utils/Address.sol#L164)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 157,
+                  "endLine": 166
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "c706e8e01049568550afd32aaf56e3f04f269e818d404e36dde611996851ece7"
+          }
+        },
+        {
+          "ruleId": "3-0-low-level-calls",
+          "message": {
+            "text": "Low level call in Address.functionDelegateCall(address,bytes,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#184-193):\n\t- (success,returndata) = target.delegatecall(data) (node_modules/@openzeppelin/contracts/utils/Address.sol#191)\n",
+            "markdown": "Low level call in [Address.functionDelegateCall(address,bytes,string)](node_modules/@openzeppelin/contracts/utils/Address.sol#L184-L193):\n\t- [(success,returndata) = target.delegatecall(data)](node_modules/@openzeppelin/contracts/utils/Address.sol#L191)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 184,
+                  "endLine": 193
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "c944733a5fa81935f97104b39ea4f867f663e8d05b23c0ea00802aa0c991e46c"
+          }
+        },
+        {
+          "ruleId": "3-0-naming-convention",
+          "message": {
+            "text": "Contract console (node_modules/hardhat/console.sol#4-1532) is not in CapWords\n",
+            "markdown": "Contract [console](node_modules/hardhat/console.sol#L4-L1532) is not in CapWords\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/hardhat/console.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 1532
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "58c9dacc35a1219332b8b6ce561daac5384e938b9878894ede5d6cbaa444d455"
+          }
+        },
+        {
+          "ruleId": "3-0-naming-convention",
+          "message": {
+            "text": "Parameter ProjectY.getAllBidsOnNFT(uint256)._entryId (contracts/ProjectY.sol#115) is not in mixedCase\n",
+            "markdown": "Parameter [ProjectY.getAllBidsOnNFT(uint256)._entryId](contracts/ProjectY.sol#L115) is not in mixedCase\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 115,
+                  "endLine": 115
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "5dc22c973e648b240e4a551d28e209d641f86d995a954458c6b27b8c4e823072"
+          }
+        },
+        {
+          "ruleId": "3-0-naming-convention",
+          "message": {
+            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is not in mixedCase\n",
+            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is not in mixedCase\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "8e2afea61a573de4b232e613e93285def78d4332843c76a4e2fa520436f70022"
+          }
+        },
+        {
+          "ruleId": "3-0-naming-convention",
+          "message": {
+            "text": "Variable ProjectY._buyerInfo (contracts/ProjectY.sol#62) is not in mixedCase\n",
+            "markdown": "Variable [ProjectY._buyerInfo](contracts/ProjectY.sol#L62) is not in mixedCase\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 62,
+                  "endLine": 62
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "b764d04d0011aa4a46b62efb5da0feefb4d376b0907f178e2b3b29dc6e853fa8"
+          }
+        },
+        {
+          "ruleId": "3-1-similar-names",
+          "message": {
+            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.getUserNFTsOpenForSale(address).sellerInfo_ (contracts/ProjectY.sol#145)\n",
+            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.getUserNFTsOpenForSale(address).sellerInfo_](contracts/ProjectY.sol#L145)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "12f8a16ee27a5efe58a1c0b11273c5bb5721e533913e09bacdafc6f19872c437"
+          }
+        },
+        {
+          "ruleId": "3-1-similar-names",
+          "message": {
+            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.withdrawPayment(uint256).sellerInfo_ (contracts/ProjectY.sol#484)\n",
+            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.withdrawPayment(uint256).sellerInfo_](contracts/ProjectY.sol#L484)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "13560129235bea31fc7be0698f1446a323492f2539161dbfa6d918f2b117d90e"
+          }
+        },
+        {
+          "ruleId": "3-1-similar-names",
+          "message": {
+            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.getInstallmentAmountPerMonth(uint256).sellerInfo_ (contracts/ProjectY.sol#213)\n",
+            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.getInstallmentAmountPerMonth(uint256).sellerInfo_](contracts/ProjectY.sol#L213)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "4644541865eb0a5ddbf79a13b4031fc222b89c44f0e048dcf18ea7b94bba94ec"
+          }
+        },
+        {
+          "ruleId": "3-1-similar-names",
+          "message": {
+            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.liquidate(uint256).sellerInfo_ (contracts/ProjectY.sol#583)\n",
+            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.liquidate(uint256).sellerInfo_](contracts/ProjectY.sol#L583)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "a941187ee0612c1ce443e3cb0cb4711f70df48a179d7acca44ff3db51d99619b"
+          }
+        },
+        {
+          "ruleId": "3-1-similar-names",
+          "message": {
+            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.getNFTsOpenForSale().sellerInfo_ (contracts/ProjectY.sol#96)\n",
+            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.getNFTsOpenForSale().sellerInfo_](contracts/ProjectY.sol#L96)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "b04921267a5de6d8d168314429de29f1daa207e6b737a3faae0fa8dfb13b5ac9"
+          }
+        },
+        {
+          "ruleId": "3-1-similar-names",
+          "message": {
+            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.selectBid(uint256).sellerInfo_ (contracts/ProjectY.sol#336)\n",
+            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.selectBid(uint256).sellerInfo_](contracts/ProjectY.sol#L336)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "c882c486cca343b99e73d2177856d46b2d633ca73bf3128bee0b0f4f2159ad06"
+          }
+        },
+        {
+          "ruleId": "3-1-too-many-digits",
+          "message": {
+            "text": "console.slitherConstructorConstantVariables() (node_modules/hardhat/console.sol#4-1532) uses literals with too many digits:\n\t- CONSOLE_ADDRESS = address(0x000000000000000000636F6e736F6c652e6c6f67) (node_modules/hardhat/console.sol#5)\n",
+            "markdown": "[console.slitherConstructorConstantVariables()](node_modules/hardhat/console.sol#L4-L1532) uses literals with too many digits:\n\t- [CONSOLE_ADDRESS = address(0x000000000000000000636F6e736F6c652e6c6f67)](node_modules/hardhat/console.sol#L5)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/hardhat/console.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 1532
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "20ddc9b48c119b71a9ee4c3006a797896bc464971a031e8fe57b2cf864d1e86c"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "withdrawBid(uint256) should be declared external:\n\t- ProjectY.withdrawBid(uint256) (contracts/ProjectY.sol#461-480)\n",
+            "markdown": "withdrawBid(uint256) should be declared external:\n\t- [ProjectY.withdrawBid(uint256)](contracts/ProjectY.sol#L461-L480)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 461,
+                  "endLine": 480
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "05c2bac6950ca39622945779baf13d83efe8a2042eec736143c4e512fc39c03f"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "selectBid(uint256) should be declared external:\n\t- ProjectY.selectBid(uint256) (contracts/ProjectY.sol#329-378)\n",
+            "markdown": "selectBid(uint256) should be declared external:\n\t- [ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L329-L378)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 329,
+                  "endLine": 378
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "08c502b9d92ddf550b56e09ea2bed5adc37dd6e363ea71c945cc32324acfc5c8"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "setOwner(address) should be declared external:\n\t- Owned.setOwner(address) (node_modules/@rari-capital/solmate/src/auth/Owned.sol#39-43)\n",
+            "markdown": "setOwner(address) should be declared external:\n\t- [Owned.setOwner(address)](node_modules/@rari-capital/solmate/src/auth/Owned.sol#L39-L43)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@rari-capital/solmate/src/auth/Owned.sol"
+                },
+                "region": {
+                  "startLine": 39,
+                  "endLine": 43
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "0f882f463018c457f003f9ddd730ad8bfae223fb48907d454383a224f9db4749"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "getUserNFTsOpenForSale(address) should be declared external:\n\t- ProjectY.getUserNFTsOpenForSale(address) (contracts/ProjectY.sol#136-160)\n",
+            "markdown": "getUserNFTsOpenForSale(address) should be declared external:\n\t- [ProjectY.getUserNFTsOpenForSale(address)](contracts/ProjectY.sol#L136-L160)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 136,
+                  "endLine": 160
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "14276d8b2f456cd77019558eceabdb252a91fc988d01b4e5ad7d90cb59db42fb"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "getAllBidsOnNFT(uint256) should be declared external:\n\t- ProjectY.getAllBidsOnNFT(uint256) (contracts/ProjectY.sol#115-134)\n",
+            "markdown": "getAllBidsOnNFT(uint256) should be declared external:\n\t- [ProjectY.getAllBidsOnNFT(uint256)](contracts/ProjectY.sol#L115-L134)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 115,
+                  "endLine": 134
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "1acf8c03a76142523b085b66c537d927bbd79873e64cfc50d1016a78ead66f06"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "getSellerInfo(uint256) should be declared external:\n\t- ProjectY.getSellerInfo(uint256) (contracts/ProjectY.sol#172-175)\n",
+            "markdown": "getSellerInfo(uint256) should be declared external:\n\t- [ProjectY.getSellerInfo(uint256)](contracts/ProjectY.sol#L172-L175)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 172,
+                  "endLine": 175
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "1c84d32a97a03e53a60a810ac497151475e2ea2f77c462ad57eb60d8e4cbfefc"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "symbol() should be declared external:\n\t- ERC721.symbol() (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#86-88)\n",
+            "markdown": "symbol() should be declared external:\n\t- [ERC721.symbol()](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L86-L88)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 86,
+                  "endLine": 88
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "2123be44349470a8d019a1b9ae2f78855118b0ae042b4b628706f33914eba5fd"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "getBuyerInfo(uint256) should be declared external:\n\t- ProjectY.getBuyerInfo(uint256) (contracts/ProjectY.sol#177-180)\n",
+            "markdown": "getBuyerInfo(uint256) should be declared external:\n\t- [ProjectY.getBuyerInfo(uint256)](contracts/ProjectY.sol#L177-L180)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 177,
+                  "endLine": 180
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "21d5dbfa6e4b8e61f16fa14891250cb05f10a342ed20081785af1591b1d49a90"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "tokenURI(uint256) should be declared external:\n\t- ERC721.tokenURI(uint256) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#93-98)\n",
+            "markdown": "tokenURI(uint256) should be declared external:\n\t- [ERC721.tokenURI(uint256)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L93-L98)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 93,
+                  "endLine": 98
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "31cd530063dffac3ab859a6a2cfce55d6a2e7d58970194957b8413eed2d803c8"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "liquidate(uint256) should be declared external:\n\t- ProjectY.liquidate(uint256) (contracts/ProjectY.sol#579-619)\n",
+            "markdown": "liquidate(uint256) should be declared external:\n\t- [ProjectY.liquidate(uint256)](contracts/ProjectY.sol#L579-L619)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 579,
+                  "endLine": 619
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "3e80eb890beda87ebf1b7aed20535252038f8b4defe104b1c6f440b0150e9cce"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "safeTransferFrom(address,address,uint256) should be declared external:\n\t- ERC721.safeTransferFrom(address,address,uint256) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#164-170)\n",
+            "markdown": "safeTransferFrom(address,address,uint256) should be declared external:\n\t- [ERC721.safeTransferFrom(address,address,uint256)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L164-L170)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 164,
+                  "endLine": 170
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "40d80158f5ec4439542ae33024335f6a43857536cd00215193327812a9b9fd10"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "withdrawPayment(uint256) should be declared external:\n\t- ProjectY.withdrawPayment(uint256) (contracts/ProjectY.sol#482-577)\n",
+            "markdown": "withdrawPayment(uint256) should be declared external:\n\t- [ProjectY.withdrawPayment(uint256)](contracts/ProjectY.sol#L482-L577)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 482,
+                  "endLine": 577
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "4c0abdcd118e53966790862dc9e12048d1725610ebb2904fd0acceffb6de6051"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "setBiddingPeriod(uint64) should be declared external:\n\t- ProjectY.setBiddingPeriod(uint64) (contracts/ProjectY.sol#621-624)\n",
+            "markdown": "setBiddingPeriod(uint64) should be declared external:\n\t- [ProjectY.setBiddingPeriod(uint64)](contracts/ProjectY.sol#L621-L624)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 621,
+                  "endLine": 624
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "539a1f32ca9c7b1ab297678ad0e24aea7d58241f2cdcd4dcde8f7639ec1674d4"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "sell(address,uint256,uint256,ProjectY.InstallmentPlan) should be declared external:\n\t- ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#257-285)\n",
+            "markdown": "sell(address,uint256,uint256,ProjectY.InstallmentPlan) should be declared external:\n\t- [ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L257-L285)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 257,
+                  "endLine": 285
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "6227fa719f84a5f45d4b0cbda94095fa05beb49790ba512d7cbbde7234ea5394"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "transferFrom(address,address,uint256) should be declared external:\n\t- ERC721.transferFrom(address,address,uint256) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#150-159)\n",
+            "markdown": "transferFrom(address,address,uint256) should be declared external:\n\t- [ERC721.transferFrom(address,address,uint256)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L150-L159)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 150,
+                  "endLine": 159
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "76ab7b066ef0a5d7f2d6c5b494476a5e38ea86c760778d698fbc30aa413a4150"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "burn(uint256) should be declared external:\n\t- MockERC721.burn(uint256) (contracts/test/MockERC721.sol#15-17)\n",
+            "markdown": "burn(uint256) should be declared external:\n\t- [MockERC721.burn(uint256)](contracts/test/MockERC721.sol#L15-L17)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/test/MockERC721.sol"
+                },
+                "region": {
+                  "startLine": 15,
+                  "endLine": 17
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "775aa436119face0c415fcd9f18dedc5293d083273af4fbe380a923c7d93f239"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "payInstallment(uint256) should be declared external:\n\t- ProjectY.payInstallment(uint256) (contracts/ProjectY.sol#380-459)\n",
+            "markdown": "payInstallment(uint256) should be declared external:\n\t- [ProjectY.payInstallment(uint256)](contracts/ProjectY.sol#L380-L459)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 380,
+                  "endLine": 459
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "7a5a5033bd58e8d9b4df174bb4c6a876be25781dacce949e5511fd216d761d78"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "approve(address,uint256) should be declared external:\n\t- ERC721.approve(address,uint256) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#112-122)\n",
+            "markdown": "approve(address,uint256) should be declared external:\n\t- [ERC721.approve(address,uint256)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L112-L122)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 112,
+                  "endLine": 122
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "85ce094a63917c55b888b8750415c666cca662a2f4c06529ea69912019b9dbab"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "getNFTsOpenForSale() should be declared external:\n\t- ProjectY.getNFTsOpenForSale() (contracts/ProjectY.sol#91-113)\n",
+            "markdown": "getNFTsOpenForSale() should be declared external:\n\t- [ProjectY.getNFTsOpenForSale()](contracts/ProjectY.sol#L91-L113)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 91,
+                  "endLine": 113
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "934b09f09b4bfee4af32ffe86bb0d7e080a02f824aa2b4a411ffa3117da64a2a"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "mint(address,uint256) should be declared external:\n\t- MockERC721.mint(address,uint256) (contracts/test/MockERC721.sol#11-13)\n",
+            "markdown": "mint(address,uint256) should be declared external:\n\t- [MockERC721.mint(address,uint256)](contracts/test/MockERC721.sol#L11-L13)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/test/MockERC721.sol"
+                },
+                "region": {
+                  "startLine": 11,
+                  "endLine": 13
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "98be96a25afcfa91e7e1b8d30a936d8d8fe21d69f5b0c1e0b7bbfbf65b8c3972"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "name() should be declared external:\n\t- ERC721.name() (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#79-81)\n",
+            "markdown": "name() should be declared external:\n\t- [ERC721.name()](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L79-L81)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 79,
+                  "endLine": 81
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "af4803233bc8f4b43dfa69fe155402fcc48c2fe4b265f9413f78b6c943509f5e"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "balanceOf(address) should be declared external:\n\t- ERC721.balanceOf(address) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#62-65)\n",
+            "markdown": "balanceOf(address) should be declared external:\n\t- [ERC721.balanceOf(address)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L62-L65)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 62,
+                  "endLine": 65
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "d68912f2305cbe6836b4ae458f23c68de02f150edd942754ac85456d1d3a2957"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "setGracePeriod(uint64) should be declared external:\n\t- ProjectY.setGracePeriod(uint64) (contracts/ProjectY.sol#626-629)\n",
+            "markdown": "setGracePeriod(uint64) should be declared external:\n\t- [ProjectY.setGracePeriod(uint64)](contracts/ProjectY.sol#L626-L629)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 626,
+                  "endLine": 629
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "e07ca14df8d0ab4fd59775b12b6aec6012e5cc689296ce9693fc58a73d3e4a90"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "onERC721Received(address,address,uint256,bytes) should be declared external:\n\t- ERC721Holder.onERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#20-27)\n",
+            "markdown": "onERC721Received(address,address,uint256,bytes) should be declared external:\n\t- [ERC721Holder.onERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#L20-L27)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol"
+                },
+                "region": {
+                  "startLine": 20,
+                  "endLine": 27
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "f50bca0660282089e5cfd8d31250adc475986aef82232d0ad2a330f19c0781e6"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "bid(uint256,uint256,ProjectY.InstallmentPlan) should be declared external:\n\t- ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#287-327)\n",
+            "markdown": "bid(uint256,uint256,ProjectY.InstallmentPlan) should be declared external:\n\t- [ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L287-L327)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 287,
+                  "endLine": 327
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "f7278be92359b6022dc6da3859fa3f9ad337d5ea05be35fb11f0dff20bd88dd4"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "setApprovalForAll(address,bool) should be declared external:\n\t- ERC721.setApprovalForAll(address,bool) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#136-138)\n",
+            "markdown": "setApprovalForAll(address,bool) should be declared external:\n\t- [ERC721.setApprovalForAll(address,bool)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L136-L138)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 136,
+                  "endLine": 138
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "f8d99776eabdc45af447d3d614b1556102036b270f46367f6cb9ef19bea645e5"
+          }
+        }
+      ]
+    }
+  ]
+}
