@@ -1,0 +1,34 @@
+name: Slither Analysis
+
+on:
+  pull_request:
+    branches:
+      - "main"
+  push:
+    branches:
+      - "main"
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Run Slither
+        uses: crytic/slither-action@v0.1.1
+        id: slither
+        continue-on-error: true
+        with:
+          node-version: 16
+          sarif: results.sarif
+          target: "contracts/"
+          slither-config: "./slither.config.json"
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.slither.outputs.sarif }}
