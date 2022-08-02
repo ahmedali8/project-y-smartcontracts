@@ -11,9 +11,10 @@ on:
 jobs:
   analyze:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
+    # permissions:
+    #   contents: read
+    #   security-events: write
+    permissions: write-all
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
