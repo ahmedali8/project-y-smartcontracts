@@ -7,6 +7,7 @@
     "url": "https://github.com/ahmedali8"
   },
   "scripts": {
+    "analyze": "rm -rf ./slither/* && slither . --hardhat-cache-directory ./generated/cache/hardhat --hardhat-artifacts-directory ./generated/artifacts/hardhat --checklist --json ./slither/output.json --sarif ./slither/output.sarif",
     "accounts": "hardhat accounts",
     "build": "forge build",
     "chain": "hardhat node --no-deploy --export-all ./generated/chain.json --network hardhat",

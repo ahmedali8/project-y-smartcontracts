@@ -94,20 +94,6 @@
               }
             },
             {
-              "id": "2-1-reentrancy-benign",
-              "name": "reentrancy-benign",
-              "properties": {
-                "precision": "high",
-                "security-severity": "3.0"
-              },
-              "shortDescription": {
-                "text": "Reentrancy vulnerabilities"
-              },
-              "help": {
-                "text": "Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy)."
-              }
-            },
-            {
               "id": "2-1-reentrancy-events",
               "name": "reentrancy-events",
               "properties": {
@@ -564,34 +550,10 @@
           }
         },
         {
-          "ruleId": "2-1-reentrancy-benign",
-          "message": {
-            "text": "Reentrancy in ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#257-285):\n\tExternal calls:\n\t- IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_) (contracts/ProjectY.sol#272)\n\tState variables written after the call(s):\n\t- _sellerInfo[entryId_].onSale = true (contracts/ProjectY.sol#275)\n\t- _sellerInfo[entryId_].sellerAddress = _msgSender() (contracts/ProjectY.sol#276)\n\t- _sellerInfo[entryId_].contractAddress = contractAddress_ (contracts/ProjectY.sol#277)\n\t- _sellerInfo[entryId_].timestamp = blockTimestamp_ (contracts/ProjectY.sol#278)\n\t- _sellerInfo[entryId_].tokenId = tokenId_ (contracts/ProjectY.sol#279)\n\t- _sellerInfo[entryId_].sellingPrice = sellingPrice_ (contracts/ProjectY.sol#280)\n\t- _sellerInfo[entryId_].installment = installment_ (contracts/ProjectY.sol#281)\n",
-            "markdown": "Reentrancy in [ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L257-L285):\n\tExternal calls:\n\t- [IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_)](contracts/ProjectY.sol#L272)\n\tState variables written after the call(s):\n\t- [_sellerInfo[entryId_].onSale = true](contracts/ProjectY.sol#L275)\n\t- [_sellerInfo[entryId_].sellerAddress = _msgSender()](contracts/ProjectY.sol#L276)\n\t- [_sellerInfo[entryId_].contractAddress = contractAddress_](contracts/ProjectY.sol#L277)\n\t- [_sellerInfo[entryId_].timestamp = blockTimestamp_](contracts/ProjectY.sol#L278)\n\t- [_sellerInfo[entryId_].tokenId = tokenId_](contracts/ProjectY.sol#L279)\n\t- [_sellerInfo[entryId_].sellingPrice = sellingPrice_](contracts/ProjectY.sol#L280)\n\t- [_sellerInfo[entryId_].installment = installment_](contracts/ProjectY.sol#L281)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 257,
-                  "endLine": 285
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "c67258a4ce7047c890bac310e9fcd88264e5e373479db32809f7ef767ec65679"
-          }
-        },
-        {
           "ruleId": "2-1-reentrancy-events",
           "message": {
-            "text": "Reentrancy in ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#257-285):\n\tExternal calls:\n\t- IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_) (contracts/ProjectY.sol#272)\n\tEvent emitted after the call(s):\n\t- Sell(_msgSender(),contractAddress_,tokenId_,entryId_,blockTimestamp_) (contracts/ProjectY.sol#283)\n",
-            "markdown": "Reentrancy in [ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L257-L285):\n\tExternal calls:\n\t- [IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_)](contracts/ProjectY.sol#L272)\n\tEvent emitted after the call(s):\n\t- [Sell(_msgSender(),contractAddress_,tokenId_,entryId_,blockTimestamp_)](contracts/ProjectY.sol#L283)\n"
+            "text": "Reentrancy in ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#257-285):\n\tExternal calls:\n\t- IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_) (contracts/ProjectY.sol#281)\n\tEvent emitted after the call(s):\n\t- Sell(_msgSender(),contractAddress_,tokenId_,entryId_,blockTimestamp_) (contracts/ProjectY.sol#283)\n",
+            "markdown": "Reentrancy in [ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L257-L285):\n\tExternal calls:\n\t- [IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_)](contracts/ProjectY.sol#L281)\n\tEvent emitted after the call(s):\n\t- [Sell(_msgSender(),contractAddress_,tokenId_,entryId_,blockTimestamp_)](contracts/ProjectY.sol#L283)\n"
           },
           "level": "warning",
           "locations": [
@@ -608,7 +570,7 @@
             }
           ],
           "partialFingerprints": {
-            "id": "610c7cce1ea8f5f36fb19e98a7caa4f597d6ceb82a9c20dc6f2be2a73e533038"
+            "id": "550161486fb916c8e7213ce38566f6af86f46196132f206419776c00635946df"
           }
         },
         {
@@ -878,8 +840,8 @@
         {
           "ruleId": "3-0-pragma",
           "message": {
-            "text": "Different versions of Solidity are used:\n\t- Version used: ['0.8.7', '>=0.4.22<0.9.0', '>=0.8.0', '^0.8.0', '^0.8.1']\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#4)\n\t- ^0.8.1 (node_modules/@openzeppelin/contracts/utils/Address.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Counters.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Strings.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)\n\t- >=0.8.0 (node_modules/@rari-capital/solmate/src/auth/Owned.sol#2)\n\t- 0.8.7 (contracts/ProjectY.sol#2)\n\t- ^0.8.0 (contracts/test/MockERC721.sol#2)\n\t- >=0.4.22<0.9.0 (node_modules/hardhat/console.sol#2)\n",
-            "markdown": "Different versions of Solidity are used:\n\t- Version used: ['0.8.7', '>=0.4.22<0.9.0', '>=0.8.0', '^0.8.0', '^0.8.1']\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#L4)\n\t- [^0.8.1](node_modules/@openzeppelin/contracts/utils/Address.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Context.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Counters.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Strings.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#L4)\n\t- [>=0.8.0](node_modules/@rari-capital/solmate/src/auth/Owned.sol#L2)\n\t- [0.8.7](contracts/ProjectY.sol#L2)\n\t- [^0.8.0](contracts/test/MockERC721.sol#L2)\n\t- [>=0.4.22<0.9.0](node_modules/hardhat/console.sol#L2)\n"
+            "text": "Different versions of Solidity are used:\n\t- Version used: ['0.8.13', '>=0.4.22<0.9.0', '>=0.8.0', '^0.8.0', '^0.8.1']\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#4)\n\t- ^0.8.1 (node_modules/@openzeppelin/contracts/utils/Address.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Counters.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Strings.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)\n\t- >=0.8.0 (node_modules/@rari-capital/solmate/src/auth/Owned.sol#2)\n\t- 0.8.13 (contracts/ProjectY.sol#2)\n\t- ^0.8.0 (contracts/test/MockERC721.sol#2)\n\t- >=0.4.22<0.9.0 (node_modules/hardhat/console.sol#2)\n",
+            "markdown": "Different versions of Solidity are used:\n\t- Version used: ['0.8.13', '>=0.4.22<0.9.0', '>=0.8.0', '^0.8.0', '^0.8.1']\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#L4)\n\t- [^0.8.1](node_modules/@openzeppelin/contracts/utils/Address.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Context.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Counters.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Strings.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#L4)\n\t- [>=0.8.0](node_modules/@rari-capital/solmate/src/auth/Owned.sol#L2)\n\t- [0.8.13](contracts/ProjectY.sol#L2)\n\t- [^0.8.0](contracts/test/MockERC721.sol#L2)\n\t- [>=0.4.22<0.9.0](node_modules/hardhat/console.sol#L2)\n"
           },
           "level": "warning",
           "locations": [
@@ -896,7 +858,7 @@
             }
           ],
           "partialFingerprints": {
-            "id": "574a881c8aed2bc4f6e690f1acffb88a0b2e8d4ddc929abf8f2731b3af2521a5"
+            "id": "2c40ff3dcf0d9d88a04653f9fcff6f47305e4549bc3bd33583894b5b0b46a6e1"
           }
         },
         {
@@ -1089,6 +1051,30 @@
           ],
           "partialFingerprints": {
             "id": "833c66ce7f52d0f775c7a2eefef742d581ed1692ac758436e22f77ceeb7c72be"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version0.8.13 (contracts/ProjectY.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7\n",
+            "markdown": "Pragma version[0.8.13](contracts/ProjectY.sol#L2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 2,
+                  "endLine": 2
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "8bde47a571e1e70f9aeda050eee8f90b4afb858d1e06949ae9e1c1c148212422"
           }
         },
         {
