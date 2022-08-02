@@ -11,10 +11,16 @@ on:
 jobs:
   analyze:
     runs-on: ubuntu-latest
-    # permissions:
-    #   contents: read
-    #   security-events: write
-    permissions: write-all
+
+    permissions:
+      # required for all workflows
+      security-events: write
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+
+    # permissions: write-all
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
