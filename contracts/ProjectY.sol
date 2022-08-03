@@ -82,6 +82,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     event BidWithdrawn(uint256 bidId, uint256 entryId, uint256 value);
 
+    event PaymentWithdrawn(uint256 bidId, uint256 entryId, uint256 value, uint256 paymentsClaimed);
+
     constructor(address owner_) Owned(owner_) {
         // solhint-disable-previous-line no-empty-blocks
     }
@@ -187,12 +189,26 @@ contract ProjectY is Context, Owned, ERC721Holder {
         return _bidIdTracker.current();
     }
 
+    function getTotalInstallments(uint256 bidId_) public view returns (uint8) {
+        isBidIdValid(bidId_);
+
+        InstallmentPlan installment_ = _buyerInfo[bidId_].bidInstallment;
+
+        if (installment_ == InstallmentPlan.ThreeMonths) {
+            return 3;
+        } else if (installment_ == InstallmentPlan.SixMonths) {
+            return 6;
+        } else if (installment_ == InstallmentPlan.NineMonths) {
+            return 9;
+        } else {
+            return 0; // InstallmentPlan.None
+        }
+    }
+
     function getDownPaymentAmount(uint256 bidId_) public view returns (uint256) {
         isBidIdValid(bidId_);
 
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
-
-        // require(buyerInfo_.pricePaid == 0, "DOWN_PAYMENT_DONE");
 
         InstallmentPlan installment_ = buyerInfo_.bidInstallment;
         uint256 bidPrice_ = buyerInfo_.bidPrice;
@@ -313,7 +329,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // update total bids for this entry id
         _sellerInfo[entryId_].totalBids += 1;
 
-        require(_buyerInfo[bidId_].pricePaid == 0, "DOWN_PAYMENT_DONE");
         uint256 downPayment_ = getDownPaymentAmount(bidId_);
 
         require(value_ != 0 && value_ == downPayment_, "VALUE_NOT_EQUAL_TO_DOWN_PAYMENT");
@@ -397,16 +412,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint8 installmentsPaid_ = _sellerInfo[entryId_].installmentsPaid;
 
         // check if installment is done then revert
-        uint8 totalInstallments_;
-        if (buyerInfo_.bidInstallment == InstallmentPlan.ThreeMonths) {
-            totalInstallments_ = 3;
-        } else if (buyerInfo_.bidInstallment == InstallmentPlan.SixMonths) {
-            totalInstallments_ = 6;
-        } else if (buyerInfo_.bidInstallment == InstallmentPlan.NineMonths) {
-            totalInstallments_ = 9;
-        }
+        uint8 totalInstallments_ = getTotalInstallments(bidId_);
 
         require(installmentsPaid_ != totalInstallments_, "NO_INSTALLMENT_LEFT");
+
+        console.log("step one");
+        console.log("bidPrice_: ", bidPrice_);
+        console.log("pricePaid_: ", pricePaid_);
 
         if (bidPrice_ != pricePaid_) {
             uint256 installmentPerMonth_ = getInstallmentAmountPerMonth(entryId_);
@@ -439,20 +451,24 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
             _buyerInfo[bidId_].pricePaid += value_;
             _sellerInfo[entryId_].installmentsPaid++;
+
+            // may increment local variable as well
+            pricePaid_ += value_;
         }
 
+        console.log("step two");
+        console.log("bidPrice_: ", bidPrice_);
+        console.log("pricePaid_: ", _buyerInfo[bidId_].pricePaid);
+
         // all installments done so transfer NFT to buyer
+        // refetch pricePaid from storage becuase we upadated it in above block
+        // if (bidPrice_ == _buyerInfo[bidId_].pricePaid) {
         if (bidPrice_ == pricePaid_) {
             IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(
                 address(this),
-                _msgSender(),
+                buyerInfo_.buyerAddress,
                 _sellerInfo[entryId_].tokenId
             );
-
-            // // delete seller
-            // delete _sellerInfo[entryId_];
-            // // delete bid
-            // delete _buyerInfo[bidId_];
         }
 
         emit InstallmentPaid(_msgSender(), entryId_, bidId_, installmentsPaid_ + 1);
@@ -493,18 +509,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         console.log("sellerInfo_.paymentsClaimed: ", sellerInfo_.paymentsClaimed);
 
         // check if installment is done then revert
-        uint8 totalInstallments_;
-        if (_buyerInfo[sellerInfo_.selectedBidId].bidInstallment == InstallmentPlan.ThreeMonths) {
-            totalInstallments_ = 3;
-        } else if (
-            _buyerInfo[sellerInfo_.selectedBidId].bidInstallment == InstallmentPlan.SixMonths
-        ) {
-            totalInstallments_ = 6;
-        } else if (
-            _buyerInfo[sellerInfo_.selectedBidId].bidInstallment == InstallmentPlan.NineMonths
-        ) {
-            totalInstallments_ = 9;
-        }
+        uint8 totalInstallments_ = getTotalInstallments(sellerInfo_.selectedBidId);
 
         // // get timestamp of next payment
         // uint64 nextInstallmentTimestamp_ = getInstallmentMonthTimestamp(
@@ -537,36 +542,87 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint8 paymentsClaimable_;
         uint256 amountClaimable_;
 
-        // seller is claiming downpayment (first time)
-        if (sellerInfo_.paymentsClaimed == 0) {
+        // seller is claiming for the first time and only second payment is done
+        // so release downpayment only
+        if (sellerInfo_.paymentsClaimed == 0 && secondLastInstallmentPaid_ == 1) {
+            console.log("block 1");
             paymentsClaimable_ = 1;
             amountClaimable_ = getDownPaymentAmount(sellerInfo_.selectedBidId);
         }
 
+        // seller is claiming for the first time and all installments are done
+        // && sellerInfo_.installmentsPaid == totalInstallments_
+        if (sellerInfo_.paymentsClaimed == 0 && secondLastInstallmentPaid_ > 1) {
+            console.log("block 2");
+            uint8 no_;
+
+            if (sellerInfo_.installmentsPaid == totalInstallments_) {
+                console.log("block 2-A");
+                // secondLastInstallmentPaid_ // totalInstallments_ - 1
+                paymentsClaimable_ = sellerInfo_.installmentsPaid;
+                no_ = secondLastInstallmentPaid_;
+            } else {
+                console.log("block 2-B");
+                paymentsClaimable_ = secondLastInstallmentPaid_; // secondLastInstallmentPaid_ // totalInstallments_ - 1
+                no_ = secondLastInstallmentPaid_ - 1;
+            }
+
+            uint256 downPayment_ = getDownPaymentAmount(sellerInfo_.selectedBidId);
+            console.log("downPayment_: ", downPayment_);
+
+            console.log("no_: ", no_);
+
+            uint256 installmentPerMonth_ = getInstallmentAmountPerMonth(entryId_);
+            console.log("installmentPerMonth_: ", installmentPerMonth_);
+
+            amountClaimable_ = downPayment_ + (installmentPerMonth_ * no_);
+        }
+
         // seller is claiming payment other than first
         if (sellerInfo_.paymentsClaimed != 0) {
+            console.log("block 3");
             paymentsClaimable_ = secondLastInstallmentPaid_ - sellerInfo_.paymentsClaimed;
             amountClaimable_ = paymentsClaimable_ * getInstallmentAmountPerMonth(entryId_);
         }
 
         // seller is claiming last payment
         if (isLastClaimablePayment_) {
+            console.log("block 4");
+            paymentsClaimable_ = 1;
             amountClaimable_ = getInstallmentAmountPerMonth(entryId_);
         }
 
         console.log("paymentsClaimable_: ", paymentsClaimable_);
         console.log("amountClaimable_: ", amountClaimable_);
 
-        // if last payment then delete buyerInfo and sellerInfo
-        if (isLastClaimablePayment_) {
+        // update paymentsClaimed
+        _sellerInfo[entryId_].paymentsClaimed += paymentsClaimable_;
+
+        emit PaymentWithdrawn(
+            sellerInfo_.selectedBidId,
+            entryId_,
+            amountClaimable_,
+            _sellerInfo[entryId_].paymentsClaimed
+        );
+
+        // if all payments claimed then delete buyerInfo and sellerInfo
+        if (_sellerInfo[entryId_].paymentsClaimed == totalInstallments_) {
             // delete seller
             delete _sellerInfo[entryId_];
             // delete bid
             delete _buyerInfo[sellerInfo_.selectedBidId];
-        } else {
-            // update paymentsClaimed
-            _sellerInfo[entryId_].paymentsClaimed += paymentsClaimable_;
         }
+
+        // // if last payment then delete buyerInfo and sellerInfo
+        // if (isLastClaimablePayment_) {
+        //     // delete seller
+        //     delete _sellerInfo[entryId_];
+        //     // delete bid
+        //     delete _buyerInfo[sellerInfo_.selectedBidId];
+        // } else {
+        //     // update paymentsClaimed
+        //     _sellerInfo[entryId_].paymentsClaimed += paymentsClaimable_;
+        // }
 
         console.log("before txn contract balance: ", address(this).balance);
 
