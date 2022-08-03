@@ -6,7 +6,7 @@ import { impersonateAccount, setBalance, time } from "@nomicfoundation/hardhat-n
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { ethers } from "hardhat";
 
-import { toBN } from "../../utils/format";
+import { fromWei, toBN } from "../../utils/format";
 import {
   InstallmentPlan,
   NINE_MONTHS_DOWN_PAYMENT_PERCENTAGE,
@@ -60,14 +60,30 @@ export function getInstallmentPerMonth(
   }
 }
 
-export function getInstallmentPercentageOf(
+// NOT GIVING CORRECT CALCULATION
+export function getInstallmentAmountOf(
   installmentPlan: InstallmentPlan,
   bidPrice: BigNumber,
   installmentNumber: number
 ): BigNumber {
-  return getDownPayment(installmentPlan, bidPrice).add(
-    getInstallmentPerMonth(installmentPlan, bidPrice).mul(installmentNumber)
-  );
+  const downPayment = getDownPayment(installmentPlan, bidPrice);
+
+  const installmentPerMonth = getInstallmentPerMonth(installmentPlan, bidPrice);
+
+  const no = installmentNumber - 1;
+  const installmentPerNoOfMonths = installmentPerMonth.mul(no);
+
+  const amountClaimable = downPayment.add(installmentPerMonth);
+
+  console.log({
+    downPayment: downPayment.toString(),
+    installmentPerMonth: installmentPerMonth.toString(),
+    installmentPerNoOfMonths: installmentPerNoOfMonths.toString(),
+    no: no,
+    amountClaimable: amountClaimable.toString(),
+  });
+
+  return amountClaimable;
 }
 
 export function getTotalInstallments(installmentPlan: InstallmentPlan): number {
