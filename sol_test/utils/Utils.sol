@@ -62,6 +62,6 @@ contract Utils is Test {
 
     /// @dev to wei converter with custom 'decimals'
     function toWei(uint256 value, uint256 decimals) public pure returns (uint256) {
-        return value * 1**decimals;
+        return value * 10**decimals;
     }
 }
