@@ -1,4 +1,5 @@
 import shouldBehaveLikeBid from "./effects/bid";
+import shouldBehaveLikeLiquidate from "./effects/liquidate";
 import shouldBehaveLikePayInstallment from "./effects/payInstallment";
 import shouldBehaveLikeSelectBid from "./effects/selectBid";
 import shouldBehaveLikeSell from "./effects/sell";
@@ -31,11 +32,14 @@ export function shouldBehaveLikeProjectY(): void {
     // describe("#withdrawPayment", function () {
     //   shouldBehaveLikeWithdrawPayment();
     // });
-    describe("#setBiddingPeriod", function () {
-      shouldBehaveLikeSetBiddingPeriod();
+    describe("#liquidate", function () {
+      shouldBehaveLikeLiquidate();
     });
-    describe("#setGracePeriod", function () {
-      shouldBehaveLikeSetGracePeriod();
-    });
+    // describe("#setBiddingPeriod", function () {
+    //   shouldBehaveLikeSetBiddingPeriod();
+    // });
+    // describe("#setGracePeriod", function () {
+    //   shouldBehaveLikeSetGracePeriod();
+    // });
   });
 }
