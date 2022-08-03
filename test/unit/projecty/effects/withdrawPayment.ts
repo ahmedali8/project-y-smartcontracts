@@ -9,10 +9,8 @@ import { BIDDING_PERIOD, InstallmentPlan, ONE_MONTH } from "../../../shared/cons
 import { ProjectYErrors } from "../../../shared/errors";
 import {
   getDownPayment,
-  getInstallmentAmountOf,
   getInstallmentPerMonth,
   getTotalInstallments,
-  increaseDays,
 } from "../../../shared/utils";
 
 export default function shouldBehaveLikeWithdrawPayment(): void {
@@ -143,14 +141,6 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
       context(
         "when buyer pays each installment after 10 days then seller claims payment after 20 days",
         function () {
-          async function increase10Days() {
-            await increaseDays(10);
-          }
-
-          async function increase20Days() {
-            await increaseDays(20);
-          }
-
           async function transfersPaymentsAndEmitEvent(contract: ProjectY) {
             for (let i = 2; i <= totalInstallments + 1; i++) {
               const installmentNumber = i;
@@ -158,7 +148,7 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
               console.log("---------------------", installmentNumber, "---------------------");
 
               // buyer pays installment after each month (within a month's period)
-              await increase10Days();
+              await time.increase(time.duration.days(10));
 
               if (installmentNumber !== 7) {
                 // buyer pays installment
@@ -166,7 +156,7 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
               }
 
               // increase 20 days so that previous 10 + 20 = 30 days
-              await increase20Days();
+              await time.increase(time.duration.days(20));
 
               // seller claims previous installments
               let balDiff: BigNumber;

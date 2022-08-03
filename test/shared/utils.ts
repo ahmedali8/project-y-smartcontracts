@@ -6,7 +6,7 @@ import { impersonateAccount, setBalance, time } from "@nomicfoundation/hardhat-n
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { ethers } from "hardhat";
 
-import { fromWei, toBN } from "../../utils/format";
+import { toBN } from "../../utils/format";
 import {
   InstallmentPlan,
   NINE_MONTHS_DOWN_PAYMENT_PERCENTAGE,
@@ -27,10 +27,6 @@ export async function createRandomSigner(salt: string, bal: BigNumber): Promise<
 
   // hre.ethers
   return await ethers.getSigner(checksummedSignerAddress);
-}
-
-export async function increaseDays(days: number) {
-  await time.increase(time.duration.days(days));
 }
 
 export function getDownPayment(installmentPlan: InstallmentPlan, bidPrice: BigNumber): BigNumber {
@@ -98,6 +94,6 @@ export function getTotalInstallments(installmentPlan: InstallmentPlan): number {
       return 9;
 
     default:
-      return 1;
+      return 0; // InstallmentPlan.None
   }
 }

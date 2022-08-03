@@ -14,32 +14,32 @@ export function shouldBehaveLikeProjectY(): void {
   });
 
   describe("Effects Functions", function () {
-    describe("#sell", function () {
-      shouldBehaveLikeSell();
-    });
-    describe("#bid", function () {
-      shouldBehaveLikeBid();
-    });
-    describe("#selectBid", function () {
-      shouldBehaveLikeSelectBid();
-    });
-    describe("#payInstallment", function () {
-      shouldBehaveLikePayInstallment();
-    });
-    describe("#withdrawBid", function () {
-      shouldBehaveLikeWithdrawBid();
-    });
-    describe("#withdrawPayment", function () {
-      shouldBehaveLikeWithdrawPayment();
-    });
-    describe("#liquidate", function () {
-      shouldBehaveLikeLiquidate();
-    });
-    describe("#setBiddingPeriod", function () {
-      shouldBehaveLikeSetBiddingPeriod();
-    });
-    describe("#setGracePeriod", function () {
-      shouldBehaveLikeSetGracePeriod();
-    });
+    // describe("#sell", function () {
+    //   shouldBehaveLikeSell();
+    // });
+    // describe("#bid", function () {
+    //   shouldBehaveLikeBid();
+    // });
+    // describe("#selectBid", function () {
+    //   shouldBehaveLikeSelectBid();
+    // });
+    // describe("#payInstallment", function () {
+    //   shouldBehaveLikePayInstallment();
+    // });
+    // describe("#withdrawBid", function () {
+    //   shouldBehaveLikeWithdrawBid();
+    // });
+    // describe("#withdrawPayment", function () {
+    //   shouldBehaveLikeWithdrawPayment();
+    // });
+    // describe("#liquidate", function () {
+    //   shouldBehaveLikeLiquidate();
+    // });
+    // describe("#setBiddingPeriod", function () {
+    //   shouldBehaveLikeSetBiddingPeriod();
+    // });
+    // describe("#setGracePeriod", function () {
+    //   shouldBehaveLikeSetGracePeriod();
+    // });
   });
 }

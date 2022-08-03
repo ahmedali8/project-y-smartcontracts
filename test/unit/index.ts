@@ -3,9 +3,10 @@ import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { ethers } from "hardhat";
 
 import type { Contracts, MockContracts, Signers } from "../shared/types";
+import { testUtils } from "../shared/utils.test";
 import { testProjectY } from "./projecty/ProjectY";
 
-describe("Unit tests", () => {
+describe("Unit tests", function () {
   before(async function () {
     this.contracts = {} as Contracts;
     this.mocks = {} as MockContracts;
@@ -18,5 +19,9 @@ describe("Unit tests", () => {
     this.loadFixture = loadFixture;
   });
 
+  // test non-blockchain files
+  testUtils();
+
+  // test projectY
   testProjectY();
 });
