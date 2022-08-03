@@ -1,12 +1,16 @@
+import type { BigNumber } from "@ethersproject/bignumber";
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
+import { Context } from "mocha";
 
+import { ProjectY } from "../../../../src/types";
 import { fromWei, toWei } from "../../../../utils/format";
 import { BIDDING_PERIOD, InstallmentPlan, ONE_MONTH } from "../../../shared/constants";
 import { ProjectYErrors } from "../../../shared/errors";
 import {
   getDownPayment,
+  getInstallmentAmountOf,
   getInstallmentPerMonth,
   getTotalInstallments,
   increaseDays,
@@ -78,14 +82,14 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
     });
 
     context("when caller is seller", function () {
-      context("when seller withdraw first payment", function () {
-        // context("when seller withdraws payment of paid installment before the next", function () {
-        //   it("reverts", async function () {
-        //     await expect(
-        //       this.contracts.projecty.connect(seller).withdrawPayment(entryId)
-        //     ).to.be.revertedWith(ProjectYErrors.ClaimAfterAppropriateTime);
-        //   });
-        // });
+      context("when seller withdraw first payment (down payment)", function () {
+        context("when seller withdraws payment of paid installment before the next", function () {
+          it("reverts", async function () {
+            await expect(
+              this.contracts.projecty.connect(seller).withdrawPayment(entryId)
+            ).to.be.revertedWith(ProjectYErrors.CannotReclaimPayment);
+          });
+        });
 
         context(
           "when seller withdraws payment after a month but installment is not done yet",
@@ -102,32 +106,15 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
 
         context("when next installment is done", function () {
           beforeEach(async function () {
-            const bidTimestamp = (await this.contracts.projecty.getBuyerInfo(bidId)).timestamp;
-
-            console.log({ bidTimestamp: bidTimestamp.toString() });
-            console.log({ latest: await time.latest() });
-
             // buyer pays installment after a few days of selection
             await time.increase(time.duration.days(10));
-
-            console.log({ bidTimestamp: bidTimestamp.toString() });
-            console.log({ latest: await time.latest() });
 
             await this.contracts.projecty
               .connect(buyer)
               .payInstallment(entryId, { value: paymentPerMonth });
           });
 
-          it("withdraws downPayment", async function () {
-            const bidTimestamp = (await this.contracts.projecty.getBuyerInfo(bidId)).timestamp;
-
-            console.log({ bidTimestamp: bidTimestamp.toString() });
-            console.log({ latest: await time.latest() });
-
-            // next installment timestamp
-            // increase 20 days so that previous 10 + 20 = 30 days
-            await time.increase(time.duration.days(20));
-
+          it("allows seller to withdraw down payment immediately", async function () {
             await expect(
               this.contracts.projecty.connect(seller).withdrawPayment(entryId)
             ).to.changeEtherBalances(
@@ -136,19 +123,15 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
             );
           });
 
+          it("emits 'PaymentWithdrawn' event", async function () {
+            const paymentsClaimed = 1;
+
+            await expect(this.contracts.projecty.connect(seller).withdrawPayment(entryId))
+              .to.emit(this.contracts.projecty, "PaymentWithdrawn")
+              .withArgs(bidId, entryId, downPayment, paymentsClaimed);
+          });
+
           it("reverts if seller tries to reclaim the payment", async function () {
-            const bidTimestamp = (await this.contracts.projecty.getBuyerInfo(bidId)).timestamp;
-
-            console.log({ bidTimestamp: bidTimestamp.toString() });
-            console.log({ latest: await time.latest() });
-
-            // next installment timestamp
-            // increase 20 days so that previous 10 + 20 = 30 days
-            await time.increase(time.duration.days(20));
-
-            console.log({ bidTimestamp: bidTimestamp.toString() });
-            console.log({ latest: await time.latest() });
-
             await this.contracts.projecty.connect(seller).withdrawPayment(entryId);
 
             await expect(
@@ -169,11 +152,9 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
             await increaseDays(20);
           }
 
-          it("all payments claimed", async function () {
-            const installmentsLeft = totalInstallments - 1;
-
-            for (let i = 0; i <= installmentsLeft; i++) {
-              const installmentNumber = i + 2;
+          async function transfersPaymentsAndEmitEvent(contract: ProjectY) {
+            for (let i = 2; i <= totalInstallments + 1; i++) {
+              const installmentNumber = i;
 
               console.log("---------------------", installmentNumber, "---------------------");
 
@@ -182,72 +163,156 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
 
               if (installmentNumber !== 7) {
                 // buyer pays installment
-                await this.contracts.projecty
-                  .connect(buyer)
-                  .payInstallment(entryId, { value: paymentPerMonth });
+                await contract.connect(buyer).payInstallment(entryId, { value: paymentPerMonth });
               }
 
               // increase 20 days so that previous 10 + 20 = 30 days
               await increase20Days();
 
-              console.log({
-                amountClaimable: fromWei(paymentPerMonth),
-                beforeTxBalOfSeller: fromWei(await seller.getBalance()),
-              });
+              // seller claims previous installments
+              let balDiff: BigNumber;
 
-              console.log({ paymentPerMonth: paymentPerMonth.toString() });
+              // seller is claiming first payment (down payment)
+              if (installmentNumber == 2) {
+                balDiff = downPayment;
+              } else {
+                balDiff = paymentPerMonth;
+              }
 
-              // seller claims previous installment
-              await this.contracts.projecty.connect(seller).withdrawPayment(entryId);
+              const paymentsClaimed = installmentNumber - 1;
 
-              // await expect(
-              //   this.contracts.projecty.connect(seller).withdrawPayment(entryId)
-              // ).to.changeEtherBalances(
-              //   [seller, this.contracts.projecty],
-              //   [paymentPerMonth, `-${paymentPerMonth.toString()}`]
-              // );
-
-              console.log({
-                amountClaimable: fromWei(paymentPerMonth),
-                afterTxBalOfSeller: fromWei(await seller.getBalance()),
-              });
+              await expect(contract.connect(seller).withdrawPayment(entryId))
+                .to.changeEtherBalances([seller, contract], [balDiff, `-${balDiff.toString()}`])
+                .to.emit(contract, "PaymentWithdrawn")
+                .withArgs(bidId, entryId, balDiff, paymentsClaimed);
             }
+          }
+
+          it("transfers payments to seller and emits 'PaymentWithdrawn'", async function () {
+            await transfersPaymentsAndEmitEvent(this.contracts.projecty);
+          });
+
+          it("deletes sellerInfo and buyerInfo after last payment claim", async function () {
+            await transfersPaymentsAndEmitEvent(this.contracts.projecty);
+
+            await expect(this.contracts.projecty.isEntryIdValid(entryId)).to.be.revertedWith(
+              ProjectYErrors.InvalidEntryId
+            );
+            await expect(this.contracts.projecty.isBidIdValid(bidId)).to.be.revertedWith(
+              ProjectYErrors.InvalidBidId
+            );
           });
         }
       );
+
+      context("when seller claims 3 months later after last installment", function () {
+        beforeEach(async function () {
+          for (let i = 2; i <= totalInstallments; i++) {
+            // console.log("---------------------", i, "---------------------");
+
+            // buyer pays installment after each month
+            await time.increase(ONE_MONTH);
+
+            // buyer pays installment
+            await this.contracts.projecty
+              .connect(buyer)
+              .payInstallment(entryId, { value: paymentPerMonth });
+
+            // console.log("------------------------------------------");
+          }
+        });
+
+        it("retrieves correct installmentsPaid", async function () {
+          expect((await this.contracts.projecty.getSellerInfo(entryId)).installmentsPaid).to.equal(
+            totalInstallments
+          );
+        });
+
+        it("allows to claim all payments at once", async function () {
+          await time.increase(3 * ONE_MONTH);
+
+          expect((await this.contracts.projecty.getSellerInfo(entryId)).paymentsClaimed).to.equal(
+            0
+          );
+
+          const paymentsClaimed = totalInstallments;
+
+          await expect(this.contracts.projecty.connect(seller).withdrawPayment(entryId))
+            .to.changeEtherBalances(
+              [seller, this.contracts.projecty],
+              [bidPrice, `-${bidPrice.toString()}`]
+            )
+            .to.emit(this.contracts.projecty, "PaymentWithdrawn")
+            .withArgs(bidId, entryId, bidPrice, paymentsClaimed);
+        });
+
+        it("deletes sellerInfo and buyerInfo", async function () {
+          await time.increase(3 * ONE_MONTH);
+
+          await this.contracts.projecty.connect(seller).withdrawPayment(entryId);
+
+          await expect(this.contracts.projecty.isEntryIdValid(entryId)).to.be.revertedWith(
+            ProjectYErrors.InvalidEntryId
+          );
+          await expect(this.contracts.projecty.isBidIdValid(bidId)).to.be.revertedWith(
+            ProjectYErrors.InvalidBidId
+          );
+        });
+      });
+
+      context("when 4/6 installments are done and seller claims 3 payments", function () {
+        const installmentsToDo = totalInstallments - 2;
+
+        beforeEach(async function () {
+          for (let i = 2; i <= installmentsToDo; i++) {
+            console.log("---------------------", i, "---------------------");
+
+            // buyer pays installment after each month
+            await time.increase(ONE_MONTH);
+
+            // buyer pays installment
+            await this.contracts.projecty
+              .connect(buyer)
+              .payInstallment(entryId, { value: paymentPerMonth });
+
+            console.log("------------------------------------------");
+          }
+        });
+
+        it("retrieves correct installmentsPaid", async function () {
+          expect((await this.contracts.projecty.getSellerInfo(entryId)).installmentsPaid).to.equal(
+            installmentsToDo
+          );
+        });
+
+        it("claims 3 payments for the first time", async function () {
+          const paymentToBeClaimed = 3;
+          const amountClaimable_ = getInstallmentAmountOf(
+            bidInstallment,
+            bidPrice,
+            paymentToBeClaimed
+          );
+
+          // 5.61 + 11.22;
+          const amountClaimable = toWei("17.17");
+
+          console.log({ amountClaimable: amountClaimable.toString() });
+
+          expect((await this.contracts.projecty.getSellerInfo(entryId)).paymentsClaimed).to.equal(
+            0
+          );
+
+          const paymentsClaimed = 3;
+
+          await expect(this.contracts.projecty.connect(seller).withdrawPayment(entryId))
+            .to.changeEtherBalances(
+              [seller, this.contracts.projecty],
+              [amountClaimable, `-${amountClaimable.toString()}`]
+            )
+            .to.emit(this.contracts.projecty, "PaymentWithdrawn")
+            .withArgs(bidId, entryId, amountClaimable, paymentsClaimed);
+        });
+      });
     });
   });
 }
-
-// total 6 installments, 5 done but only 1 installment claimed
-
-// const buyerInfo = await this.contracts.projecty.getBuyerInfo(bidId);
-// const pricePaid = buyerInfo.pricePaid;
-// expect(pricePaid).to.equal(downPayment);
-
-// const sellerInfo = await this.contracts.projecty.getSellerInfo(entryId);
-// const paymentsClaimed = sellerInfo.paymentsClaimed;
-// const installmentsPaid = sellerInfo.installmentsPaid;
-// expect(paymentsClaimed).to.equal(installmentsPaid - 1);
-
-// console.log("before tx: ", {
-//   paymentsClaimed: (await this.contracts.projecty.getSellerInfo(entryId)).paymentsClaimed,
-//   installmentsPaid: (await this.contracts.projecty.getSellerInfo(entryId))
-//     .installmentsPaid,
-// });
-
-// await this.contracts.projecty.connect(seller).withdrawPayment(entryId);
-
-// console.log("after tx: ", {
-//   paymentsClaimed: (await this.contracts.projecty.getSellerInfo(entryId)).paymentsClaimed,
-//   installmentsPaid: (await this.contracts.projecty.getSellerInfo(entryId))
-//     .installmentsPaid,
-// });
-
-// await this.contracts.projecty.connect(seller).withdrawPayment(entryId);
-
-// console.log("after second tx: ", {
-//   paymentsClaimed: (await this.contracts.projecty.getSellerInfo(entryId)).paymentsClaimed,
-//   installmentsPaid: (await this.contracts.projecty.getSellerInfo(entryId))
-//     .installmentsPaid,
-// });
