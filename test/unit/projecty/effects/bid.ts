@@ -149,14 +149,19 @@ export default function shouldBehaveLikeBid(): void {
             const bidPrice = toWei("5");
             const buyingInstallment = InstallmentPlan.None;
             const bidId = 1;
+            const downPayment = getDownPayment(buyingInstallment, bidPrice);
 
             await expect(
               this.contracts.projecty.connect(buyer).bid(entryId, bidPrice, buyingInstallment, {
-                value: getDownPayment(buyingInstallment, bidPrice),
+                value: downPayment,
               })
             )
               .to.emit(this.contracts.projecty, "Bid")
-              .withArgs(buyer.address, entryId, bidId, anyValue);
+              .withArgs(buyer.address, entryId, bidId, anyValue)
+              .changeEtherBalances(
+                [this.contracts.projecty, buyer],
+                [downPayment, `-${downPayment}`]
+              );
           });
         });
       });

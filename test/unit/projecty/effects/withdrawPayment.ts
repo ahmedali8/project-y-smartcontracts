@@ -2,10 +2,9 @@ import type { BigNumber } from "@ethersproject/bignumber";
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
-import { Context } from "mocha";
 
 import { ProjectY } from "../../../../src/types";
-import { fromWei, toWei } from "../../../../utils/format";
+import { toWei } from "../../../../utils/format";
 import { BIDDING_PERIOD, InstallmentPlan, ONE_MONTH } from "../../../shared/constants";
 import { ProjectYErrors } from "../../../shared/errors";
 import {
@@ -287,11 +286,11 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
 
         it("claims 3 payments for the first time", async function () {
           const paymentToBeClaimed = 3;
-          const amountClaimable_ = getInstallmentAmountOf(
-            bidInstallment,
-            bidPrice,
-            paymentToBeClaimed
-          );
+          // const amountClaimable_ = getInstallmentAmountOf(
+          //   bidInstallment,
+          //   bidPrice,
+          //   paymentToBeClaimed
+          // );
 
           // 5.61 + 11.22;
           const amountClaimable = toWei("17.17");

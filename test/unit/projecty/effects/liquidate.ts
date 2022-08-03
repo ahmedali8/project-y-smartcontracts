@@ -4,7 +4,7 @@ import { time } from "@nomicfoundation/hardhat-network-helpers";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 
-import { calculatePercentage, fromWei, toWei } from "../../../../utils/format";
+import { calculatePercentage, toWei } from "../../../../utils/format";
 import {
   BIDDING_PERIOD,
   GRACE_PERIOD,
