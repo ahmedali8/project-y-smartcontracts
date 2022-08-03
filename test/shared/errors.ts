@@ -28,7 +28,7 @@ export enum ProjectYErrors {
   BidderShouldNotBeSelected = "BIDDER_SHOULD_NOT_BE_SELECTED",
   NoPaymentAvailable = "NO_PAYMENT_AVAILABLE",
   CannotReclaimPayment = "CANNOT_RECLAIM_PAYMENT",
-  NoInstallmentLeft = "NO_INSTALLMENT_LEFT",
+  InstallmentsComplete = "INSTALLMENTS_COMPLETE",
   InstallmentOnTrack = "INSTALLMENT_ON_TRACK",
   InvalidLiquidationValue = "INVALID_LIQUIDATION_VALUE",
   InvalidBiddingPeriod = "INVALID_BIDDING_PERIOD",
@@ -37,4 +37,5 @@ export enum ProjectYErrors {
   NoBidIdSelected = "NO_BID_ID_SELECTED",
   PayAfterAppropriateTime = "PAY_AFTER_APPROPRIATE_TIME",
   ClaimAfterAppropriateTime = "CLAIM_AFTER_APPROPRIATE_TIME",
+  InvalidCaller = "INVALID_CALLER",
 }

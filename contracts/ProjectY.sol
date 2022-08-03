@@ -84,6 +84,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     event PaymentWithdrawn(uint256 bidId, uint256 entryId, uint256 value, uint256 paymentsClaimed);
 
+    event Liquidated(uint256 entryId, uint256 bidId, uint256 installmentPaid, uint256 value);
+
     event BiddingPeriodUpdated(uint64 prevBiddingPeriod, uint64 newBiddingPeriod);
 
     event GracePeriodUpdated(uint64 prevGracePeriod, uint64 newGracePeriod);
@@ -646,12 +648,21 @@ contract ProjectY is Context, Owned, ERC721Holder {
         isBidIdValid(bidId_);
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
-        uint256 installmentPerMonth_ = getInstallmentAmountPerMonth(entryId_);
+        require(
+            _msgSender() != sellerInfo_.sellerAddress && _msgSender() != buyerInfo_.buyerAddress,
+            "INVALID_CALLER"
+        );
+
+        // 0 means InstallmentPlan.None
+        uint8 totalInstallments_ = getTotalInstallments(sellerInfo_.selectedBidId);
+
+        console.log("totalInstallments_: ", totalInstallments_);
+        console.log("sellerInfo_.installmentsPaid: ", sellerInfo_.installmentsPaid);
 
         // None or Installments paid
         require(
-            installmentPerMonth_ != 0 || (buyerInfo_.bidPrice == buyerInfo_.pricePaid),
-            "NO_INSTALLMENT_LEFT"
+            sellerInfo_.installmentsPaid != totalInstallments_ && totalInstallments_ != 0,
+            "INSTALLMENTS_COMPLETE"
         );
 
         // get timestamp of next payment
@@ -667,15 +678,36 @@ contract ProjectY is Context, Owned, ERC721Holder {
         );
 
         address oldbuyer_ = buyerInfo_.buyerAddress;
-        uint256 priceToBePaidByLiquidator_ = (buyerInfo_.pricePaid * 95) / 100;
 
-        require(priceToBePaidByLiquidator_ == value_, "INVALID_LIQUIDATION_VALUE");
+        uint256 installmentPerMonth_ = getInstallmentAmountPerMonth(entryId_);
+        uint256 liquidationValue_ = (buyerInfo_.pricePaid * 95) / 100;
+
+        uint256 valueToBePaid_ = liquidationValue_ + installmentPerMonth_;
+
+        console.log("installmentPerMonth_: ", installmentPerMonth_);
+        console.log("liquidationValue_: ", liquidationValue_);
+        console.log("valueToBePaid_: ", valueToBePaid_);
+
+        require(valueToBePaid_ == value_, "INVALID_LIQUIDATION_VALUE");
 
         // update new buyer
         _buyerInfo[bidId_].buyerAddress = _msgSender();
+        _buyerInfo[bidId_].pricePaid += installmentPerMonth_;
+        _sellerInfo[entryId_].installmentsPaid++;
+
+        // if only last installment remains then transfer nft
+        if (sellerInfo_.installmentsPaid == totalInstallments_ - 1) {
+            IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(
+                address(this),
+                _msgSender(),
+                sellerInfo_.tokenId
+            );
+        }
 
         // transfer 95% of pricePaid to old buyer
-        Address.sendValue(payable(oldbuyer_), priceToBePaidByLiquidator_);
+        Address.sendValue(payable(oldbuyer_), liquidationValue_);
+
+        emit Liquidated(entryId_, bidId_, _sellerInfo[entryId_].installmentsPaid, valueToBePaid_);
     }
 
     function setBiddingPeriod(uint64 biddingPeriod_) public onlyOwner {
