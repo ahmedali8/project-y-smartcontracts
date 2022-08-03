@@ -3,7 +3,7 @@ import { time } from "@nomicfoundation/hardhat-network-helpers";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 
-import { toWei } from "../../../../utils/format";
+import { fromWei, toWei } from "../../../../utils/format";
 import {
   BIDDING_PERIOD,
   GRACE_PERIOD,
@@ -229,11 +229,13 @@ export default function shouldBehaveLikePayInstallment(): void {
             this.contracts.projecty.address
           );
 
-          for (let i = 0; i < totalInstallments; i++) {
+          const installmentNumber = 2;
+
+          for (let i = installmentNumber; i <= totalInstallments; i++) {
             // increase time to one month
             await time.increase(ONE_MONTH);
 
-            const installmentToBePaid = i + 2;
+            const installmentToBePaid = i;
             const installmentPerMonth = getInstallmentPerMonth(buyingInstallment, bidPrice);
 
             await expect(
@@ -248,15 +250,6 @@ export default function shouldBehaveLikePayInstallment(): void {
 
         it("transfers nft to buyer", async function () {
           expect(await this.mocks.erc721.ownerOf(tokenId)).to.equal(buyer.address);
-        });
-
-        it("deletes sellerInfo and buyerInfo", async function () {
-          await expect(this.contracts.projecty.isEntryIdValid(entryId)).to.be.revertedWith(
-            ProjectYErrors.InvalidEntryId
-          );
-          await expect(this.contracts.projecty.isBidIdValid(bidId)).to.be.revertedWith(
-            ProjectYErrors.InvalidBidId
-          );
         });
       });
     });

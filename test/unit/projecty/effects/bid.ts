@@ -143,11 +143,6 @@ export default function shouldBehaveLikeBid(): void {
             });
 
             expect((await this.contracts.projecty.getSellerInfo(entryId)).totalBids).to.equal(1);
-
-            const bidId = 1;
-            await expect(this.contracts.projecty.getDownPaymentAmount(bidId)).to.be.revertedWith(
-              ProjectYErrors.DownPaymentDone
-            );
           });
 
           it("emits 'Bid' event", async function () {
