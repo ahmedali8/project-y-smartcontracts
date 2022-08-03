@@ -84,6 +84,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     event PaymentWithdrawn(uint256 bidId, uint256 entryId, uint256 value, uint256 paymentsClaimed);
 
+    event BiddingPeriodUpdated(uint64 prevBiddingPeriod, uint64 newBiddingPeriod);
+
+    event GracePeriodUpdated(uint64 prevGracePeriod, uint64 newGracePeriod);
+
     constructor(address owner_) Owned(owner_) {
         // solhint-disable-previous-line no-empty-blocks
     }
@@ -676,11 +680,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     function setBiddingPeriod(uint64 biddingPeriod_) public onlyOwner {
         require(biddingPeriod_ != 0, "INVALID_BIDDING_PERIOD");
+        emit BiddingPeriodUpdated(biddingPeriod, biddingPeriod_);
         biddingPeriod = biddingPeriod_;
     }
 
     function setGracePeriod(uint64 gracePeriod_) public onlyOwner {
         require(gracePeriod_ != 0, "INVALID_GRACE_PERIOD");
+        emit GracePeriodUpdated(gracePeriod, gracePeriod_);
         gracePeriod = gracePeriod_;
     }
 }

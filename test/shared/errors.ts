@@ -31,7 +31,7 @@ export enum ProjectYErrors {
   NoInstallmentLeft = "NO_INSTALLMENT_LEFT",
   InstallmentOnTrack = "INSTALLMENT_ON_TRACK",
   InvalidLiquidationValue = "INVALID_LIQUIDATION_VALUE",
-  InvalidBiddingPrice = "INVALID_BIDDING_PERIOD",
+  InvalidBiddingPeriod = "INVALID_BIDDING_PERIOD",
   InvalidGracePeriod = "INVALID_GRACE_PERIOD",
   DueDatePassed = "DUE_DATE_PASSED",
   NoBidIdSelected = "NO_BID_ID_SELECTED",
