@@ -20,7 +20,7 @@ describe("Unit tests", function () {
   });
 
   // test non-blockchain files
-  testUtils();
+  // testUtils();
 
   // test projectY
   testProjectY();

@@ -219,12 +219,20 @@ contract ProjectY is Context, Owned, ERC721Holder {
                     TEMPORARY FRONT-END FUNCTIONS END
     //////////////////////////////////////////////////////////////*/
 
-    function isEntryIdValid(uint256 entryId_) public view returns (bool isValid_) {
-        require(isValid_ = (_sellerInfo[entryId_].sellerAddress != address(0)), "INVALID_ENTRY_ID");
+    function isEntryIdValid(uint256 entryId_) public view returns (bool) {
+        return _sellerInfo[entryId_].sellerAddress != address(0);
+    }
+
+    function _requireIsEntryIdValid(uint256 entryId_) internal view {
+        require(isEntryIdValid(entryId_), "INVALID_ENTRY_ID");
+    }
+
+    function _requireIsBidIdValid(uint256 bidId_) internal view {
+        require(isBidIdValid(bidId_), "INVALID_BID_ID");
     }
 
     function isBidIdValid(uint256 bidId_) public view returns (bool isValid_) {
-        require(isValid_ = (_buyerInfo[bidId_].buyerAddress != address(0)), "INVALID_BID_ID");
+        return _buyerInfo[bidId_].buyerAddress != address(0);
     }
 
     function getSellerInfo(uint256 entryId_) public view returns (SellerInfo memory) {
