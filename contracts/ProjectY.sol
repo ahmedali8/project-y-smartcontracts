@@ -94,8 +94,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // solhint-disable-previous-line no-empty-blocks
     }
 
-    // some additional getters for front-end start
+    /*//////////////////////////////////////////////////////////////
+                    TEMPORARY FRONT-END FUNCTIONS START
+    //////////////////////////////////////////////////////////////*/
 
+    // gives all nfts that are open for sale (excluding the one selectedBid)
     function getNFTsOpenForSale() public view returns (SellerInfo[] memory nftsOpenForSale_) {
         uint256 totalEntryIds_ = getTotalEntryIds();
         nftsOpenForSale_ = new SellerInfo[](totalEntryIds_);
@@ -120,27 +123,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         return nftsOpenForSale_;
     }
 
-    function getAllBidsOnNFT(uint256 _entryId)
-        public
-        view
-        returns (BuyerInfo[] memory allBidsOnNFT_)
-    {
-        uint256 totalBidIds_ = getTotalBidIds();
-        allBidsOnNFT_ = new BuyerInfo[](totalBidIds_);
-
-        for (uint256 i_ = 0; i_ < totalBidIds_; ) {
-            if (_buyerInfo[i_].entryId == _entryId) {
-                allBidsOnNFT_[i_] = _buyerInfo[i_ + 1];
-            }
-
-            // An array can't have a total length
-            // larger than the max uint256 value.
-            unchecked {
-                ++i_;
-            }
-        }
-    }
-
+    // gives all nfts specific to user that are open for sale (excluding the one selectedBid)
     function getUserNFTsOpenForSale(address user_)
         public
         view
@@ -167,7 +150,74 @@ contract ProjectY is Context, Owned, ERC721Holder {
         }
     }
 
-    // some additional getters for front-end end
+    function getAllBidsOnNFT(uint256 _entryId)
+        public
+        view
+        returns (BuyerInfo[] memory allBidsOnNFT_)
+    {
+        uint256 totalBidIds_ = getTotalBidIds();
+        allBidsOnNFT_ = new BuyerInfo[](totalBidIds_);
+
+        for (uint256 i_ = 0; i_ < totalBidIds_; ) {
+            if (_buyerInfo[i_].entryId == _entryId) {
+                allBidsOnNFT_[i_] = _buyerInfo[i_ + 1];
+            }
+
+            // An array can't have a total length
+            // larger than the max uint256 value.
+            unchecked {
+                ++i_;
+            }
+        }
+    }
+
+    // get all nfts ongoing installment phase specific to user
+    function getUserNFTsOngoingInstallmentPhase(address user_)
+        public
+        view
+        returns (
+            SellerInfo[] memory sellerInfos_,
+            BuyerInfo[] memory buyerInfos_,
+            uint256[] memory downPayments_,
+            uint256[] memory monthlyPayments_
+        )
+    {
+        uint256 totalEntryIds_ = getTotalEntryIds();
+        sellerInfos_ = new SellerInfo[](totalEntryIds_);
+
+        // Storing this outside the loop saves gas per iteration.
+        SellerInfo memory sellerInfo_;
+        BuyerInfo memory buyerInfo_;
+
+        for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
+            sellerInfo_ = _sellerInfo[i_ + 1];
+
+            // skip loop if no selected bid id
+            if (sellerInfo_.selectedBidId == 0) {
+                continue;
+            }
+
+            buyerInfo_ = _buyerInfo[sellerInfo_.selectedBidId];
+
+            if (buyerInfo_.buyerAddress == user_) {
+                sellerInfos_[i_] = sellerInfo_;
+                buyerInfos_[i_] = buyerInfo_;
+
+                downPayments_[i_] = getDownPaymentAmount(sellerInfo_.selectedBidId);
+                monthlyPayments_[i_] = getInstallmentAmountPerMonth(sellerInfo_.selectedBidId);
+            }
+
+            // An array can't have a total length
+            // larger than the max uint256 value.
+            unchecked {
+                ++i_;
+            }
+        }
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                    TEMPORARY FRONT-END FUNCTIONS END
+    //////////////////////////////////////////////////////////////*/
 
     function isEntryIdValid(uint256 entryId_) public view returns (bool isValid_) {
         require(isValid_ = (_sellerInfo[entryId_].sellerAddress != address(0)), "INVALID_ENTRY_ID");

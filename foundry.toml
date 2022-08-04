@@ -1,5 +1,5 @@
 ## defaults for all profiles
-[profile.default]
+[default]
 src = 'contracts'                                             # the source directory
 test = 'sol_test'                                             # the test directory
 script = 'sol_script'                                         # the script directory
@@ -60,16 +60,16 @@ sparse_mode = false
 etherscan_api_key='YOURETHERSCANAPIKEY'
 
 ## optimizer details for the default profile
-[profile.default.optimizer_details]
+[default.optimizer_details]
 constantOptimizer = true                                      # whether to enable the optimizer for literal numbers and strings or not
 yul = true                                                    # whether to enable the new Yul optimizer or not
 
 # sets the `yulDetails` of the `optimizer_details` for the `default` profile
-[profile.default.optimizer_details.yulDetails]
+[default.optimizer_details.yulDetails]
 stackAllocation = true                                        # whether to enable the improvement of allocation of stack slots for variables or not
 optimizerSteps = 'dhfoDgvulfnTUtnIf'                          # the optimization steps to be applied
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
 
-[profile.ci]
+[ci]
 fuzz-runs = 500
