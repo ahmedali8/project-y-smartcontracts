@@ -23,7 +23,7 @@ $ rm -rf ./slither/* && slither . --hardhat-cache-directory ./generated/cache/ha
 ### Note: refer to [hardhat-foundry-template](https://github.com/ahmedali8/foundry-hardhat-template) for more information and commands
 
 [gha]: https://github.com/ahmedali8/project-y-smartcontracts/actions
-[gha-badge]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/hardhat-ci.yml/badge.svg
+[gha-badge]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/hardhat.yml/badge.svg
 [coveralls]: https://coveralls.io/github/ahmedali8/project-y-smartcontracts?branch=main
 [coveralls-badge]: https://coveralls.io/repos/github/ahmedali8/project-y-smartcontracts/badge.svg?branch=main&t=ssK3fj
 [prettier]: https://prettier.io
