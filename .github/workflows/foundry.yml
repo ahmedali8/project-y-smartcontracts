@@ -49,7 +49,7 @@ jobs:
         run: forge snapshot --check
 
       - name: Run tests
-        run: forge test -vvvv
+        run: forge test -vvvv --gas-report
 
       - name: "Add test summary"
         run: |
