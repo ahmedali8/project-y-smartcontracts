@@ -131,10 +131,10 @@ export function shouldBehaveLikeGetTotalInstallments(): void {
 }
 
 export function testUtils(): void {
-  describe("test/shared/utils", function () {
-    // shouldBehaveLikeGetDownPayment();
-    // shouldBehaveLikeGetInstallmentPerMonth();
+  describe("test/shared/utils [ @skip-on-coverage ]", function () {
+    shouldBehaveLikeGetDownPayment();
+    shouldBehaveLikeGetInstallmentPerMonth();
     shouldBehaveLikeGetInstallmentAmountOf();
-    // shouldBehaveLikeGetTotalInstallments();
+    shouldBehaveLikeGetTotalInstallments();
   });
 }

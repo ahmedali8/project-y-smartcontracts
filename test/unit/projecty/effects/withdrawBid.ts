@@ -31,7 +31,7 @@ export function shouldBehaveLikeWithdrawBid(): void {
       InstallmentPlan.SixMonths,
       InstallmentPlan.ThreeMonths,
     ];
-    const NONE_INDEX = 0;
+    // const NONE_INDEX = 0;
 
     const buyers: SignerWithAddress[] = [] as Array<SignerWithAddress>;
 

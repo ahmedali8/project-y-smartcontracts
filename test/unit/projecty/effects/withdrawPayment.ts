@@ -3,12 +3,13 @@ import { time } from "@nomicfoundation/hardhat-network-helpers";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 
-import { ProjectY } from "../../../../src/types";
+import type { ProjectY } from "../../../../src/types/contracts/ProjectY";
 import { toWei } from "../../../../utils/format";
 import { BIDDING_PERIOD, InstallmentPlan, ONE_MONTH } from "../../../shared/constants";
 import { ProjectYErrors } from "../../../shared/errors";
 import {
   getDownPayment,
+  getInstallmentAmountOf,
   getInstallmentPerMonth,
   getTotalInstallments,
 } from "../../../shared/utils";
@@ -276,14 +277,14 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
 
         it("claims 3 payments for the first time", async function () {
           const paymentToBeClaimed = 3;
-          // const amountClaimable_ = getInstallmentAmountOf(
-          //   bidInstallment,
-          //   bidPrice,
-          //   paymentToBeClaimed
-          // );
+          const amountClaimable = getInstallmentAmountOf(
+            bidInstallment,
+            bidPrice,
+            paymentToBeClaimed
+          );
 
           // 5.61 + 11.22;
-          const amountClaimable = toWei("17.17");
+          // const amountClaimable = toWei("17.17");
 
           console.log({ amountClaimable: amountClaimable.toString() });
 

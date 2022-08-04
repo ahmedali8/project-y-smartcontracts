@@ -72,17 +72,17 @@ export function getInstallmentAmountOf(
   const installmentPerMonth = getInstallmentPerMonth(installmentPlan, bidPrice);
 
   const no = installmentNumber - 1;
-  const installmentPerNoOfMonths = installmentPerMonth.mul(no);
+  const installmentPerMonthForNumber = installmentPerMonth.mul(no);
 
-  const amountClaimable = downPayment.add(installmentPerNoOfMonths);
+  const amountClaimable = downPayment.add(installmentPerMonthForNumber);
 
-  console.log({
-    downPayment: downPayment.toString(),
-    installmentPerMonth: installmentPerMonth.toString(),
-    installmentPerNoOfMonths: installmentPerNoOfMonths.toString(),
-    no: no,
-    amountClaimable: amountClaimable.toString(),
-  });
+  // console.log({
+  //   downPayment: downPayment.toString(),
+  //   installmentPerMonth: installmentPerMonth.toString(),
+  //   installmentPerMonthForNumber: installmentPerMonthForNumber.toString(),
+  //   no: no,
+  //   amountClaimable: amountClaimable.toString(),
+  // });
 
   return amountClaimable;
 }
