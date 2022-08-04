@@ -1,5 +1,6 @@
 import { getAddress } from "@ethersproject/address";
 import type { BigNumber } from "@ethersproject/bignumber";
+import { Zero } from "@ethersproject/constants";
 import { keccak256 } from "@ethersproject/solidity";
 import { computeAddress } from "@ethersproject/transactions";
 import { impersonateAccount, setBalance, time } from "@nomicfoundation/hardhat-network-helpers";
@@ -29,6 +30,10 @@ export async function createRandomSigner(salt: string, bal: BigNumber): Promise<
   return await ethers.getSigner(checksummedSignerAddress);
 }
 
+/*//////////////////////////////////////////////////////////////
+                            PURE FUNCTIONS
+//////////////////////////////////////////////////////////////*/
+
 export function getDownPayment(installmentPlan: InstallmentPlan, bidPrice: BigNumber): BigNumber {
   if (installmentPlan == InstallmentPlan.ThreeMonths) {
     return bidPrice.mul(THREE_MONTHS_DOWN_PAYMENT_PERCENTAGE).div(100);
@@ -52,7 +57,7 @@ export function getInstallmentPerMonth(
   } else if (installmentPlan == InstallmentPlan.NineMonths) {
     return bidPrice.mul(NINE_MONTHS_MONTHLY_PERCENTAGE).div(100);
   } else {
-    return toBN("0");
+    return Zero;
   }
 }
 
@@ -69,7 +74,7 @@ export function getInstallmentAmountOf(
   const no = installmentNumber - 1;
   const installmentPerNoOfMonths = installmentPerMonth.mul(no);
 
-  const amountClaimable = downPayment.add(installmentPerMonth);
+  const amountClaimable = downPayment.add(installmentPerNoOfMonths);
 
   console.log({
     downPayment: downPayment.toString(),
