@@ -1,4 +1,4 @@
-name: Hardhat-CI
+name: Hardhat
 
 env:
   COVERAGE_GIT_BRANCH: "main"
@@ -6,6 +6,7 @@ env:
   COVERAGE_SERVICE_NAME: "github-actions-ci"
   INFURA_PROJECT_ID: ${{ secrets.INFURA_API_KEY }}
   PRIVATE_KEY_1: ${{ secrets.PRIVATE_KEY_1 }}
+  COIN_MARKET_CAP_API_KEY: ${{ secrets.COIN_MARKET_CAP_API_KEY }}
 
 on:
   pull_request:
@@ -16,7 +17,7 @@ on:
       - "main"
 
 jobs:
-  hardhat-ci:
+  hardhat:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Check out the repo"
