@@ -706,7 +706,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
     //////////////////////////////////////////////////////////////*/
 
     // gives all nfts that are open for sale (excluding the one selectedBid)
-    function getNFTsOpenForSale() external view returns (SellerInfo[] memory nftsOpenForSale_) {
+    function getNFTsOpenForSale()
+        external
+        view
+        returns (SellerInfo[] memory nftsOpenForSale_, uint256[] memory entryIds_)
+    {
         uint256 totalEntryIds_ = getTotalEntryIds();
         nftsOpenForSale_ = new SellerInfo[](totalEntryIds_);
 
@@ -715,13 +719,14 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         for (uint256 i_; i_ < totalEntryIds_; ) {
             // skip seller info if entryId is invalid
-            if (!getIsEntryIdValid(i_ + 0)) {
+            if (!getIsEntryIdValid(i_ + 1)) {
                 continue;
             }
 
-            sellerInfo_ = _sellerInfo[i_ + 1];
+            sellerInfo_ = getSellerInfo(i_ + 1);
 
             if (sellerInfo_.onSale) {
+                entryIds_[i_] = i_ + 1;
                 nftsOpenForSale_[i_] = sellerInfo_;
             }
 
@@ -731,15 +736,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 ++i_;
             }
         }
-
-        return nftsOpenForSale_;
     }
 
     // gives all nfts specific to user that are open for sale (excluding the one selectedBid)
     function getUserNFTsOpenForSale(address user_)
         external
         view
-        returns (SellerInfo[] memory userNFTsOpenForSale_)
+        returns (SellerInfo[] memory userNFTsOpenForSale_, uint256[] memory entryIds_)
     {
         uint256 totalEntryIds_ = getTotalEntryIds();
         userNFTsOpenForSale_ = new SellerInfo[](totalEntryIds_);
@@ -749,13 +752,14 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
             // skip seller info if entryId is invalid
-            if (!getIsEntryIdValid(i_ + 0)) {
+            if (!getIsEntryIdValid(i_ + 1)) {
                 continue;
             }
 
-            sellerInfo_ = _sellerInfo[i_ + 1];
+            sellerInfo_ = getSellerInfo(i_ + 1);
 
             if (sellerInfo_.onSale && sellerInfo_.sellerAddress == user_) {
+                entryIds_[i_] = i_ + 1;
                 userNFTsOpenForSale_[i_] = sellerInfo_;
             }
 
@@ -770,19 +774,20 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function getAllBidsOnNFT(uint256 _entryId)
         external
         view
-        returns (BuyerInfo[] memory allBidsOnNFT_)
+        returns (BuyerInfo[] memory allBidsOnNFT_, uint256[] memory bidIds_)
     {
         uint256 totalBidIds_ = getTotalBidIds();
         allBidsOnNFT_ = new BuyerInfo[](totalBidIds_);
 
         for (uint256 i_ = 0; i_ < totalBidIds_; ) {
             // skip buyer info if bidId is invalid
-            if (!getIsBidIdValid(i_ + 0)) {
+            if (!getIsBidIdValid(i_ + 1)) {
                 continue;
             }
 
             if (_buyerInfo[i_].entryId == _entryId) {
-                allBidsOnNFT_[i_] = _buyerInfo[i_ + 1];
+                bidIds_[i_] = i_ + 1;
+                allBidsOnNFT_[i_] = getBuyerInfo(i_ + 1);
             }
 
             // An array can't have a total length
@@ -801,7 +806,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
             SellerInfo[] memory sellerInfos_,
             BuyerInfo[] memory buyerInfos_,
             uint256[] memory downPayments_,
-            uint256[] memory monthlyPayments_
+            uint256[] memory monthlyPayments_,
+            uint256[] memory entryIds_,
+            uint256[] memory bidIds_
         )
     {
         uint256 totalEntryIds_ = getTotalEntryIds();
@@ -813,18 +820,18 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
             // skip seller info if entryId is invalid
-            if (!getIsEntryIdValid(i_ + 0)) {
+            if (!getIsEntryIdValid(i_ + 1)) {
                 continue;
             }
 
-            sellerInfo_ = _sellerInfo[i_ + 1];
+            sellerInfo_ = getSellerInfo(i_ + 1);
 
             // skip loop if no selected bid id
             if (sellerInfo_.selectedBidId == 0) {
                 continue;
             }
 
-            buyerInfo_ = _buyerInfo[sellerInfo_.selectedBidId];
+            buyerInfo_ = getBuyerInfo(sellerInfo_.selectedBidId);
 
             if (buyerInfo_.buyerAddress == user_) {
                 sellerInfos_[i_] = sellerInfo_;
@@ -832,6 +839,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
                 downPayments_[i_] = getDownPaymentAmount(sellerInfo_.selectedBidId);
                 monthlyPayments_[i_] = getInstallmentAmountPerMonth(sellerInfo_.selectedBidId);
+
+                entryIds_[i_] = i_ + 1;
+                bidIds_[i_] = i_ + 1;
             }
 
             // An array can't have a total length
