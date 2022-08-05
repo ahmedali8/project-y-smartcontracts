@@ -185,12 +185,8 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
           it("deletes sellerInfo and buyerInfo after last payment claim", async function () {
             await transfersPaymentsAndEmitEvent(this.contracts.projecty);
 
-            await expect(this.contracts.projecty.isEntryIdValid(entryId)).to.be.revertedWith(
-              ProjectYErrors.InvalidEntryId
-            );
-            await expect(this.contracts.projecty.isBidIdValid(bidId)).to.be.revertedWith(
-              ProjectYErrors.InvalidBidId
-            );
+            expect(await this.contracts.projecty.getIsEntryIdValid(entryId)).to.be.equal(false);
+            expect(await this.contracts.projecty.getIsBidIdValid(bidId)).to.be.equal(false);
           });
         }
       );
@@ -241,12 +237,8 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
 
           await this.contracts.projecty.connect(seller).withdrawPayment(entryId);
 
-          await expect(this.contracts.projecty.isEntryIdValid(entryId)).to.be.revertedWith(
-            ProjectYErrors.InvalidEntryId
-          );
-          await expect(this.contracts.projecty.isBidIdValid(bidId)).to.be.revertedWith(
-            ProjectYErrors.InvalidBidId
-          );
+          expect(await this.contracts.projecty.getIsEntryIdValid(entryId)).to.be.equal(false);
+          expect(await this.contracts.projecty.getIsBidIdValid(bidId)).to.be.equal(false);
         });
       });
 

@@ -7,7 +7,7 @@ import { BIDDING_PERIOD, InstallmentPlan } from "../../../shared/constants";
 import { ProjectYErrors } from "../../../shared/errors";
 import { getDownPayment } from "../../../shared/utils";
 
-export function shouldBehaveLikeWithdrawBid(): void {
+export default function shouldBehaveLikeWithdrawBid(): void {
   context("when bidId is invalid", function () {
     it("reverts", async function () {
       await expect(this.contracts.projecty.withdrawBid(45)).to.be.revertedWith(

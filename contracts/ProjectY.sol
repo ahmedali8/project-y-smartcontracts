@@ -56,10 +56,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
 
     // entryId -> SellerInfo
-    mapping(uint256 => SellerInfo) internal _sellerInfo;
+    mapping(uint256 => SellerInfo) private _sellerInfo;
 
     // bidId -> BuyerInfo
-    mapping(uint256 => BuyerInfo) internal _buyerInfo;
+    mapping(uint256 => BuyerInfo) private _buyerInfo;
 
     event Sell(
         address indexed seller,
@@ -99,7 +99,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
     //////////////////////////////////////////////////////////////*/
 
     // gives all nfts that are open for sale (excluding the one selectedBid)
-    function getNFTsOpenForSale() public view returns (SellerInfo[] memory nftsOpenForSale_) {
+    function getNFTsOpenForSale() external view returns (SellerInfo[] memory nftsOpenForSale_) {
         uint256 totalEntryIds_ = getTotalEntryIds();
         nftsOpenForSale_ = new SellerInfo[](totalEntryIds_);
 
@@ -107,6 +107,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
         SellerInfo memory sellerInfo_;
 
         for (uint256 i_; i_ < totalEntryIds_; ) {
+            // skip seller info if entryId is invalid
+            if (!getIsEntryIdValid(i_ + 0)) {
+                continue;
+            }
+
             sellerInfo_ = _sellerInfo[i_ + 1];
 
             if (sellerInfo_.onSale) {
@@ -125,7 +130,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     // gives all nfts specific to user that are open for sale (excluding the one selectedBid)
     function getUserNFTsOpenForSale(address user_)
-        public
+        external
         view
         returns (SellerInfo[] memory userNFTsOpenForSale_)
     {
@@ -136,6 +141,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
         SellerInfo memory sellerInfo_;
 
         for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
+            // skip seller info if entryId is invalid
+            if (!getIsEntryIdValid(i_ + 0)) {
+                continue;
+            }
+
             sellerInfo_ = _sellerInfo[i_ + 1];
 
             if (sellerInfo_.onSale && sellerInfo_.sellerAddress == user_) {
@@ -151,7 +161,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
 
     function getAllBidsOnNFT(uint256 _entryId)
-        public
+        external
         view
         returns (BuyerInfo[] memory allBidsOnNFT_)
     {
@@ -159,6 +169,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
         allBidsOnNFT_ = new BuyerInfo[](totalBidIds_);
 
         for (uint256 i_ = 0; i_ < totalBidIds_; ) {
+            // skip buyer info if bidId is invalid
+            if (!getIsBidIdValid(i_ + 0)) {
+                continue;
+            }
+
             if (_buyerInfo[i_].entryId == _entryId) {
                 allBidsOnNFT_[i_] = _buyerInfo[i_ + 1];
             }
@@ -173,7 +188,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     // get all nfts ongoing installment phase specific to user
     function getUserNFTsOngoingInstallmentPhase(address user_)
-        public
+        external
         view
         returns (
             SellerInfo[] memory sellerInfos_,
@@ -190,6 +205,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
         BuyerInfo memory buyerInfo_;
 
         for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
+            // skip seller info if entryId is invalid
+            if (!getIsEntryIdValid(i_ + 0)) {
+                continue;
+            }
+
             sellerInfo_ = _sellerInfo[i_ + 1];
 
             // skip loop if no selected bid id
@@ -219,29 +239,21 @@ contract ProjectY is Context, Owned, ERC721Holder {
                     TEMPORARY FRONT-END FUNCTIONS END
     //////////////////////////////////////////////////////////////*/
 
-    function isEntryIdValid(uint256 entryId_) public view returns (bool) {
+    function getIsEntryIdValid(uint256 entryId_) public view returns (bool) {
         return _sellerInfo[entryId_].sellerAddress != address(0);
     }
 
-    function _requireIsEntryIdValid(uint256 entryId_) internal view {
-        require(isEntryIdValid(entryId_), "INVALID_ENTRY_ID");
-    }
-
-    function _requireIsBidIdValid(uint256 bidId_) internal view {
-        require(isBidIdValid(bidId_), "INVALID_BID_ID");
-    }
-
-    function isBidIdValid(uint256 bidId_) public view returns (bool isValid_) {
+    function getIsBidIdValid(uint256 bidId_) public view returns (bool isValid_) {
         return _buyerInfo[bidId_].buyerAddress != address(0);
     }
 
     function getSellerInfo(uint256 entryId_) public view returns (SellerInfo memory) {
-        isEntryIdValid(entryId_);
+        _requireIsEntryIdValid(entryId_);
         return _sellerInfo[entryId_];
     }
 
     function getBuyerInfo(uint256 bidId_) public view returns (BuyerInfo memory) {
-        isBidIdValid(bidId_);
+        _requireIsBidIdValid(bidId_);
         return _buyerInfo[bidId_];
     }
 
@@ -254,7 +266,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
 
     function getTotalInstallments(uint256 bidId_) public view returns (uint8) {
-        isBidIdValid(bidId_);
+        _requireIsBidIdValid(bidId_);
 
         InstallmentPlan installment_ = _buyerInfo[bidId_].bidInstallment;
 
@@ -270,7 +282,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
 
     function getDownPaymentAmount(uint256 bidId_) public view returns (uint256) {
-        isBidIdValid(bidId_);
+        _requireIsBidIdValid(bidId_);
 
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
@@ -289,11 +301,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
 
     function getInstallmentAmountPerMonth(uint256 entryId_) public view returns (uint256) {
-        isEntryIdValid(entryId_);
+        _requireIsEntryIdValid(entryId_);
         SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
 
         uint256 bidId_ = sellerInfo_.selectedBidId;
-        isBidIdValid(bidId_);
+        _requireIsBidIdValid(bidId_);
 
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
@@ -369,7 +381,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 bidPrice_,
         InstallmentPlan installment_
     ) public payable returns (uint256) {
-        isEntryIdValid(entryId_);
+        _requireIsEntryIdValid(entryId_);
 
         uint256 value_ = msg.value;
         uint64 blockTimestamp_ = uint64(block.timestamp);
@@ -407,10 +419,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     function selectBid(uint256 bidId_) public {
         uint64 blockTimestamp_ = uint64(block.timestamp);
-        isBidIdValid(bidId_);
+        _requireIsBidIdValid(bidId_);
 
         uint256 entryId_ = _buyerInfo[bidId_].entryId;
-        isEntryIdValid(entryId_);
+        _requireIsEntryIdValid(entryId_);
 
         SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
@@ -460,7 +472,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 value_ = msg.value;
 
         // if InstallmentPlan.None so entryId is not validated as it was deleted
-        isEntryIdValid(entryId_);
+        _requireIsEntryIdValid(entryId_);
 
         uint256 bidId_ = _sellerInfo[entryId_].selectedBidId;
 
@@ -539,7 +551,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
 
     function withdrawBid(uint256 bidId_) public {
-        isBidIdValid(bidId_);
+        _requireIsBidIdValid(bidId_);
 
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
@@ -560,9 +572,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
 
     function withdrawPayment(uint256 entryId_) public {
-        isEntryIdValid(entryId_);
+        _requireIsEntryIdValid(entryId_);
         SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
-        isBidIdValid(sellerInfo_.selectedBidId);
+        _requireIsBidIdValid(sellerInfo_.selectedBidId);
 
         require(_msgSender() == sellerInfo_.sellerAddress, "CALLER_NOT_SELLER");
 
@@ -699,11 +711,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function liquidate(uint256 entryId_) public payable {
         uint256 value_ = msg.value;
 
-        isEntryIdValid(entryId_);
+        _requireIsEntryIdValid(entryId_);
         SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
 
         uint256 bidId_ = sellerInfo_.selectedBidId;
-        isBidIdValid(bidId_);
+        _requireIsBidIdValid(bidId_);
         BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
 
         require(
@@ -778,5 +790,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
         require(gracePeriod_ != 0, "INVALID_GRACE_PERIOD");
         emit GracePeriodUpdated(gracePeriod, gracePeriod_);
         gracePeriod = gracePeriod_;
+    }
+
+    function _requireIsEntryIdValid(uint256 entryId_) internal view {
+        require(getIsEntryIdValid(entryId_), "INVALID_ENTRY_ID");
+    }
+
+    function _requireIsBidIdValid(uint256 bidId_) internal view {
+        require(getIsBidIdValid(bidId_), "INVALID_BID_ID");
     }
 }
