@@ -530,6 +530,14 @@ contract ProjectY is Context, Owned, ERC721Holder {
                             VIEW/PURE FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
+    function getTotalEntryIds() public view returns (uint256) {
+        return _entryIdTracker.current();
+    }
+
+    function getTotalBidIds() public view returns (uint256) {
+        return _bidIdTracker.current();
+    }
+
     function getIsEntryIdValid(uint256 entryId_) public view returns (bool) {
         return _sellerInfo[entryId_].sellerAddress != address(0);
     }
@@ -546,14 +554,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function getBuyerInfo(uint256 bidId_) public view returns (BuyerInfo memory) {
         _requireIsBidIdValid(bidId_);
         return _buyerInfo[bidId_];
-    }
-
-    function getTotalEntryIds() public view returns (uint256) {
-        return _entryIdTracker.current();
-    }
-
-    function getTotalBidIds() public view returns (uint256) {
-        return _bidIdTracker.current();
     }
 
     function getTotalInstallments(uint256 bidId_) public view returns (uint8) {

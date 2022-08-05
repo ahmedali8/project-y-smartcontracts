@@ -7,12 +7,16 @@ import shouldBehaveLikeSetBiddingPeriod from "./effects/setBiddingPeriod";
 import shouldBehaveLikeSetGracePeriod from "./effects/setGracePeriod";
 import shouldBehaveLikeWithdrawBid from "./effects/withdrawBid";
 import shouldBehaveLikeWithdrawPayment from "./effects/withdrawPayment";
+import shouldBehaveLikeGetIsBidIdValid from "./view/getIsBidIdValid";
 import shouldBehaveLikeGetIsEntryIdValid from "./view/getIsEntryIdValid";
 
 export function shouldBehaveLikeProjectY(): void {
   describe("View Functions", function () {
-    describe("#getIsEntryIdValid", function () {
-      shouldBehaveLikeGetIsEntryIdValid();
+    // describe("#getIsEntryIdValid", function () {
+    //   shouldBehaveLikeGetIsEntryIdValid();
+    // });
+    describe("#getIsBidIdValid", function () {
+      shouldBehaveLikeGetIsBidIdValid();
     });
   });
 
