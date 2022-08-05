@@ -17,8 +17,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
                                 VARIABLES
     //////////////////////////////////////////////////////////////*/
 
-    Counters.Counter private _entryIdTracker;
-    Counters.Counter private _bidIdTracker;
+    Counters.Counter private p_entryIdTracker;
+    Counters.Counter private p_bidIdTracker;
 
     uint64 public constant ONE_MONTH = 30 days;
 
@@ -60,10 +60,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
     }
 
     // entryId -> SellerInfo
-    mapping(uint256 => SellerInfo) private _sellerInfo;
+    mapping(uint256 => SellerInfo) private p_sellerInfo;
 
     // bidId -> BuyerInfo
-    mapping(uint256 => BuyerInfo) private _buyerInfo;
+    mapping(uint256 => BuyerInfo) private p_buyerInfo;
 
     /*//////////////////////////////////////////////////////////////
                                 EVENTS
@@ -123,17 +123,17 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint64 blockTimestamp_ = uint64(block.timestamp);
 
         // create unique entryId
-        _entryIdTracker.increment();
-        uint256 entryId_ = _entryIdTracker.current();
+        p_entryIdTracker.increment();
+        uint256 entryId_ = p_entryIdTracker.current();
 
         // update mapping
-        _sellerInfo[entryId_].onSale = true;
-        _sellerInfo[entryId_].sellerAddress = _msgSender();
-        _sellerInfo[entryId_].contractAddress = contractAddress_;
-        _sellerInfo[entryId_].timestamp = blockTimestamp_;
-        _sellerInfo[entryId_].tokenId = tokenId_;
-        _sellerInfo[entryId_].sellingPrice = sellingPrice_;
-        _sellerInfo[entryId_].installment = installment_;
+        p_sellerInfo[entryId_].onSale = true;
+        p_sellerInfo[entryId_].sellerAddress = _msgSender();
+        p_sellerInfo[entryId_].contractAddress = contractAddress_;
+        p_sellerInfo[entryId_].timestamp = blockTimestamp_;
+        p_sellerInfo[entryId_].tokenId = tokenId_;
+        p_sellerInfo[entryId_].sellingPrice = sellingPrice_;
+        p_sellerInfo[entryId_].installment = installment_;
 
         // transfer NFT to this contract
         IERC721(contractAddress_).safeTransferFrom(_msgSender(), address(this), tokenId_);
@@ -145,7 +145,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function withdrawSell(uint256 entryId_) external returns (uint256) {
         _requireIsEntryIdValid(entryId_);
 
-        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
+        SellerInfo memory sellerInfo_ = p_sellerInfo[entryId_];
 
         require(_msgSender() == sellerInfo_.sellerAddress, "CALLER_NOT_SELLER");
 
@@ -156,10 +156,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
         require(sellerInfo_.selectedBidId == 0, "BIDDER_SHOULD_NOT_BE_SELECTED");
 
         // delete entryId
-        delete _sellerInfo[entryId_];
+        delete p_sellerInfo[entryId_];
 
         // decrease total entryIds
-        _entryIdTracker.decrement();
+        p_entryIdTracker.decrement();
 
         emit SellWithdrawn(sellerInfo_.sellerAddress, entryId_);
 
@@ -177,30 +177,30 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint64 blockTimestamp_ = uint64(block.timestamp);
 
         require(
-            blockTimestamp_ <= _sellerInfo[entryId_].timestamp + biddingPeriod,
+            blockTimestamp_ <= p_sellerInfo[entryId_].timestamp + biddingPeriod,
             "BIDDING_PERIOD_OVER"
         );
 
         // create unique bidId
-        _bidIdTracker.increment();
-        uint256 bidId_ = _bidIdTracker.current();
+        p_bidIdTracker.increment();
+        uint256 bidId_ = p_bidIdTracker.current();
 
         // update buyer info mapping
-        _buyerInfo[bidId_].buyerAddress = _msgSender();
-        _buyerInfo[bidId_].bidInstallment = installment_;
-        _buyerInfo[bidId_].timestamp = blockTimestamp_;
-        _buyerInfo[bidId_].bidPrice = bidPrice_;
-        _buyerInfo[bidId_].entryId = entryId_;
+        p_buyerInfo[bidId_].buyerAddress = _msgSender();
+        p_buyerInfo[bidId_].bidInstallment = installment_;
+        p_buyerInfo[bidId_].timestamp = blockTimestamp_;
+        p_buyerInfo[bidId_].bidPrice = bidPrice_;
+        p_buyerInfo[bidId_].entryId = entryId_;
 
         // update total bids for this entry id
-        _sellerInfo[entryId_].totalBids += 1;
+        p_sellerInfo[entryId_].totalBids += 1;
 
         uint256 downPayment_ = getDownPaymentAmount(bidId_);
 
         require(value_ != 0 && value_ == downPayment_, "VALUE_NOT_EQUAL_TO_DOWN_PAYMENT");
 
         // update price paid
-        _buyerInfo[bidId_].pricePaid = value_;
+        p_buyerInfo[bidId_].pricePaid = value_;
 
         emit Bid(_msgSender(), entryId_, bidId_, blockTimestamp_);
 
@@ -211,11 +211,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint64 blockTimestamp_ = uint64(block.timestamp);
         _requireIsBidIdValid(bidId_);
 
-        uint256 entryId_ = _buyerInfo[bidId_].entryId;
+        uint256 entryId_ = p_buyerInfo[bidId_].entryId;
         _requireIsEntryIdValid(entryId_);
 
-        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+        SellerInfo memory sellerInfo_ = p_sellerInfo[entryId_];
+        BuyerInfo memory buyerInfo_ = p_buyerInfo[bidId_];
 
         require(_msgSender() == sellerInfo_.sellerAddress, "CALLER_NOT_SELLER");
         require(
@@ -238,28 +238,28 @@ contract ProjectY is Context, Owned, ERC721Holder {
             Address.sendValue(payable(sellerInfo_.sellerAddress), buyerInfo_.pricePaid);
 
             // delete seller
-            delete _sellerInfo[entryId_];
+            delete p_sellerInfo[entryId_];
 
             // decrease total entryIds
-            _entryIdTracker.decrement();
+            p_entryIdTracker.decrement();
 
             // delete bid
-            delete _buyerInfo[bidId_];
+            delete p_buyerInfo[bidId_];
 
             // decrease total bidIds
-            _bidIdTracker.decrement();
+            p_bidIdTracker.decrement();
         } else {
             // update buyer info
-            _buyerInfo[bidId_].isSelected = true;
-            _buyerInfo[bidId_].timestamp = blockTimestamp_;
+            p_buyerInfo[bidId_].isSelected = true;
+            p_buyerInfo[bidId_].timestamp = blockTimestamp_;
 
             // make NFT onSale off and set selected bidId
-            _sellerInfo[entryId_].onSale = false;
-            _sellerInfo[entryId_].selectedBidId = bidId_;
+            p_sellerInfo[entryId_].onSale = false;
+            p_sellerInfo[entryId_].selectedBidId = bidId_;
 
-            _sellerInfo[entryId_].installment = buyerInfo_.bidInstallment;
-            _sellerInfo[entryId_].sellingPrice = buyerInfo_.bidPrice;
-            _sellerInfo[entryId_].installmentsPaid = 1;
+            p_sellerInfo[entryId_].installment = buyerInfo_.bidInstallment;
+            p_sellerInfo[entryId_].sellingPrice = buyerInfo_.bidPrice;
+            p_sellerInfo[entryId_].installmentsPaid = 1;
         }
 
         emit BidSelected(bidId_, entryId_);
@@ -271,18 +271,18 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // if InstallmentPlan.None so entryId is not validated as it was deleted
         _requireIsEntryIdValid(entryId_);
 
-        uint256 bidId_ = _sellerInfo[entryId_].selectedBidId;
+        uint256 bidId_ = p_sellerInfo[entryId_].selectedBidId;
 
         require(bidId_ != 0, "NO_BID_ID_SELECTED");
 
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+        BuyerInfo memory buyerInfo_ = p_buyerInfo[bidId_];
 
         require(buyerInfo_.buyerAddress == _msgSender(), "CALLER_NOT_BUYER");
 
         uint256 bidPrice_ = buyerInfo_.bidPrice;
         uint256 pricePaid_ = buyerInfo_.pricePaid;
 
-        uint8 installmentsPaid_ = _sellerInfo[entryId_].installmentsPaid;
+        uint8 installmentsPaid_ = p_sellerInfo[entryId_].installmentsPaid;
 
         // check if installment is done then revert
         uint8 totalInstallments_ = getTotalInstallments(bidId_);
@@ -322,8 +322,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 "DUE_DATE_PASSED"
             );
 
-            _buyerInfo[bidId_].pricePaid += value_;
-            _sellerInfo[entryId_].installmentsPaid++;
+            p_buyerInfo[bidId_].pricePaid += value_;
+            p_sellerInfo[entryId_].installmentsPaid++;
 
             // may increment local variable as well
             pricePaid_ += value_;
@@ -331,16 +331,16 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         console.log("step two");
         console.log("bidPrice_: ", bidPrice_);
-        console.log("pricePaid_: ", _buyerInfo[bidId_].pricePaid);
+        console.log("pricePaid_: ", p_buyerInfo[bidId_].pricePaid);
 
         // all installments done so transfer NFT to buyer
         // refetch pricePaid from storage becuase we upadated it in above block
-        // if (bidPrice_ == _buyerInfo[bidId_].pricePaid) {
+        // if (bidPrice_ == p_buyerInfo[bidId_].pricePaid) {
         if (bidPrice_ == pricePaid_) {
-            IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(
+            IERC721(p_sellerInfo[entryId_].contractAddress).safeTransferFrom(
                 address(this),
                 buyerInfo_.buyerAddress,
-                _sellerInfo[entryId_].tokenId
+                p_sellerInfo[entryId_].tokenId
             );
         }
 
@@ -350,20 +350,20 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function withdrawBid(uint256 bidId_) external {
         _requireIsBidIdValid(bidId_);
 
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+        BuyerInfo memory buyerInfo_ = p_buyerInfo[bidId_];
 
         require(buyerInfo_.buyerAddress == _msgSender(), "CALLER_NOT_BUYER");
         require(
-            uint64(block.timestamp) >= _sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,
+            uint64(block.timestamp) >= p_sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,
             "BIDDING_PERIOD_NOT_OVER"
         );
         require(!buyerInfo_.isSelected, "BIDDER_SHOULD_NOT_BE_SELECTED");
 
         // delete bid
-        delete _buyerInfo[bidId_];
+        delete p_buyerInfo[bidId_];
 
         // decrease total bidIds
-        _bidIdTracker.decrement();
+        p_bidIdTracker.decrement();
 
         // return the price paid
         Address.sendValue(payable(buyerInfo_.buyerAddress), buyerInfo_.pricePaid);
@@ -373,7 +373,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     function withdrawPayment(uint256 entryId_) external {
         _requireIsEntryIdValid(entryId_);
-        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
+        SellerInfo memory sellerInfo_ = p_sellerInfo[entryId_];
         _requireIsBidIdValid(sellerInfo_.selectedBidId);
 
         require(_msgSender() == sellerInfo_.sellerAddress, "CALLER_NOT_SELLER");
@@ -472,39 +472,39 @@ contract ProjectY is Context, Owned, ERC721Holder {
         console.log("amountClaimable_: ", amountClaimable_);
 
         // update paymentsClaimed
-        _sellerInfo[entryId_].paymentsClaimed += paymentsClaimable_;
+        p_sellerInfo[entryId_].paymentsClaimed += paymentsClaimable_;
 
         emit PaymentWithdrawn(
             sellerInfo_.selectedBidId,
             entryId_,
             amountClaimable_,
-            _sellerInfo[entryId_].paymentsClaimed
+            p_sellerInfo[entryId_].paymentsClaimed
         );
 
         // if all payments claimed then delete buyerInfo and sellerInfo
-        if (_sellerInfo[entryId_].paymentsClaimed == totalInstallments_) {
+        if (p_sellerInfo[entryId_].paymentsClaimed == totalInstallments_) {
             // delete seller
-            delete _sellerInfo[entryId_];
+            delete p_sellerInfo[entryId_];
 
             // decrease total entryIds
-            _entryIdTracker.decrement();
+            p_entryIdTracker.decrement();
 
             // delete bid
-            delete _buyerInfo[sellerInfo_.selectedBidId];
+            delete p_buyerInfo[sellerInfo_.selectedBidId];
 
             // decrease total bidIds
-            _bidIdTracker.decrement();
+            p_bidIdTracker.decrement();
         }
 
         // // if last payment then delete buyerInfo and sellerInfo
         // if (isLastClaimablePayment_) {
         //     // delete seller
-        //     delete _sellerInfo[entryId_];
+        //     delete p_sellerInfo[entryId_];
         //     // delete bid
-        //     delete _buyerInfo[sellerInfo_.selectedBidId];
+        //     delete p_buyerInfo[sellerInfo_.selectedBidId];
         // } else {
         //     // update paymentsClaimed
-        //     _sellerInfo[entryId_].paymentsClaimed += paymentsClaimable_;
+        //     p_sellerInfo[entryId_].paymentsClaimed += paymentsClaimable_;
         // }
 
         console.log("before txn contract balance: ", address(this).balance);
@@ -519,11 +519,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint256 value_ = msg.value;
 
         _requireIsEntryIdValid(entryId_);
-        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
+        SellerInfo memory sellerInfo_ = p_sellerInfo[entryId_];
 
         uint256 bidId_ = sellerInfo_.selectedBidId;
         _requireIsBidIdValid(bidId_);
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+        BuyerInfo memory buyerInfo_ = p_buyerInfo[bidId_];
 
         require(
             _msgSender() != sellerInfo_.sellerAddress && _msgSender() != buyerInfo_.buyerAddress,
@@ -568,13 +568,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
         require(valueToBePaid_ == value_, "INVALID_LIQUIDATION_VALUE");
 
         // update new buyer
-        _buyerInfo[bidId_].buyerAddress = _msgSender();
-        _buyerInfo[bidId_].pricePaid += installmentPerMonth_;
-        _sellerInfo[entryId_].installmentsPaid++;
+        p_buyerInfo[bidId_].buyerAddress = _msgSender();
+        p_buyerInfo[bidId_].pricePaid += installmentPerMonth_;
+        p_sellerInfo[entryId_].installmentsPaid++;
 
         // if only last installment remains then transfer nft
         if (sellerInfo_.installmentsPaid == totalInstallments_ - 1) {
-            IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(
+            IERC721(p_sellerInfo[entryId_].contractAddress).safeTransferFrom(
                 address(this),
                 _msgSender(),
                 sellerInfo_.tokenId
@@ -584,7 +584,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // transfer 95% of pricePaid to old buyer
         Address.sendValue(payable(oldbuyer_), liquidationValue_);
 
-        emit Liquidated(entryId_, bidId_, _sellerInfo[entryId_].installmentsPaid, valueToBePaid_);
+        emit Liquidated(entryId_, bidId_, p_sellerInfo[entryId_].installmentsPaid, valueToBePaid_);
     }
 
     function setBiddingPeriod(uint64 biddingPeriod_) external onlyOwner {
@@ -604,35 +604,35 @@ contract ProjectY is Context, Owned, ERC721Holder {
     //////////////////////////////////////////////////////////////*/
 
     function getTotalEntryIds() public view returns (uint256) {
-        return _entryIdTracker.current();
+        return p_entryIdTracker.current();
     }
 
     function getTotalBidIds() public view returns (uint256) {
-        return _bidIdTracker.current();
+        return p_bidIdTracker.current();
     }
 
     function getIsEntryIdValid(uint256 entryId_) public view returns (bool) {
-        return _sellerInfo[entryId_].sellerAddress != address(0);
+        return p_sellerInfo[entryId_].sellerAddress != address(0);
     }
 
     function getIsBidIdValid(uint256 bidId_) public view returns (bool isValid_) {
-        return _buyerInfo[bidId_].buyerAddress != address(0);
+        return p_buyerInfo[bidId_].buyerAddress != address(0);
     }
 
     function getSellerInfo(uint256 entryId_) public view returns (SellerInfo memory) {
         _requireIsEntryIdValid(entryId_);
-        return _sellerInfo[entryId_];
+        return p_sellerInfo[entryId_];
     }
 
     function getBuyerInfo(uint256 bidId_) public view returns (BuyerInfo memory) {
         _requireIsBidIdValid(bidId_);
-        return _buyerInfo[bidId_];
+        return p_buyerInfo[bidId_];
     }
 
     function getTotalInstallments(uint256 bidId_) public view returns (uint8) {
         _requireIsBidIdValid(bidId_);
 
-        InstallmentPlan installment_ = _buyerInfo[bidId_].bidInstallment;
+        InstallmentPlan installment_ = p_buyerInfo[bidId_].bidInstallment;
 
         if (installment_ == InstallmentPlan.ThreeMonths) {
             return 3;
@@ -648,7 +648,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
     function getDownPaymentAmount(uint256 bidId_) public view returns (uint256) {
         _requireIsBidIdValid(bidId_);
 
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+        BuyerInfo memory buyerInfo_ = p_buyerInfo[bidId_];
 
         InstallmentPlan installment_ = buyerInfo_.bidInstallment;
         uint256 bidPrice_ = buyerInfo_.bidPrice;
@@ -666,12 +666,12 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     function getInstallmentAmountPerMonth(uint256 entryId_) public view returns (uint256) {
         _requireIsEntryIdValid(entryId_);
-        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
+        SellerInfo memory sellerInfo_ = p_sellerInfo[entryId_];
 
         uint256 bidId_ = sellerInfo_.selectedBidId;
         _requireIsBidIdValid(bidId_);
 
-        BuyerInfo memory buyerInfo_ = _buyerInfo[bidId_];
+        BuyerInfo memory buyerInfo_ = p_buyerInfo[bidId_];
 
         InstallmentPlan installment_ = buyerInfo_.bidInstallment;
 
@@ -707,7 +707,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         view
         returns (uint64)
     {
-        return _buyerInfo[bidId_].timestamp + ((installmentNumber_ - 1) * ONE_MONTH);
+        return p_buyerInfo[bidId_].timestamp + ((installmentNumber_ - 1) * ONE_MONTH);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -794,7 +794,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 continue;
             }
 
-            if (_buyerInfo[i_].entryId == _entryId) {
+            if (p_buyerInfo[i_].entryId == _entryId) {
                 bidIds_[i_] = i_ + 1;
                 allBidsOnNFT_[i_] = getBuyerInfo(i_ + 1);
             }
