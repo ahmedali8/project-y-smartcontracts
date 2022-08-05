@@ -9,14 +9,18 @@ import shouldBehaveLikeWithdrawBid from "./effects/withdrawBid";
 import shouldBehaveLikeWithdrawPayment from "./effects/withdrawPayment";
 import shouldBehaveLikeGetIsBidIdValid from "./view/getIsBidIdValid";
 import shouldBehaveLikeGetIsEntryIdValid from "./view/getIsEntryIdValid";
+import shouldBehaveLikeGetTotalEntryIds from "./view/getTotalEntryIds";
 
 export function shouldBehaveLikeProjectY(): void {
   describe("View Functions", function () {
     // describe("#getIsEntryIdValid", function () {
     //   shouldBehaveLikeGetIsEntryIdValid();
     // });
-    describe("#getIsBidIdValid", function () {
-      shouldBehaveLikeGetIsBidIdValid();
+    // describe("#getIsBidIdValid", function () {
+    //   shouldBehaveLikeGetIsBidIdValid();
+    // });
+    describe("#getTotalEntryIds", function () {
+      shouldBehaveLikeGetTotalEntryIds();
     });
   });
 

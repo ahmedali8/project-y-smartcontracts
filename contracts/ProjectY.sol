@@ -90,6 +90,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
     event BidWithdrawn(uint256 bidId, uint256 entryId, uint256 value);
 
+    event SellWithdrawn(address seller, uint256 entryId);
+
     event PaymentWithdrawn(uint256 bidId, uint256 entryId, uint256 value, uint256 paymentsClaimed);
 
     event Liquidated(uint256 entryId, uint256 bidId, uint256 installmentPaid, uint256 value);
@@ -109,6 +111,60 @@ contract ProjectY is Context, Owned, ERC721Holder {
     /*//////////////////////////////////////////////////////////////
                         NON-VIEW/PURE FUNCTIONS
     //////////////////////////////////////////////////////////////*/
+
+    function sell(
+        address contractAddress_,
+        uint256 tokenId_,
+        uint256 sellingPrice_,
+        InstallmentPlan installment_
+    ) external returns (uint256) {
+        require(sellingPrice_ != 0, "INVALID_PRICE");
+
+        uint64 blockTimestamp_ = uint64(block.timestamp);
+
+        // create unique entryId
+        _entryIdTracker.increment();
+        uint256 entryId_ = _entryIdTracker.current();
+
+        // update mapping
+        _sellerInfo[entryId_].onSale = true;
+        _sellerInfo[entryId_].sellerAddress = _msgSender();
+        _sellerInfo[entryId_].contractAddress = contractAddress_;
+        _sellerInfo[entryId_].timestamp = blockTimestamp_;
+        _sellerInfo[entryId_].tokenId = tokenId_;
+        _sellerInfo[entryId_].sellingPrice = sellingPrice_;
+        _sellerInfo[entryId_].installment = installment_;
+
+        // transfer NFT to this contract
+        IERC721(contractAddress_).safeTransferFrom(_msgSender(), address(this), tokenId_);
+
+        emit Sell(_msgSender(), contractAddress_, tokenId_, entryId_, blockTimestamp_);
+        return entryId_;
+    }
+
+    function withdrawSell(uint256 entryId_) external returns (uint256) {
+        _requireIsEntryIdValid(entryId_);
+
+        SellerInfo memory sellerInfo_ = _sellerInfo[entryId_];
+
+        require(_msgSender() == sellerInfo_.sellerAddress, "CALLER_NOT_SELLER");
+
+        require(
+            uint64(block.timestamp) >= sellerInfo_.timestamp + biddingPeriod,
+            "BIDDING_PERIOD_NOT_OVER"
+        );
+        require(sellerInfo_.selectedBidId == 0, "BIDDER_SHOULD_NOT_BE_SELECTED");
+
+        // delete entryId
+        delete _sellerInfo[entryId_];
+
+        // decrease total entryIds
+        _entryIdTracker.decrement();
+
+        emit SellWithdrawn(sellerInfo_.sellerAddress, entryId_);
+
+        return entryId_;
+    }
 
     function bid(
         uint256 entryId_,
@@ -183,6 +239,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
             // delete seller
             delete _sellerInfo[entryId_];
+
+            // decrease total entryIds
+            _entryIdTracker.decrement();
+
             // delete bid
             delete _buyerInfo[bidId_];
         } else {
@@ -419,6 +479,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
         if (_sellerInfo[entryId_].paymentsClaimed == totalInstallments_) {
             // delete seller
             delete _sellerInfo[entryId_];
+
+            // decrease total entryIds
+            _entryIdTracker.decrement();
+
             // delete bid
             delete _buyerInfo[sellerInfo_.selectedBidId];
         }
@@ -635,36 +699,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
         returns (uint64)
     {
         return _buyerInfo[bidId_].timestamp + ((installmentNumber_ - 1) * ONE_MONTH);
-    }
-
-    function sell(
-        address contractAddress_,
-        uint256 tokenId_,
-        uint256 sellingPrice_,
-        InstallmentPlan installment_
-    ) public returns (uint256) {
-        require(sellingPrice_ != 0, "INVALID_PRICE");
-
-        uint64 blockTimestamp_ = uint64(block.timestamp);
-
-        // create unique entryId
-        _entryIdTracker.increment();
-        uint256 entryId_ = _entryIdTracker.current();
-
-        // update mapping
-        _sellerInfo[entryId_].onSale = true;
-        _sellerInfo[entryId_].sellerAddress = _msgSender();
-        _sellerInfo[entryId_].contractAddress = contractAddress_;
-        _sellerInfo[entryId_].timestamp = blockTimestamp_;
-        _sellerInfo[entryId_].tokenId = tokenId_;
-        _sellerInfo[entryId_].sellingPrice = sellingPrice_;
-        _sellerInfo[entryId_].installment = installment_;
-
-        // transfer NFT to this contract
-        IERC721(contractAddress_).safeTransferFrom(_msgSender(), address(this), tokenId_);
-
-        emit Sell(_msgSender(), contractAddress_, tokenId_, entryId_, blockTimestamp_);
-        return entryId_;
     }
 
     /*//////////////////////////////////////////////////////////////
