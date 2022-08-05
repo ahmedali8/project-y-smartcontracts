@@ -18,8 +18,24 @@ async function main() {
   await projecty.sell(erc721.address, 1, toWei("0.1"), InstallmentPlan.ThreeMonths);
   await projecty.sell(erc721.address, 2, toWei("0.1"), InstallmentPlan.ThreeMonths);
 
-  console.log("getSellerInfo: ", await projecty.getSellerInfo(1));
-  console.log("getNFTsOpenForSale: ", await projecty.getNFTsOpenForSale());
+  console.log({ getSellerInfo: await projecty.getSellerInfo(1) });
+  console.log("---------------------------------------------------------");
+
+  console.log({ getNFTsOpenForSale: await projecty.getNFTsOpenForSale() });
+  console.log("---------------------------------------------------------");
+
+  console.log({ getUserNFTsOpenForSale: await projecty.getUserNFTsOpenForSale(nftOwner.address) });
+  console.log("---------------------------------------------------------");
+
+  console.log({ getAllBidsOnNFT: await projecty.getAllBidsOnNFT(1) });
+  console.log("---------------------------------------------------------");
+
+  console.log({
+    getUserNFTsOngoingInstallmentPhase: await projecty.getUserNFTsOngoingInstallmentPhase(
+      nftOwner.address
+    ),
+  });
+  console.log("---------------------------------------------------------");
 }
 
 main()

@@ -28,6 +28,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
     uint64 public biddingPeriod = 7 days;
     uint64 public gracePeriod = 7 days;
 
+    // vars for frontend helpers
+    uint256 public getHistoricTotalEntryIds;
+    uint256 public getHistoricTotalBidIds;
+
     enum InstallmentPlan {
         None, // no installment
         ThreeMonths,
@@ -124,6 +128,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         // create unique entryId
         p_entryIdTracker.increment();
+        getHistoricTotalEntryIds++;
         uint256 entryId_ = p_entryIdTracker.current();
 
         // update mapping
@@ -183,6 +188,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         // create unique bidId
         p_bidIdTracker.increment();
+        getHistoricTotalBidIds++;
         uint256 bidId_ = p_bidIdTracker.current();
 
         // update buyer info mapping
@@ -720,13 +726,14 @@ contract ProjectY is Context, Owned, ERC721Holder {
         view
         returns (SellerInfo[] memory nftsOpenForSale_, uint256[] memory entryIds_)
     {
-        uint256 totalEntryIds_ = getTotalEntryIds();
+        uint256 totalEntryIds_ = getHistoricTotalEntryIds;
         nftsOpenForSale_ = new SellerInfo[](totalEntryIds_);
+        entryIds_ = new uint256[](totalEntryIds_);
 
         // Storing this outside the loop saves gas per iteration.
         SellerInfo memory sellerInfo_;
 
-        for (uint256 i_; i_ < totalEntryIds_; ) {
+        for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
             // skip seller info if entryId is invalid
             if (!getIsEntryIdValid(i_ + 1)) {
                 continue;
@@ -753,8 +760,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
         view
         returns (SellerInfo[] memory userNFTsOpenForSale_, uint256[] memory entryIds_)
     {
-        uint256 totalEntryIds_ = getTotalEntryIds();
+        uint256 totalEntryIds_ = getHistoricTotalEntryIds;
         userNFTsOpenForSale_ = new SellerInfo[](totalEntryIds_);
+        entryIds_ = new uint256[](totalEntryIds_);
 
         // Storing this outside the loop saves gas per iteration.
         SellerInfo memory sellerInfo_;
@@ -785,8 +793,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
         view
         returns (BuyerInfo[] memory allBidsOnNFT_, uint256[] memory bidIds_)
     {
-        uint256 totalBidIds_ = getTotalBidIds();
+        uint256 totalBidIds_ = getHistoricTotalBidIds;
         allBidsOnNFT_ = new BuyerInfo[](totalBidIds_);
+        bidIds_ = new uint256[](totalBidIds_);
 
         for (uint256 i_ = 0; i_ < totalBidIds_; ) {
             // skip buyer info if bidId is invalid
@@ -820,8 +829,12 @@ contract ProjectY is Context, Owned, ERC721Holder {
             uint256[] memory bidIds_
         )
     {
-        uint256 totalEntryIds_ = getTotalEntryIds();
+        uint256 totalEntryIds_ = getHistoricTotalEntryIds;
+        uint256 totalBidIds_ = getHistoricTotalBidIds;
+
         sellerInfos_ = new SellerInfo[](totalEntryIds_);
+        entryIds_ = new uint256[](totalEntryIds_);
+        bidIds_ = new uint256[](totalBidIds_);
 
         // Storing this outside the loop saves gas per iteration.
         SellerInfo memory sellerInfo_;
