@@ -13,44 +13,44 @@ import shouldBehaveLikeGetTotalEntryIds from "./view/getTotalEntryIds";
 
 export function shouldBehaveLikeProjectY(): void {
   describe("View Functions", function () {
-    // describe("#getIsEntryIdValid", function () {
-    //   shouldBehaveLikeGetIsEntryIdValid();
-    // });
-    // describe("#getIsBidIdValid", function () {
-    //   shouldBehaveLikeGetIsBidIdValid();
-    // });
+    describe("#getIsEntryIdValid", function () {
+      shouldBehaveLikeGetIsEntryIdValid();
+    });
+    describe("#getIsBidIdValid", function () {
+      shouldBehaveLikeGetIsBidIdValid();
+    });
     describe("#getTotalEntryIds", function () {
       shouldBehaveLikeGetTotalEntryIds();
     });
   });
 
   describe("Effects Functions", function () {
-    // describe("#sell", function () {
-    //   shouldBehaveLikeSell();
-    // });
-    // describe("#bid", function () {
-    //   shouldBehaveLikeBid();
-    // });
-    // describe("#selectBid", function () {
-    //   shouldBehaveLikeSelectBid();
-    // });
-    // describe("#payInstallment", function () {
-    //   shouldBehaveLikePayInstallment();
-    // });
-    // describe("#withdrawBid", function () {
-    //   shouldBehaveLikeWithdrawBid();
-    // });
-    // describe("#withdrawPayment", function () {
-    //   shouldBehaveLikeWithdrawPayment();
-    // });
-    // describe("#liquidate", function () {
-    //   shouldBehaveLikeLiquidate();
-    // });
-    // describe("#setBiddingPeriod", function () {
-    //   shouldBehaveLikeSetBiddingPeriod();
-    // });
-    // describe("#setGracePeriod", function () {
-    //   shouldBehaveLikeSetGracePeriod();
-    // });
+    describe("#sell", function () {
+      shouldBehaveLikeSell();
+    });
+    describe("#bid", function () {
+      shouldBehaveLikeBid();
+    });
+    describe("#selectBid", function () {
+      shouldBehaveLikeSelectBid();
+    });
+    describe("#payInstallment", function () {
+      shouldBehaveLikePayInstallment();
+    });
+    describe("#withdrawBid", function () {
+      shouldBehaveLikeWithdrawBid();
+    });
+    describe("#withdrawPayment", function () {
+      shouldBehaveLikeWithdrawPayment();
+    });
+    describe("#liquidate", function () {
+      shouldBehaveLikeLiquidate();
+    });
+    describe("#setBiddingPeriod", function () {
+      shouldBehaveLikeSetBiddingPeriod();
+    });
+    describe("#setGracePeriod", function () {
+      shouldBehaveLikeSetGracePeriod();
+    });
   });
 }
