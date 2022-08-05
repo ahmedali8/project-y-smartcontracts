@@ -10,6 +10,7 @@ import shouldBehaveLikeWithdrawPayment from "./effects/withdrawPayment";
 import shouldBehaveLikeWithdrawSell from "./effects/withdrawSell";
 import shouldBehaveLikeGetIsBidIdValid from "./view/getIsBidIdValid";
 import shouldBehaveLikeGetIsEntryIdValid from "./view/getIsEntryIdValid";
+import shouldBehaveLikeGetTotalBidIds from "./view/getTotalBidIds";
 import shouldBehaveLikeGetTotalEntryIds from "./view/getTotalEntryIds";
 
 export function shouldBehaveLikeProjectY(): void {
@@ -23,6 +24,9 @@ export function shouldBehaveLikeProjectY(): void {
     // describe("#getTotalEntryIds", function () {
     //   shouldBehaveLikeGetTotalEntryIds();
     // });
+    describe("#getTotalBidIds", function () {
+      shouldBehaveLikeGetTotalBidIds();
+    });
   });
 
   describe("Effects Functions", function () {
@@ -53,8 +57,8 @@ export function shouldBehaveLikeProjectY(): void {
     // describe("#setGracePeriod", function () {
     //   shouldBehaveLikeSetGracePeriod();
     // });
-    describe("#withdrawSell", function () {
-      shouldBehaveLikeWithdrawSell();
-    });
+    // describe("#withdrawSell", function () {
+    //   shouldBehaveLikeWithdrawSell();
+    // });
   });
 }

@@ -245,6 +245,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
             // delete bid
             delete _buyerInfo[bidId_];
+
+            // decrease total bidIds
+            _bidIdTracker.decrement();
         } else {
             // update buyer info
             _buyerInfo[bidId_].isSelected = true;
@@ -358,6 +361,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         // delete bid
         delete _buyerInfo[bidId_];
+
+        // decrease total bidIds
+        _bidIdTracker.decrement();
 
         // return the price paid
         Address.sendValue(payable(buyerInfo_.buyerAddress), buyerInfo_.pricePaid);
@@ -485,6 +491,9 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
             // delete bid
             delete _buyerInfo[sellerInfo_.selectedBidId];
+
+            // decrease total bidIds
+            _bidIdTracker.decrement();
         }
 
         // // if last payment then delete buyerInfo and sellerInfo
