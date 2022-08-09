@@ -1,5 +1,4 @@
 [![Github Actions][gha-badge]][gha]
-[![Code Coverage][coveralls-badge]][coveralls]
 [![Prettier][prettier-badge]][prettier]
 [![License][license-badge]][license]
 
@@ -17,6 +16,7 @@ $ yarn install
 ```
 
 ```bash
+# Slither
 $ rm -rf ./slither/* && slither . --hardhat-cache-directory ./generated/cache/hardhat --hardhat-artifacts-directory ./generated/artifacts/hardhat --checklist --json ./slither/output.json --sarif ./slither/output.sarif
 ```
 
@@ -24,8 +24,6 @@ $ rm -rf ./slither/* && slither . --hardhat-cache-directory ./generated/cache/ha
 
 [gha]: https://github.com/ahmedali8/project-y-smartcontracts/actions
 [gha-badge]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/hardhat.yml/badge.svg
-[coveralls]: https://coveralls.io/github/ahmedali8/project-y-smartcontracts?branch=main
-[coveralls-badge]: https://coveralls.io/repos/github/ahmedali8/project-y-smartcontracts/badge.svg?branch=main&t=ssK3fj
 [prettier]: https://prettier.io
 [prettier-badge]: https://img.shields.io/badge/Code_Style-Prettier-ff69b4.svg
 [license]: https://unlicense.org/

@@ -1,9 +1,6 @@
 name: Hardhat
 
 env:
-  COVERAGE_GIT_BRANCH: "main"
-  COVERAGE_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-  COVERAGE_SERVICE_NAME: "github-actions-ci"
   INFURA_PROJECT_ID: ${{ secrets.INFURA_API_KEY }}
   PRIVATE_KEY_1: ${{ secrets.PRIVATE_KEY_1 }}
   COIN_MARKET_CAP_API_KEY: ${{ secrets.COIN_MARKET_CAP_API_KEY }}
@@ -53,9 +50,3 @@ jobs:
 
       - name: "Generate coverage report"
         run: "yarn coverage"
-
-      - name: "Upload the coverage report to Coveralls"
-        uses: "coverallsapp/github-action@master"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: "./coverage/lcov.info"
