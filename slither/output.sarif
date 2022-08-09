@@ -52,20 +52,6 @@
               }
             },
             {
-              "id": "2-1-events-maths",
-              "name": "events-maths",
-              "properties": {
-                "precision": "high",
-                "security-severity": "3.0"
-              },
-              "shortDescription": {
-                "text": "Missing events arithmetic"
-              },
-              "help": {
-                "text": "Emit an event for critical parameter changes."
-              }
-            },
-            {
               "id": "2-1-missing-zero-check",
               "name": "missing-zero-check",
               "properties": {
@@ -192,20 +178,6 @@
               }
             },
             {
-              "id": "3-1-similar-names",
-              "name": "similar-names",
-              "properties": {
-                "precision": "high",
-                "security-severity": "0.0"
-              },
-              "shortDescription": {
-                "text": "Variable names too similar"
-              },
-              "help": {
-                "text": "Prevent variables from having similar names."
-              }
-            },
-            {
               "id": "3-1-too-many-digits",
               "name": "too-many-digits",
               "properties": {
@@ -240,8 +212,8 @@
         {
           "ruleId": "1-1-reentrancy-no-eth",
           "message": {
-            "text": "Reentrancy in ProjectY.selectBid(uint256) (contracts/ProjectY.sol#329-378):\n\tExternal calls:\n\t- IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId) (contracts/ProjectY.sol#350-354)\n\t- Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid) (contracts/ProjectY.sol#357)\n\tState variables written after the call(s):\n\t- delete _buyerInfo[bidId_] (contracts/ProjectY.sol#362)\n\t- delete _sellerInfo[entryId_] (contracts/ProjectY.sol#360)\n",
-            "markdown": "Reentrancy in [ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L329-L378):\n\tExternal calls:\n\t- [IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId)](contracts/ProjectY.sol#L350-L354)\n\t- [Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid)](contracts/ProjectY.sol#L357)\n\tState variables written after the call(s):\n\t- [delete _buyerInfo[bidId_]](contracts/ProjectY.sol#L362)\n\t- [delete _sellerInfo[entryId_]](contracts/ProjectY.sol#L360)\n"
+            "text": "Reentrancy in ProjectY.selectBid(uint256) (contracts/ProjectY.sol#216-272):\n\tExternal calls:\n\t- IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId) (contracts/ProjectY.sol#237-241)\n\t- Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid) (contracts/ProjectY.sol#244)\n\tState variables written after the call(s):\n\t- delete p_buyerInfo[bidId_] (contracts/ProjectY.sol#253)\n\t- delete p_sellerInfo[entryId_] (contracts/ProjectY.sol#247)\n",
+            "markdown": "Reentrancy in [ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L216-L272):\n\tExternal calls:\n\t- [IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId)](contracts/ProjectY.sol#L237-L241)\n\t- [Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid)](contracts/ProjectY.sol#L244)\n\tState variables written after the call(s):\n\t- [delete p_buyerInfo[bidId_]](contracts/ProjectY.sol#L253)\n\t- [delete p_sellerInfo[entryId_]](contracts/ProjectY.sol#L247)\n"
           },
           "level": "warning",
           "locations": [
@@ -251,21 +223,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 329,
-                  "endLine": 378
+                  "startLine": 216,
+                  "endLine": 272
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "54a67f26eeb0927fcc08a8a0f733d522585d39b4ed4a23d2e30d27f9ab8ef573"
+            "id": "3e22823e935d34c380e4b184fb8bbb2a0d16ea4133fa1958ec4966812d31c167"
           }
         },
         {
           "ruleId": "1-1-uninitialized-local",
           "message": {
-            "text": "ProjectY.withdrawPayment(uint256).totalInstallments_ (contracts/ProjectY.sol#496) is a local variable never initialized\n",
-            "markdown": "[ProjectY.withdrawPayment(uint256).totalInstallments_](contracts/ProjectY.sol#L496) is a local variable never initialized\n"
+            "text": "ProjectY.withdrawPayment(uint256).amountClaimable_ (contracts/ProjectY.sol#425) is a local variable never initialized\n",
+            "markdown": "[ProjectY.withdrawPayment(uint256).amountClaimable_](contracts/ProjectY.sol#L425) is a local variable never initialized\n"
           },
           "level": "warning",
           "locations": [
@@ -275,32 +247,8 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 496,
-                  "endLine": 496
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "049815da2e76b79ad51e421c4206c11d5afd210485d12ee247bf4c0ec7984e19"
-          }
-        },
-        {
-          "ruleId": "1-1-uninitialized-local",
-          "message": {
-            "text": "ProjectY.withdrawPayment(uint256).amountClaimable_ (contracts/ProjectY.sol#538) is a local variable never initialized\n",
-            "markdown": "[ProjectY.withdrawPayment(uint256).amountClaimable_](contracts/ProjectY.sol#L538) is a local variable never initialized\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 538,
-                  "endLine": 538
+                  "startLine": 425,
+                  "endLine": 425
                 }
               }
             }
@@ -312,8 +260,8 @@
         {
           "ruleId": "1-1-uninitialized-local",
           "message": {
-            "text": "ProjectY.getNFTsOpenForSale().i_ (contracts/ProjectY.sol#98) is a local variable never initialized\n",
-            "markdown": "[ProjectY.getNFTsOpenForSale().i_](contracts/ProjectY.sol#L98) is a local variable never initialized\n"
+            "text": "ProjectY.withdrawPayment(uint256).paymentsClaimable_ (contracts/ProjectY.sol#424) is a local variable never initialized\n",
+            "markdown": "[ProjectY.withdrawPayment(uint256).paymentsClaimable_](contracts/ProjectY.sol#L424) is a local variable never initialized\n"
           },
           "level": "warning",
           "locations": [
@@ -323,56 +271,8 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 98,
-                  "endLine": 98
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "83baaa6bac2d0828ed5ee2b340d525d4c681d11bd620bc488dc23c67f152c511"
-          }
-        },
-        {
-          "ruleId": "1-1-uninitialized-local",
-          "message": {
-            "text": "ProjectY.payInstallment(uint256).totalInstallments_ (contracts/ProjectY.sol#400) is a local variable never initialized\n",
-            "markdown": "[ProjectY.payInstallment(uint256).totalInstallments_](contracts/ProjectY.sol#L400) is a local variable never initialized\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 400,
-                  "endLine": 400
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "c7545524db52d095e85d48f7a38e9fa38e4b51a08e3639f3a1deacc78500fac1"
-          }
-        },
-        {
-          "ruleId": "1-1-uninitialized-local",
-          "message": {
-            "text": "ProjectY.withdrawPayment(uint256).paymentsClaimable_ (contracts/ProjectY.sol#537) is a local variable never initialized\n",
-            "markdown": "[ProjectY.withdrawPayment(uint256).paymentsClaimable_](contracts/ProjectY.sol#L537) is a local variable never initialized\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 537,
-                  "endLine": 537
+                  "startLine": 424,
+                  "endLine": 424
                 }
               }
             }
@@ -403,54 +303,6 @@
           ],
           "partialFingerprints": {
             "id": "3cffe9ecf701f572a747af03bb26b5ac2e89dd363ce046fb252f30b8a418cb67"
-          }
-        },
-        {
-          "ruleId": "2-1-events-maths",
-          "message": {
-            "text": "ProjectY.setBiddingPeriod(uint64) (contracts/ProjectY.sol#621-624) should emit an event for: \n\t- biddingPeriod = biddingPeriod_ (contracts/ProjectY.sol#623) \n",
-            "markdown": "[ProjectY.setBiddingPeriod(uint64)](contracts/ProjectY.sol#L621-L624) should emit an event for: \n\t- [biddingPeriod = biddingPeriod_](contracts/ProjectY.sol#L623) \n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 621,
-                  "endLine": 624
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "8232eb993d130b374a9a08030147215e03a6bb7b403c5527221dfd1f0ce78c4b"
-          }
-        },
-        {
-          "ruleId": "2-1-events-maths",
-          "message": {
-            "text": "ProjectY.setGracePeriod(uint64) (contracts/ProjectY.sol#626-629) should emit an event for: \n\t- gracePeriod = gracePeriod_ (contracts/ProjectY.sol#628) \n",
-            "markdown": "[ProjectY.setGracePeriod(uint64)](contracts/ProjectY.sol#L626-L629) should emit an event for: \n\t- [gracePeriod = gracePeriod_](contracts/ProjectY.sol#L628) \n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 626,
-                  "endLine": 629
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "c8d8cde361d69915d193ef24de4c28bbe5cbe9a15e42712629f0717162299c8d"
           }
         },
         {
@@ -552,8 +404,8 @@
         {
           "ruleId": "2-1-reentrancy-events",
           "message": {
-            "text": "Reentrancy in ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#257-285):\n\tExternal calls:\n\t- IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_) (contracts/ProjectY.sol#281)\n\tEvent emitted after the call(s):\n\t- Sell(_msgSender(),contractAddress_,tokenId_,entryId_,blockTimestamp_) (contracts/ProjectY.sol#283)\n",
-            "markdown": "Reentrancy in [ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L257-L285):\n\tExternal calls:\n\t- [IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_)](contracts/ProjectY.sol#L281)\n\tEvent emitted after the call(s):\n\t- [Sell(_msgSender(),contractAddress_,tokenId_,entryId_,blockTimestamp_)](contracts/ProjectY.sol#L283)\n"
+            "text": "Reentrancy in ProjectY.withdrawBid(uint256) (contracts/ProjectY.sol#356-378):\n\tExternal calls:\n\t- Address.sendValue(address(buyerInfo_.buyerAddress),buyerInfo_.pricePaid) (contracts/ProjectY.sol#375)\n\tEvent emitted after the call(s):\n\t- BidWithdrawn(bidId_,buyerInfo_.entryId,buyerInfo_.pricePaid) (contracts/ProjectY.sol#377)\n",
+            "markdown": "Reentrancy in [ProjectY.withdrawBid(uint256)](contracts/ProjectY.sol#L356-L378):\n\tExternal calls:\n\t- [Address.sendValue(address(buyerInfo_.buyerAddress),buyerInfo_.pricePaid)](contracts/ProjectY.sol#L375)\n\tEvent emitted after the call(s):\n\t- [BidWithdrawn(bidId_,buyerInfo_.entryId,buyerInfo_.pricePaid)](contracts/ProjectY.sol#L377)\n"
           },
           "level": "warning",
           "locations": [
@@ -563,69 +415,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 257,
-                  "endLine": 285
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "550161486fb916c8e7213ce38566f6af86f46196132f206419776c00635946df"
-          }
-        },
-        {
-          "ruleId": "2-1-reentrancy-events",
-          "message": {
-            "text": "Reentrancy in ProjectY.withdrawBid(uint256) (contracts/ProjectY.sol#461-480):\n\tExternal calls:\n\t- Address.sendValue(address(buyerInfo_.buyerAddress),buyerInfo_.pricePaid) (contracts/ProjectY.sol#477)\n\tEvent emitted after the call(s):\n\t- BidWithdrawn(bidId_,buyerInfo_.entryId,buyerInfo_.pricePaid) (contracts/ProjectY.sol#479)\n",
-            "markdown": "Reentrancy in [ProjectY.withdrawBid(uint256)](contracts/ProjectY.sol#L461-L480):\n\tExternal calls:\n\t- [Address.sendValue(address(buyerInfo_.buyerAddress),buyerInfo_.pricePaid)](contracts/ProjectY.sol#L477)\n\tEvent emitted after the call(s):\n\t- [BidWithdrawn(bidId_,buyerInfo_.entryId,buyerInfo_.pricePaid)](contracts/ProjectY.sol#L479)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 461,
-                  "endLine": 480
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "86257120c0a757861443efef8ac38fcb80cf4ea26b4f27557830d32779ba3adb"
-          }
-        },
-        {
-          "ruleId": "2-1-reentrancy-events",
-          "message": {
-            "text": "Reentrancy in ProjectY.selectBid(uint256) (contracts/ProjectY.sol#329-378):\n\tExternal calls:\n\t- IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId) (contracts/ProjectY.sol#350-354)\n\t- Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid) (contracts/ProjectY.sol#357)\n\tEvent emitted after the call(s):\n\t- BidSelected(bidId_,entryId_) (contracts/ProjectY.sol#377)\n",
-            "markdown": "Reentrancy in [ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L329-L378):\n\tExternal calls:\n\t- [IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId)](contracts/ProjectY.sol#L350-L354)\n\t- [Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid)](contracts/ProjectY.sol#L357)\n\tEvent emitted after the call(s):\n\t- [BidSelected(bidId_,entryId_)](contracts/ProjectY.sol#L377)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 329,
+                  "startLine": 356,
                   "endLine": 378
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "a5f80461f4d54e80096cadc3f82e05930fbae6f6e1b2bc7fc9518b7ff6eb2a69"
+            "id": "4beaad810f6c10c73dcd1b8aff39d69fc7aed8e9aa7ba9c40a63ba958f52e104"
           }
         },
         {
           "ruleId": "2-1-reentrancy-events",
           "message": {
-            "text": "Reentrancy in ProjectY.payInstallment(uint256) (contracts/ProjectY.sol#380-459):\n\tExternal calls:\n\t- IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(address(this),_msgSender(),_sellerInfo[entryId_].tokenId) (contracts/ProjectY.sol#446-450)\n\tEvent emitted after the call(s):\n\t- InstallmentPaid(_msgSender(),entryId_,bidId_,installmentsPaid_ + 1) (contracts/ProjectY.sol#458)\n",
-            "markdown": "Reentrancy in [ProjectY.payInstallment(uint256)](contracts/ProjectY.sol#L380-L459):\n\tExternal calls:\n\t- [IERC721(_sellerInfo[entryId_].contractAddress).safeTransferFrom(address(this),_msgSender(),_sellerInfo[entryId_].tokenId)](contracts/ProjectY.sol#L446-L450)\n\tEvent emitted after the call(s):\n\t- [InstallmentPaid(_msgSender(),entryId_,bidId_,installmentsPaid_ + 1)](contracts/ProjectY.sol#L458)\n"
+            "text": "Reentrancy in ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#119-148):\n\tExternal calls:\n\t- IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_) (contracts/ProjectY.sol#144)\n\tEvent emitted after the call(s):\n\t- Sell(_msgSender(),contractAddress_,tokenId_,entryId_,blockTimestamp_) (contracts/ProjectY.sol#146)\n",
+            "markdown": "Reentrancy in [ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L119-L148):\n\tExternal calls:\n\t- [IERC721(contractAddress_).safeTransferFrom(_msgSender(),address(this),tokenId_)](contracts/ProjectY.sol#L144)\n\tEvent emitted after the call(s):\n\t- [Sell(_msgSender(),contractAddress_,tokenId_,entryId_,blockTimestamp_)](contracts/ProjectY.sol#L146)\n"
           },
           "level": "warning",
           "locations": [
@@ -635,21 +439,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 380,
-                  "endLine": 459
+                  "startLine": 119,
+                  "endLine": 148
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "ce605e5a1a8d2dce0b67fa70c5409ac1a385342d237ca71d860a738a879d59f1"
+            "id": "69a78127b3b8cfa45ba40e838cdb003f0855acef0500a06b35360912ed8715f0"
           }
         },
         {
-          "ruleId": "2-1-timestamp",
+          "ruleId": "2-1-reentrancy-events",
           "message": {
-            "text": "ProjectY.payInstallment(uint256) (contracts/ProjectY.sol#380-459) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) > installmentPaidTimestamp_,PAY_AFTER_APPROPRIATE_TIME) (contracts/ProjectY.sol#423-426)\n\t- require(bool,string)(! (uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),DUE_DATE_PASSED) (contracts/ProjectY.sol#435-438)\n",
-            "markdown": "[ProjectY.payInstallment(uint256)](contracts/ProjectY.sol#L380-L459) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) > installmentPaidTimestamp_,PAY_AFTER_APPROPRIATE_TIME)](contracts/ProjectY.sol#L423-L426)\n\t- [require(bool,string)(! (uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),DUE_DATE_PASSED)](contracts/ProjectY.sol#L435-L438)\n"
+            "text": "Reentrancy in ProjectY.liquidate(uint256) (contracts/ProjectY.sol#524-594):\n\tExternal calls:\n\t- IERC721(p_sellerInfo[entryId_].contractAddress).safeTransferFrom(address(this),_msgSender(),sellerInfo_.tokenId) (contracts/ProjectY.sol#583-587)\n\t- Address.sendValue(address(oldbuyer_),liquidationValue_) (contracts/ProjectY.sol#591)\n\tEvent emitted after the call(s):\n\t- Liquidated(entryId_,bidId_,p_sellerInfo[entryId_].installmentsPaid,valueToBePaid_) (contracts/ProjectY.sol#593)\n",
+            "markdown": "Reentrancy in [ProjectY.liquidate(uint256)](contracts/ProjectY.sol#L524-L594):\n\tExternal calls:\n\t- [IERC721(p_sellerInfo[entryId_].contractAddress).safeTransferFrom(address(this),_msgSender(),sellerInfo_.tokenId)](contracts/ProjectY.sol#L583-L587)\n\t- [Address.sendValue(address(oldbuyer_),liquidationValue_)](contracts/ProjectY.sol#L591)\n\tEvent emitted after the call(s):\n\t- [Liquidated(entryId_,bidId_,p_sellerInfo[entryId_].installmentsPaid,valueToBePaid_)](contracts/ProjectY.sol#L593)\n"
           },
           "level": "warning",
           "locations": [
@@ -659,21 +463,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 380,
-                  "endLine": 459
+                  "startLine": 524,
+                  "endLine": 594
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "430f3f1fd3100d600e37244e429ccb968e45812fbe53acb53460402fffcbfc8b"
+            "id": "6aa06eb42cc2239b606cd42ebcba0ff36a1b94f7ee9085c9b978e4a45083ed84"
           }
         },
         {
-          "ruleId": "2-1-timestamp",
+          "ruleId": "2-1-reentrancy-events",
           "message": {
-            "text": "ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#287-327) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(blockTimestamp_ <= _sellerInfo[entryId_].timestamp + biddingPeriod,BIDDING_PERIOD_OVER) (contracts/ProjectY.sol#297-300)\n",
-            "markdown": "[ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L287-L327) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(blockTimestamp_ <= _sellerInfo[entryId_].timestamp + biddingPeriod,BIDDING_PERIOD_OVER)](contracts/ProjectY.sol#L297-L300)\n"
+            "text": "Reentrancy in ProjectY.selectBid(uint256) (contracts/ProjectY.sol#216-272):\n\tExternal calls:\n\t- IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId) (contracts/ProjectY.sol#237-241)\n\t- Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid) (contracts/ProjectY.sol#244)\n\tEvent emitted after the call(s):\n\t- BidSelected(bidId_,entryId_) (contracts/ProjectY.sol#271)\n",
+            "markdown": "Reentrancy in [ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L216-L272):\n\tExternal calls:\n\t- [IERC721(sellerInfo_.contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,sellerInfo_.tokenId)](contracts/ProjectY.sol#L237-L241)\n\t- [Address.sendValue(address(sellerInfo_.sellerAddress),buyerInfo_.pricePaid)](contracts/ProjectY.sol#L244)\n\tEvent emitted after the call(s):\n\t- [BidSelected(bidId_,entryId_)](contracts/ProjectY.sol#L271)\n"
           },
           "level": "warning",
           "locations": [
@@ -683,21 +487,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 287,
-                  "endLine": 327
+                  "startLine": 216,
+                  "endLine": 272
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "592168eabb61d2f74d554e736eee8bf68355743238c9f96148d9db4e2b9d558f"
+            "id": "93383c3d0d869f9f301be734543ec7394d3df283844206cf96f3ab90ef867eab"
           }
         },
         {
-          "ruleId": "2-1-timestamp",
+          "ruleId": "2-1-reentrancy-events",
           "message": {
-            "text": "ProjectY.selectBid(uint256) (contracts/ProjectY.sol#329-378) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#340-343)\n",
-            "markdown": "[ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L329-L378) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L340-L343)\n"
+            "text": "Reentrancy in ProjectY.payInstallment(uint256) (contracts/ProjectY.sol#274-354):\n\tExternal calls:\n\t- IERC721(p_sellerInfo[entryId_].contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,p_sellerInfo[entryId_].tokenId) (contracts/ProjectY.sol#346-350)\n\tEvent emitted after the call(s):\n\t- InstallmentPaid(_msgSender(),entryId_,bidId_,installmentsPaid_ + 1) (contracts/ProjectY.sol#353)\n",
+            "markdown": "Reentrancy in [ProjectY.payInstallment(uint256)](contracts/ProjectY.sol#L274-L354):\n\tExternal calls:\n\t- [IERC721(p_sellerInfo[entryId_].contractAddress).safeTransferFrom(address(this),buyerInfo_.buyerAddress,p_sellerInfo[entryId_].tokenId)](contracts/ProjectY.sol#L346-L350)\n\tEvent emitted after the call(s):\n\t- [InstallmentPaid(_msgSender(),entryId_,bidId_,installmentsPaid_ + 1)](contracts/ProjectY.sol#L353)\n"
           },
           "level": "warning",
           "locations": [
@@ -707,62 +511,158 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 329,
+                  "startLine": 274,
+                  "endLine": 354
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "ef41bcbb7f00870d667d56d85883c359cd6f6138d03d1cfbdcc3894f4bf0b1c3"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#174-214) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(blockTimestamp_ <= p_sellerInfo[entryId_].timestamp + biddingPeriod,BIDDING_PERIOD_OVER) (contracts/ProjectY.sol#184-187)\n",
+            "markdown": "[ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L174-L214) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(blockTimestamp_ <= p_sellerInfo[entryId_].timestamp + biddingPeriod,BIDDING_PERIOD_OVER)](contracts/ProjectY.sol#L184-L187)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 174,
+                  "endLine": 214
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "0c235622db4f65a3b922af522573d3990411c3751a15aa434ad31fb54ccffb7d"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.liquidate(uint256) (contracts/ProjectY.sol#524-594) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),INSTALLMENT_ON_TRACK) (contracts/ProjectY.sol#558-561)\n",
+            "markdown": "[ProjectY.liquidate(uint256)](contracts/ProjectY.sol#L524-L594) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),INSTALLMENT_ON_TRACK)](contracts/ProjectY.sol#L558-L561)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 524,
+                  "endLine": 594
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "24031bb54779611774050e9cd034984d7e3af0b7aedf4ad01d2486091512099b"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.payInstallment(uint256) (contracts/ProjectY.sol#274-354) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) > installmentPaidTimestamp_,PAY_AFTER_APPROPRIATE_TIME) (contracts/ProjectY.sol#314-317)\n\t- require(bool,string)(! (uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),DUE_DATE_PASSED) (contracts/ProjectY.sol#326-329)\n",
+            "markdown": "[ProjectY.payInstallment(uint256)](contracts/ProjectY.sol#L274-L354) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) > installmentPaidTimestamp_,PAY_AFTER_APPROPRIATE_TIME)](contracts/ProjectY.sol#L314-L317)\n\t- [require(bool,string)(! (uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),DUE_DATE_PASSED)](contracts/ProjectY.sol#L326-L329)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 274,
+                  "endLine": 354
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "716eb34d3e7301ec64c39d9ca282571a6008d4c905750c2c6d83bad15ad00e94"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.selectBid(uint256) (contracts/ProjectY.sol#216-272) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#227-230)\n",
+            "markdown": "[ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L216-L272) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L227-L230)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 216,
+                  "endLine": 272
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "95d87f90c864af4dab53a457203fd892b2c9f8a83d7974e8fe7434e179ffc316"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.withdrawSell(uint256) (contracts/ProjectY.sol#150-172) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#157-160)\n",
+            "markdown": "[ProjectY.withdrawSell(uint256)](contracts/ProjectY.sol#L150-L172) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L157-L160)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 150,
+                  "endLine": 172
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "b410574405a40b8136da8930104626b1847924e84c0a0e14b38788d794edae56"
+          }
+        },
+        {
+          "ruleId": "2-1-timestamp",
+          "message": {
+            "text": "ProjectY.withdrawBid(uint256) (contracts/ProjectY.sol#356-378) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) >= p_sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#362-365)\n",
+            "markdown": "[ProjectY.withdrawBid(uint256)](contracts/ProjectY.sol#L356-L378) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) >= p_sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L362-L365)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 356,
                   "endLine": 378
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "85caff9faac52d243da72e43712ac3828b196eebbf6e286643d0dd4e46984772"
-          }
-        },
-        {
-          "ruleId": "2-1-timestamp",
-          "message": {
-            "text": "ProjectY.withdrawBid(uint256) (contracts/ProjectY.sol#461-480) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) >= _sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#467-470)\n",
-            "markdown": "[ProjectY.withdrawBid(uint256)](contracts/ProjectY.sol#L461-L480) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) >= _sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L467-L470)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 461,
-                  "endLine": 480
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "cad112f138fa7ee1646f637a0470c9edd3f4e790b9bd17818fe89beb6a58285a"
-          }
-        },
-        {
-          "ruleId": "2-1-timestamp",
-          "message": {
-            "text": "ProjectY.liquidate(uint256) (contracts/ProjectY.sol#579-619) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),INSTALLMENT_ON_TRACK) (contracts/ProjectY.sol#604-607)\n",
-            "markdown": "[ProjectY.liquidate(uint256)](contracts/ProjectY.sol#L579-L619) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),INSTALLMENT_ON_TRACK)](contracts/ProjectY.sol#L604-L607)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 579,
-                  "endLine": 619
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "e699a5033d31298ab39fd4229dda26fe38c473559b8b73082e7b62750555013a"
+            "id": "f8a68eb7b4ab19aec5450866c2e911a094b4240aeec6b9c4937fe01503ba207b"
           }
         },
         {
@@ -1344,8 +1244,8 @@
         {
           "ruleId": "3-0-naming-convention",
           "message": {
-            "text": "Parameter ProjectY.getAllBidsOnNFT(uint256)._entryId (contracts/ProjectY.sol#115) is not in mixedCase\n",
-            "markdown": "Parameter [ProjectY.getAllBidsOnNFT(uint256)._entryId](contracts/ProjectY.sol#L115) is not in mixedCase\n"
+            "text": "Parameter ProjectY.getAllBidsOnNFT(uint256)._entryId (contracts/ProjectY.sol#786) is not in mixedCase\n",
+            "markdown": "Parameter [ProjectY.getAllBidsOnNFT(uint256)._entryId](contracts/ProjectY.sol#L786) is not in mixedCase\n"
           },
           "level": "warning",
           "locations": [
@@ -1355,8 +1255,8 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 115,
-                  "endLine": 115
+                  "startLine": 786,
+                  "endLine": 786
                 }
               }
             }
@@ -1368,8 +1268,8 @@
         {
           "ruleId": "3-0-naming-convention",
           "message": {
-            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is not in mixedCase\n",
-            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is not in mixedCase\n"
+            "text": "Variable ProjectY.p_bidIdTracker (contracts/ProjectY.sol#21) is not in mixedCase\n",
+            "markdown": "Variable [ProjectY.p_bidIdTracker](contracts/ProjectY.sol#L21) is not in mixedCase\n"
           },
           "level": "warning",
           "locations": [
@@ -1379,21 +1279,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 59,
-                  "endLine": 59
+                  "startLine": 21,
+                  "endLine": 21
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "8e2afea61a573de4b232e613e93285def78d4332843c76a4e2fa520436f70022"
+            "id": "67c6b1568712996455b530b9c2230d25e60a35d379d72988ef14c51d65bb1a85"
           }
         },
         {
           "ruleId": "3-0-naming-convention",
           "message": {
-            "text": "Variable ProjectY._buyerInfo (contracts/ProjectY.sol#62) is not in mixedCase\n",
-            "markdown": "Variable [ProjectY._buyerInfo](contracts/ProjectY.sol#L62) is not in mixedCase\n"
+            "text": "Variable ProjectY.p_buyerInfo (contracts/ProjectY.sol#70) is not in mixedCase\n",
+            "markdown": "Variable [ProjectY.p_buyerInfo](contracts/ProjectY.sol#L70) is not in mixedCase\n"
           },
           "level": "warning",
           "locations": [
@@ -1403,21 +1303,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 62,
-                  "endLine": 62
+                  "startLine": 70,
+                  "endLine": 70
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "b764d04d0011aa4a46b62efb5da0feefb4d376b0907f178e2b3b29dc6e853fa8"
+            "id": "a868f50121fe08283f11a537e11d05bf88725e4df568fa39e12aa59c24c24165"
           }
         },
         {
-          "ruleId": "3-1-similar-names",
+          "ruleId": "3-0-naming-convention",
           "message": {
-            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.getUserNFTsOpenForSale(address).sellerInfo_ (contracts/ProjectY.sol#145)\n",
-            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.getUserNFTsOpenForSale(address).sellerInfo_](contracts/ProjectY.sol#L145)\n"
+            "text": "Variable ProjectY.p_sellerInfo (contracts/ProjectY.sol#67) is not in mixedCase\n",
+            "markdown": "Variable [ProjectY.p_sellerInfo](contracts/ProjectY.sol#L67) is not in mixedCase\n"
           },
           "level": "warning",
           "locations": [
@@ -1427,21 +1327,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 59,
-                  "endLine": 59
+                  "startLine": 67,
+                  "endLine": 67
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "12f8a16ee27a5efe58a1c0b11273c5bb5721e533913e09bacdafc6f19872c437"
+            "id": "c1e3d93050e6da3c5239f3a02b46fe6823cf0c30f67e562e857b4017b729f95d"
           }
         },
         {
-          "ruleId": "3-1-similar-names",
+          "ruleId": "3-0-naming-convention",
           "message": {
-            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.withdrawPayment(uint256).sellerInfo_ (contracts/ProjectY.sol#484)\n",
-            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.withdrawPayment(uint256).sellerInfo_](contracts/ProjectY.sol#L484)\n"
+            "text": "Variable ProjectY.p_entryIdTracker (contracts/ProjectY.sol#20) is not in mixedCase\n",
+            "markdown": "Variable [ProjectY.p_entryIdTracker](contracts/ProjectY.sol#L20) is not in mixedCase\n"
           },
           "level": "warning",
           "locations": [
@@ -1451,110 +1351,14 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 59,
-                  "endLine": 59
+                  "startLine": 20,
+                  "endLine": 20
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "13560129235bea31fc7be0698f1446a323492f2539161dbfa6d918f2b117d90e"
-          }
-        },
-        {
-          "ruleId": "3-1-similar-names",
-          "message": {
-            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.getInstallmentAmountPerMonth(uint256).sellerInfo_ (contracts/ProjectY.sol#213)\n",
-            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.getInstallmentAmountPerMonth(uint256).sellerInfo_](contracts/ProjectY.sol#L213)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 59,
-                  "endLine": 59
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "4644541865eb0a5ddbf79a13b4031fc222b89c44f0e048dcf18ea7b94bba94ec"
-          }
-        },
-        {
-          "ruleId": "3-1-similar-names",
-          "message": {
-            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.liquidate(uint256).sellerInfo_ (contracts/ProjectY.sol#583)\n",
-            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.liquidate(uint256).sellerInfo_](contracts/ProjectY.sol#L583)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 59,
-                  "endLine": 59
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "a941187ee0612c1ce443e3cb0cb4711f70df48a179d7acca44ff3db51d99619b"
-          }
-        },
-        {
-          "ruleId": "3-1-similar-names",
-          "message": {
-            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.getNFTsOpenForSale().sellerInfo_ (contracts/ProjectY.sol#96)\n",
-            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.getNFTsOpenForSale().sellerInfo_](contracts/ProjectY.sol#L96)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 59,
-                  "endLine": 59
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "b04921267a5de6d8d168314429de29f1daa207e6b737a3faae0fa8dfb13b5ac9"
-          }
-        },
-        {
-          "ruleId": "3-1-similar-names",
-          "message": {
-            "text": "Variable ProjectY._sellerInfo (contracts/ProjectY.sol#59) is too similar to ProjectY.selectBid(uint256).sellerInfo_ (contracts/ProjectY.sol#336)\n",
-            "markdown": "Variable [ProjectY._sellerInfo](contracts/ProjectY.sol#L59) is too similar to [ProjectY.selectBid(uint256).sellerInfo_](contracts/ProjectY.sol#L336)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 59,
-                  "endLine": 59
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "c882c486cca343b99e73d2177856d46b2d633ca73bf3128bee0b0f4f2159ad06"
+            "id": "d024b21fbd18ef5912ee1059240a45caff734fcb44be669636852ea9a1dbd7a6"
           }
         },
         {
@@ -1584,54 +1388,6 @@
         {
           "ruleId": "4-0-external-function",
           "message": {
-            "text": "withdrawBid(uint256) should be declared external:\n\t- ProjectY.withdrawBid(uint256) (contracts/ProjectY.sol#461-480)\n",
-            "markdown": "withdrawBid(uint256) should be declared external:\n\t- [ProjectY.withdrawBid(uint256)](contracts/ProjectY.sol#L461-L480)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 461,
-                  "endLine": 480
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "05c2bac6950ca39622945779baf13d83efe8a2042eec736143c4e512fc39c03f"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
-            "text": "selectBid(uint256) should be declared external:\n\t- ProjectY.selectBid(uint256) (contracts/ProjectY.sol#329-378)\n",
-            "markdown": "selectBid(uint256) should be declared external:\n\t- [ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L329-L378)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 329,
-                  "endLine": 378
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "08c502b9d92ddf550b56e09ea2bed5adc37dd6e363ea71c945cc32324acfc5c8"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
             "text": "setOwner(address) should be declared external:\n\t- Owned.setOwner(address) (node_modules/@rari-capital/solmate/src/auth/Owned.sol#39-43)\n",
             "markdown": "setOwner(address) should be declared external:\n\t- [Owned.setOwner(address)](node_modules/@rari-capital/solmate/src/auth/Owned.sol#L39-L43)\n"
           },
@@ -1651,78 +1407,6 @@
           ],
           "partialFingerprints": {
             "id": "0f882f463018c457f003f9ddd730ad8bfae223fb48907d454383a224f9db4749"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
-            "text": "getUserNFTsOpenForSale(address) should be declared external:\n\t- ProjectY.getUserNFTsOpenForSale(address) (contracts/ProjectY.sol#136-160)\n",
-            "markdown": "getUserNFTsOpenForSale(address) should be declared external:\n\t- [ProjectY.getUserNFTsOpenForSale(address)](contracts/ProjectY.sol#L136-L160)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 136,
-                  "endLine": 160
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "14276d8b2f456cd77019558eceabdb252a91fc988d01b4e5ad7d90cb59db42fb"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
-            "text": "getAllBidsOnNFT(uint256) should be declared external:\n\t- ProjectY.getAllBidsOnNFT(uint256) (contracts/ProjectY.sol#115-134)\n",
-            "markdown": "getAllBidsOnNFT(uint256) should be declared external:\n\t- [ProjectY.getAllBidsOnNFT(uint256)](contracts/ProjectY.sol#L115-L134)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 115,
-                  "endLine": 134
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "1acf8c03a76142523b085b66c537d927bbd79873e64cfc50d1016a78ead66f06"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
-            "text": "getSellerInfo(uint256) should be declared external:\n\t- ProjectY.getSellerInfo(uint256) (contracts/ProjectY.sol#172-175)\n",
-            "markdown": "getSellerInfo(uint256) should be declared external:\n\t- [ProjectY.getSellerInfo(uint256)](contracts/ProjectY.sol#L172-L175)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 172,
-                  "endLine": 175
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "1c84d32a97a03e53a60a810ac497151475e2ea2f77c462ad57eb60d8e4cbfefc"
           }
         },
         {
@@ -1752,30 +1436,6 @@
         {
           "ruleId": "4-0-external-function",
           "message": {
-            "text": "getBuyerInfo(uint256) should be declared external:\n\t- ProjectY.getBuyerInfo(uint256) (contracts/ProjectY.sol#177-180)\n",
-            "markdown": "getBuyerInfo(uint256) should be declared external:\n\t- [ProjectY.getBuyerInfo(uint256)](contracts/ProjectY.sol#L177-L180)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 177,
-                  "endLine": 180
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "21d5dbfa6e4b8e61f16fa14891250cb05f10a342ed20081785af1591b1d49a90"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
             "text": "tokenURI(uint256) should be declared external:\n\t- ERC721.tokenURI(uint256) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#93-98)\n",
             "markdown": "tokenURI(uint256) should be declared external:\n\t- [ERC721.tokenURI(uint256)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L93-L98)\n"
           },
@@ -1800,8 +1460,8 @@
         {
           "ruleId": "4-0-external-function",
           "message": {
-            "text": "liquidate(uint256) should be declared external:\n\t- ProjectY.liquidate(uint256) (contracts/ProjectY.sol#579-619)\n",
-            "markdown": "liquidate(uint256) should be declared external:\n\t- [ProjectY.liquidate(uint256)](contracts/ProjectY.sol#L579-L619)\n"
+            "text": "getTotalBidIds() should be declared external:\n\t- ProjectY.getTotalBidIds() (contracts/ProjectY.sol#616-618)\n",
+            "markdown": "getTotalBidIds() should be declared external:\n\t- [ProjectY.getTotalBidIds()](contracts/ProjectY.sol#L616-L618)\n"
           },
           "level": "warning",
           "locations": [
@@ -1811,14 +1471,14 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 579,
-                  "endLine": 619
+                  "startLine": 616,
+                  "endLine": 618
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "3e80eb890beda87ebf1b7aed20535252038f8b4defe104b1c6f440b0150e9cce"
+            "id": "3ca6b24c83c5b6c7e4ed6780b25fb02df64e009ff3bbd240bf248278bb14b8b2"
           }
         },
         {
@@ -1843,78 +1503,6 @@
           ],
           "partialFingerprints": {
             "id": "40d80158f5ec4439542ae33024335f6a43857536cd00215193327812a9b9fd10"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
-            "text": "withdrawPayment(uint256) should be declared external:\n\t- ProjectY.withdrawPayment(uint256) (contracts/ProjectY.sol#482-577)\n",
-            "markdown": "withdrawPayment(uint256) should be declared external:\n\t- [ProjectY.withdrawPayment(uint256)](contracts/ProjectY.sol#L482-L577)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 482,
-                  "endLine": 577
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "4c0abdcd118e53966790862dc9e12048d1725610ebb2904fd0acceffb6de6051"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
-            "text": "setBiddingPeriod(uint64) should be declared external:\n\t- ProjectY.setBiddingPeriod(uint64) (contracts/ProjectY.sol#621-624)\n",
-            "markdown": "setBiddingPeriod(uint64) should be declared external:\n\t- [ProjectY.setBiddingPeriod(uint64)](contracts/ProjectY.sol#L621-L624)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 621,
-                  "endLine": 624
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "539a1f32ca9c7b1ab297678ad0e24aea7d58241f2cdcd4dcde8f7639ec1674d4"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
-            "text": "sell(address,uint256,uint256,ProjectY.InstallmentPlan) should be declared external:\n\t- ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#257-285)\n",
-            "markdown": "sell(address,uint256,uint256,ProjectY.InstallmentPlan) should be declared external:\n\t- [ProjectY.sell(address,uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L257-L285)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 257,
-                  "endLine": 285
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "6227fa719f84a5f45d4b0cbda94095fa05beb49790ba512d7cbbde7234ea5394"
           }
         },
         {
@@ -1968,30 +1556,6 @@
         {
           "ruleId": "4-0-external-function",
           "message": {
-            "text": "payInstallment(uint256) should be declared external:\n\t- ProjectY.payInstallment(uint256) (contracts/ProjectY.sol#380-459)\n",
-            "markdown": "payInstallment(uint256) should be declared external:\n\t- [ProjectY.payInstallment(uint256)](contracts/ProjectY.sol#L380-L459)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 380,
-                  "endLine": 459
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "7a5a5033bd58e8d9b4df174bb4c6a876be25781dacce949e5511fd216d761d78"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
             "text": "approve(address,uint256) should be declared external:\n\t- ERC721.approve(address,uint256) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#112-122)\n",
             "markdown": "approve(address,uint256) should be declared external:\n\t- [ERC721.approve(address,uint256)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L112-L122)\n"
           },
@@ -2016,30 +1580,6 @@
         {
           "ruleId": "4-0-external-function",
           "message": {
-            "text": "getNFTsOpenForSale() should be declared external:\n\t- ProjectY.getNFTsOpenForSale() (contracts/ProjectY.sol#91-113)\n",
-            "markdown": "getNFTsOpenForSale() should be declared external:\n\t- [ProjectY.getNFTsOpenForSale()](contracts/ProjectY.sol#L91-L113)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 91,
-                  "endLine": 113
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "934b09f09b4bfee4af32ffe86bb0d7e080a02f824aa2b4a411ffa3117da64a2a"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
             "text": "mint(address,uint256) should be declared external:\n\t- MockERC721.mint(address,uint256) (contracts/test/MockERC721.sol#11-13)\n",
             "markdown": "mint(address,uint256) should be declared external:\n\t- [MockERC721.mint(address,uint256)](contracts/test/MockERC721.sol#L11-L13)\n"
           },
@@ -2059,6 +1599,30 @@
           ],
           "partialFingerprints": {
             "id": "98be96a25afcfa91e7e1b8d30a936d8d8fe21d69f5b0c1e0b7bbfbf65b8c3972"
+          }
+        },
+        {
+          "ruleId": "4-0-external-function",
+          "message": {
+            "text": "getTotalEntryIds() should be declared external:\n\t- ProjectY.getTotalEntryIds() (contracts/ProjectY.sol#612-614)\n",
+            "markdown": "getTotalEntryIds() should be declared external:\n\t- [ProjectY.getTotalEntryIds()](contracts/ProjectY.sol#L612-L614)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/ProjectY.sol"
+                },
+                "region": {
+                  "startLine": 612,
+                  "endLine": 614
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "9dc582f1eed1afdcc64d3204d9d0a64d399b8bf6b9eae2276dabffb5f7e07600"
           }
         },
         {
@@ -2112,30 +1676,6 @@
         {
           "ruleId": "4-0-external-function",
           "message": {
-            "text": "setGracePeriod(uint64) should be declared external:\n\t- ProjectY.setGracePeriod(uint64) (contracts/ProjectY.sol#626-629)\n",
-            "markdown": "setGracePeriod(uint64) should be declared external:\n\t- [ProjectY.setGracePeriod(uint64)](contracts/ProjectY.sol#L626-L629)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 626,
-                  "endLine": 629
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "e07ca14df8d0ab4fd59775b12b6aec6012e5cc689296ce9693fc58a73d3e4a90"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
             "text": "onERC721Received(address,address,uint256,bytes) should be declared external:\n\t- ERC721Holder.onERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#20-27)\n",
             "markdown": "onERC721Received(address,address,uint256,bytes) should be declared external:\n\t- [ERC721Holder.onERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#L20-L27)\n"
           },
@@ -2155,30 +1695,6 @@
           ],
           "partialFingerprints": {
             "id": "f50bca0660282089e5cfd8d31250adc475986aef82232d0ad2a330f19c0781e6"
-          }
-        },
-        {
-          "ruleId": "4-0-external-function",
-          "message": {
-            "text": "bid(uint256,uint256,ProjectY.InstallmentPlan) should be declared external:\n\t- ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#287-327)\n",
-            "markdown": "bid(uint256,uint256,ProjectY.InstallmentPlan) should be declared external:\n\t- [ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L287-L327)\n"
-          },
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "contracts/ProjectY.sol"
-                },
-                "region": {
-                  "startLine": 287,
-                  "endLine": 327
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "id": "f7278be92359b6022dc6da3859fa3f9ad337d5ea05be35fb11f0dff20bd88dd4"
           }
         },
         {
