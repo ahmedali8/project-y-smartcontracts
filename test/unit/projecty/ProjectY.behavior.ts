@@ -8,6 +8,7 @@ import shouldBehaveLikeSetGracePeriod from "./effects/setGracePeriod";
 import shouldBehaveLikeWithdrawBid from "./effects/withdrawBid";
 import shouldBehaveLikeWithdrawPayment from "./effects/withdrawPayment";
 import shouldBehaveLikeWithdrawSell from "./effects/withdrawSell";
+import shouldBehaveLikeTemporaryFrontendHelpers from "./temp-frontend-helpers";
 import shouldBehaveLikeGetBuyerInfo from "./view/getBuyerInfo";
 import shouldBehaveLikeGetDownPaymentAmount from "./view/getDownPaymentAmount";
 import shouldBehaveLikeGetInstallmentAmountPerMonth from "./view/getInstallmentAmountPerMonth";
@@ -50,6 +51,11 @@ export function shouldBehaveLikeProjectY(): void {
     });
     describe("#getInstallmentMonthTimestamp", function () {
       shouldBehaveLikeGetInstallmentMonthTimestamp();
+    });
+
+    // temporary
+    describe("Temporary Frontend Helpers", function () {
+      shouldBehaveLikeTemporaryFrontendHelpers();
     });
   });
 

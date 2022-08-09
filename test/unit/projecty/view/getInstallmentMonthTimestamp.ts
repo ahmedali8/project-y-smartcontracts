@@ -5,7 +5,7 @@ import { expect } from "chai";
 import { toWei } from "../../../../utils/format";
 import { BIDDING_PERIOD, InstallmentPlan, ONE_MONTH } from "../../../shared/constants";
 import { ProjectYErrors } from "../../../shared/errors";
-import { getDownPayment, getInstallmentPerMonth } from "../../../shared/utils";
+import { getDownPayment } from "../../../shared/utils";
 
 export default function shouldBehaveLikeGetInstallmentMonthTimestamp(): void {
   context("when bidId is invalid", function () {

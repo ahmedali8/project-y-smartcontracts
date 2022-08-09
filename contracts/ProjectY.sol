@@ -670,7 +670,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         }
     }
 
-    function getInstallmentAmountPerMonth(uint256 entryId_) public view returns (uint256) {
+    function getInstallmentAmountPerMonth(uint256 entryId_) public view returns (uint256 amount_) {
         _requireIsEntryIdValid(entryId_);
         SellerInfo memory sellerInfo_ = p_sellerInfo[entryId_];
 
@@ -686,14 +686,18 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // }
 
         if (installment_ == InstallmentPlan.ThreeMonths) {
-            return (buyerInfo_.bidPrice * 33) / 100; // 33%
+            amount_ = (buyerInfo_.bidPrice * 33) / 100; // 33%
         } else if (installment_ == InstallmentPlan.SixMonths) {
-            return (buyerInfo_.bidPrice * 165) / 1000; // 16.5%
+            amount_ = (buyerInfo_.bidPrice * 165) / 1000; // 16.5%
         } else if (installment_ == InstallmentPlan.NineMonths) {
-            return (buyerInfo_.bidPrice * 11) / 100; // 11%
-        } else {
-            return 0; // InstallmentPlan.None
+            amount_ = (buyerInfo_.bidPrice * 11) / 100; // 11%
         }
+
+        // unreachable code as it gets reverted
+        // in case of InstallmentPlan.None
+        // else {
+        //     return 0; // InstallmentPlan.None
+        // }
     }
 
     // // get installment amount of specific installment number
@@ -735,7 +739,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // Storing this outside the loop saves gas per iteration.
         SellerInfo memory sellerInfo_;
 
-        for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
+        for (uint256 i_ = 0; i_ < totalEntryIds_; i_++) {
             // skip seller info if entryId is invalid
             if (!getIsEntryIdValid(i_ + 1)) {
                 continue;
@@ -747,12 +751,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 entryIds_[i_] = i_ + 1;
                 nftsOpenForSale_[i_] = sellerInfo_;
             }
-
-            // An array can't have a total length
-            // larger than the max uint256 value.
-            unchecked {
-                ++i_;
-            }
         }
     }
 
@@ -762,6 +760,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         view
         returns (SellerInfo[] memory userNFTsOpenForSale_, uint256[] memory entryIds_)
     {
+        require(user_ != address(0), "INVALID_ADDRESS");
         uint256 totalEntryIds_ = getHistoricTotalEntryIds;
         userNFTsOpenForSale_ = new SellerInfo[](totalEntryIds_);
         entryIds_ = new uint256[](totalEntryIds_);
@@ -769,7 +768,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // Storing this outside the loop saves gas per iteration.
         SellerInfo memory sellerInfo_;
 
-        for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
+        for (uint256 i_ = 0; i_ < totalEntryIds_; i_++) {
             // skip seller info if entryId is invalid
             if (!getIsEntryIdValid(i_ + 1)) {
                 continue;
@@ -780,12 +779,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
             if (sellerInfo_.onSale && sellerInfo_.sellerAddress == user_) {
                 entryIds_[i_] = i_ + 1;
                 userNFTsOpenForSale_[i_] = sellerInfo_;
-            }
-
-            // An array can't have a total length
-            // larger than the max uint256 value.
-            unchecked {
-                ++i_;
             }
         }
     }
@@ -799,21 +792,15 @@ contract ProjectY is Context, Owned, ERC721Holder {
         allBidsOnNFT_ = new BuyerInfo[](totalBidIds_);
         bidIds_ = new uint256[](totalBidIds_);
 
-        for (uint256 i_ = 0; i_ < totalBidIds_; ) {
+        for (uint256 i_ = 0; i_ < totalBidIds_; i_++) {
             // skip buyer info if bidId is invalid
             if (!getIsBidIdValid(i_ + 1)) {
                 continue;
             }
 
-            if (p_buyerInfo[i_].entryId == _entryId) {
+            if (p_buyerInfo[i_ + 1].entryId == _entryId) {
                 bidIds_[i_] = i_ + 1;
                 allBidsOnNFT_[i_] = getBuyerInfo(i_ + 1);
-            }
-
-            // An array can't have a total length
-            // larger than the max uint256 value.
-            unchecked {
-                ++i_;
             }
         }
     }
@@ -831,10 +818,14 @@ contract ProjectY is Context, Owned, ERC721Holder {
             uint256[] memory bidIds_
         )
     {
+        require(user_ != address(0), "INVALID_ADDRESS");
         uint256 totalEntryIds_ = getHistoricTotalEntryIds;
         uint256 totalBidIds_ = getHistoricTotalBidIds;
 
         sellerInfos_ = new SellerInfo[](totalEntryIds_);
+        buyerInfos_ = new BuyerInfo[](totalBidIds_);
+        downPayments_ = new uint256[](totalEntryIds_);
+        monthlyPayments_ = new uint256[](9); // max 9 monthly payments
         entryIds_ = new uint256[](totalEntryIds_);
         bidIds_ = new uint256[](totalBidIds_);
 
@@ -842,7 +833,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         SellerInfo memory sellerInfo_;
         BuyerInfo memory buyerInfo_;
 
-        for (uint256 i_ = 0; i_ < totalEntryIds_; ) {
+        for (uint256 i_ = 0; i_ < totalEntryIds_; i_++) {
             // skip seller info if entryId is invalid
             if (!getIsEntryIdValid(i_ + 1)) {
                 continue;
@@ -866,12 +857,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
                 entryIds_[i_] = i_ + 1;
                 bidIds_[i_] = i_ + 1;
-            }
-
-            // An array can't have a total length
-            // larger than the max uint256 value.
-            unchecked {
-                ++i_;
             }
         }
     }

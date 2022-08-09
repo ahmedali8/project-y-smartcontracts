@@ -39,4 +39,5 @@ export enum ProjectYErrors {
   ClaimAfterAppropriateTime = "CLAIM_AFTER_APPROPRIATE_TIME",
   InvalidCaller = "INVALID_CALLER",
   InvalidInstallmentNumber = "INVALID_INSTALLMENT_NUMBER",
+  InvalidAddress = "INVALID_ADDRESS",
 }

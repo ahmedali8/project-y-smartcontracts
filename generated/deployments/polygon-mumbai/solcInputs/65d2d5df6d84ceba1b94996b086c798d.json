@@ -68,9 +68,7 @@
           "devdoc",
           "userdoc"
         ],
-        "": [
-          "ast"
-        ]
+        "": ["ast"]
       }
     },
     "libraries": {
