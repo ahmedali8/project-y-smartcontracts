@@ -88,7 +88,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         uint64 timestamp
     );
 
-    event BidSelected(uint256 indexed bidId, uint256 indexed entryId);
+    event BidSelected(uint256 bidId, uint256 entryId);
 
     event InstallmentPaid(address buyer, uint256 entryId, uint256 bidId, uint256 installmentNumber);
 
