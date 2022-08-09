@@ -1,6 +1,6 @@
 import { Zero } from "@ethersproject/constants";
 import { time } from "@nomicfoundation/hardhat-network-helpers";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 
 import { toWei } from "../../../../utils/format";
@@ -44,7 +44,6 @@ export default function shouldBehaveLikeGetTotalBidIds(): void {
 
     let erc721Address: string;
     let seller: SignerWithAddress;
-    let buyer: SignerWithAddress;
 
     before(async function () {
       erc721Address = this.mocks.erc721.address;

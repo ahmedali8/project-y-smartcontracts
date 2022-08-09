@@ -38,4 +38,5 @@ export enum ProjectYErrors {
   PayAfterAppropriateTime = "PAY_AFTER_APPROPRIATE_TIME",
   ClaimAfterAppropriateTime = "CLAIM_AFTER_APPROPRIATE_TIME",
   InvalidCaller = "INVALID_CALLER",
+  InvalidInstallmentNumber = "INVALID_INSTALLMENT_NUMBER",
 }

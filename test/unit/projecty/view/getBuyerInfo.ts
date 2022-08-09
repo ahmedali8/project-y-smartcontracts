@@ -10,11 +10,7 @@ import {
   ONE_MONTH,
 } from "../../../shared/constants";
 import { ProjectYErrors } from "../../../shared/errors";
-import {
-  getDownPayment,
-  getInstallmentPerMonth,
-  getTotalInstallments,
-} from "../../../shared/utils";
+import { getDownPayment, getInstallmentPerMonth } from "../../../shared/utils";
 
 export default function shouldBehaveLikeGetBuyerInfo(): void {
   context("when bidId is invalid", function () {
@@ -90,7 +86,6 @@ export default function shouldBehaveLikeGetBuyerInfo(): void {
 
           const bidId = 1;
           const bidPrice = toWei("34");
-          const totalInstallments = getTotalInstallments(bidInstallment);
           const downPayment = getDownPayment(bidInstallment, bidPrice);
           const installmentPerMonth = getInstallmentPerMonth(bidInstallment, bidPrice);
 

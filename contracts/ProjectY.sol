@@ -713,6 +713,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
         view
         returns (uint64)
     {
+        _requireIsBidIdValid(bidId_);
+        require(installmentNumber_ != 0, "INVALID_INSTALLMENT_NUMBER");
         return p_buyerInfo[bidId_].timestamp + ((installmentNumber_ - 1) * ONE_MONTH);
     }
 

@@ -3,11 +3,10 @@ import type { BigNumber } from "@ethersproject/bignumber";
 import { Zero } from "@ethersproject/constants";
 import { keccak256 } from "@ethersproject/solidity";
 import { computeAddress } from "@ethersproject/transactions";
-import { impersonateAccount, setBalance, time } from "@nomicfoundation/hardhat-network-helpers";
+import { impersonateAccount, setBalance } from "@nomicfoundation/hardhat-network-helpers";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { ethers } from "hardhat";
 
-import { toBN } from "../../utils/format";
 import {
   InstallmentPlan,
   NINE_MONTHS_DOWN_PAYMENT_PERCENTAGE,
@@ -88,17 +87,13 @@ export function getInstallmentAmountOf(
 }
 
 export function getTotalInstallments(installmentPlan: InstallmentPlan): number {
-  switch (installmentPlan) {
-    case InstallmentPlan.ThreeMonths:
-      return 3;
-
-    case InstallmentPlan.SixMonths:
-      return 6;
-
-    case InstallmentPlan.NineMonths:
-      return 9;
-
-    default:
-      return 0; // InstallmentPlan.None
+  if (installmentPlan == InstallmentPlan.ThreeMonths) {
+    return 3;
+  } else if (installmentPlan == InstallmentPlan.SixMonths) {
+    return 6;
+  } else if (installmentPlan == InstallmentPlan.NineMonths) {
+    return 9;
+  } else {
+    return 0; // InstallmentPlan.None
   }
 }
