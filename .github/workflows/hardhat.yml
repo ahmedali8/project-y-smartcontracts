@@ -55,8 +55,6 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./coverage/
-          # files: ./coverage/lcov.info
+          files: ./coverage/lcov.info
           flags: unittests
-          path_to_write_report: ./coverage/codecov_report.txt
           verbose: true
