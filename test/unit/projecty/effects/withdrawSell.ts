@@ -110,6 +110,16 @@ export default function shouldBehaveLikeWithdrawSell(): void {
               .to.emit(this.contracts.projecty, "SellWithdrawn")
               .withArgs(seller.address, entryId);
           });
+
+          it("transfers nft back to seller", async function () {
+            expect(await this.mocks.erc721.ownerOf(tokenId)).to.equal(
+              this.contracts.projecty.address
+            );
+
+            await this.contracts.projecty.connect(seller).withdrawSell(entryId);
+
+            expect(await this.mocks.erc721.ownerOf(tokenId)).to.equal(seller.address);
+          });
         });
       });
     });

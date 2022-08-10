@@ -42,5 +42,5 @@ export default func;
 func.tags = ["mockerc721"];
 func.skip = async (env) => await true;
 
-// RINKEBY: 0x1d5614fDDDb8bA6bc02eCef52f52E04735762fa3
-// MUMBAI_POLYGON: 0x6FeCDA318e9770166D9D200B5A1Dc80a3d834110
+// RINKEBY: 0x94C0e2d4428706AfD759794A46cE2772A720998C
+// MUMBAI_POLYGON:

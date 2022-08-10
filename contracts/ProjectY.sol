@@ -20,13 +20,14 @@ contract ProjectY is Context, Owned, ERC721Holder {
     Counters.Counter private p_entryIdTracker;
     Counters.Counter private p_bidIdTracker;
 
-    uint64 public constant ONE_MONTH = 30 days;
+    // // FOR TESTNET ONLY
+    uint64 public constant ONE_MONTH = 1 days;
+    uint64 public biddingPeriod = 90 minutes;
+    uint64 public gracePeriod = 90 minutes;
 
-    // FOR TESTNET ONLY
-    // uint64 public constant ONE_MONTH = 10 minutes;
-
-    uint64 public biddingPeriod = 7 days;
-    uint64 public gracePeriod = 7 days;
+    // uint64 public constant ONE_MONTH = 30 days;
+    // uint64 public biddingPeriod = 7 days;
+    // uint64 public gracePeriod = 7 days;
 
     // vars for frontend helpers
     uint256 public getHistoricTotalEntryIds;
@@ -168,6 +169,12 @@ contract ProjectY is Context, Owned, ERC721Holder {
         p_entryIdTracker.decrement();
 
         emit SellWithdrawn(sellerInfo_.sellerAddress, entryId_);
+
+        IERC721(sellerInfo_.contractAddress).safeTransferFrom(
+            address(this),
+            sellerInfo_.sellerAddress,
+            sellerInfo_.tokenId
+        );
 
         return entryId_;
     }

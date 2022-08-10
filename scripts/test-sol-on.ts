@@ -14,7 +14,7 @@ async function main() {
   const { signatureCollection } = createOptimizedSignatureCollection(
     Object.keys(projecty.interface.functions)
   );
-  console.log({ signatureCollection });
+  console.table(signatureCollection);
 }
 
 main()

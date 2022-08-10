@@ -35,10 +35,11 @@ const getAccounts = (): HttpNetworkAccountsUserConfig => {
   else
     return [
       `0x${process.env.PRIVATE_KEY_1}`,
-      // `0x${process.env.PRIVATE_KEY_2}`,
-      // `0x${process.env.PRIVATE_KEY_3}`,
-      // `0x${process.env.PRIVATE_KEY_4}`,
-      // `0x${process.env.PRIVATE_KEY_5}`,
+      `0x${process.env.PRIVATE_KEY_KUMAIL}`,
+      `0x${process.env.PRIVATE_KEY_2}`,
+      `0x${process.env.PRIVATE_KEY_3}`,
+      `0x${process.env.PRIVATE_KEY_4}`,
+      `0x${process.env.PRIVATE_KEY_5}`,
     ];
 };
 
@@ -93,6 +94,9 @@ const config: HardhatUserConfig = {
   namedAccounts: {
     deployer: {
       default: 0, // here this will by default take the first account as deployer
+    },
+    kumail: {
+      default: 1,
     },
   },
   networks: {
