@@ -1,4 +1,5 @@
 [![Github Actions][gha-badge]][gha]
+[![Code Coverage][coverage-badge]][coverage-link]
 [![Prettier][prettier-badge]][prettier]
 [![License][license-badge]][license]
 
@@ -24,6 +25,8 @@ $ rm -rf ./slither/* && slither . --hardhat-cache-directory ./generated/cache/ha
 
 [gha]: https://github.com/ahmedali8/project-y-smartcontracts/actions
 [gha-badge]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/hardhat.yml/badge.svg
+[coverage-badge]: https://codecov.io/gh/ahmedali8/project-y-smartcontracts/branch/main/graph/badge.svg?token=Z84USEIDJX
+[coverage-link]: https://codecov.io/gh/ahmedali8/project-y-smartcontracts
 [prettier]: https://prettier.io
 [prettier-badge]: https://img.shields.io/badge/Code_Style-Prettier-ff69b4.svg
 [license]: https://unlicense.org/
