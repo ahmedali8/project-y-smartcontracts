@@ -27,8 +27,7 @@ jobs:
           node-version: "16"
 
       - name: "Install the dependencies"
-        run: "yarn install"
-        # --immutable
+        run: "yarn install --immutable"
 
       - name: "Lint the code"
         run: "yarn lint:sol"
