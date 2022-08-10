@@ -36,10 +36,10 @@ const getAccounts = (): HttpNetworkAccountsUserConfig => {
     return [
       `0x${process.env.PRIVATE_KEY_1}`,
       `0x${process.env.PRIVATE_KEY_KUMAIL}`,
-      `0x${process.env.PRIVATE_KEY_2}`,
-      `0x${process.env.PRIVATE_KEY_3}`,
-      `0x${process.env.PRIVATE_KEY_4}`,
-      `0x${process.env.PRIVATE_KEY_5}`,
+      // `0x${process.env.PRIVATE_KEY_2}`,
+      // `0x${process.env.PRIVATE_KEY_3}`,
+      // `0x${process.env.PRIVATE_KEY_4}`,
+      // `0x${process.env.PRIVATE_KEY_5}`,
     ];
 };
 
@@ -125,7 +125,7 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
-        version: "0.8.16",
+        version: "0.8.15",
         settings: {
           metadata: {
             // Not including the metadata hash
