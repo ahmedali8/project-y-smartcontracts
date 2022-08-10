@@ -40,7 +40,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 export default func;
 func.tags = ["mockerc721"];
-// func.skip = async (env) => await true;
+func.skip = async (env) => await true;
 
 // RINKEBY: 0x1d5614fDDDb8bA6bc02eCef52f52E04735762fa3
 // MUMBAI_POLYGON: 0x6FeCDA318e9770166D9D200B5A1Dc80a3d834110
