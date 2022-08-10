@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.13;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
@@ -140,10 +140,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
         p_sellerInfo[entryId_].sellingPrice = sellingPrice_;
         p_sellerInfo[entryId_].installment = installment_;
 
+        emit Sell(_msgSender(), contractAddress_, tokenId_, entryId_, blockTimestamp_);
+
         // transfer NFT to this contract
         IERC721(contractAddress_).safeTransferFrom(_msgSender(), address(this), tokenId_);
 
-        emit Sell(_msgSender(), contractAddress_, tokenId_, entryId_, blockTimestamp_);
         return entryId_;
     }
 
@@ -232,17 +233,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // will be tested in other than none scenario
         require(sellerInfo_.selectedBidId == 0 && !buyerInfo_.isSelected, "CANNOT_RESELECT_BID");
 
+        emit BidSelected(bidId_, entryId_);
+
         // if installment plan is none so transfer the nft on selection of bid
         if (buyerInfo_.bidInstallment == InstallmentPlan.None) {
-            IERC721(sellerInfo_.contractAddress).safeTransferFrom(
-                address(this),
-                buyerInfo_.buyerAddress,
-                sellerInfo_.tokenId
-            );
-
-            // send value to seller
-            Address.sendValue(payable(sellerInfo_.sellerAddress), buyerInfo_.pricePaid);
-
             // delete seller
             delete p_sellerInfo[entryId_];
 
@@ -254,6 +248,15 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
             // decrease total bidIds
             p_bidIdTracker.decrement();
+
+            IERC721(sellerInfo_.contractAddress).safeTransferFrom(
+                address(this),
+                buyerInfo_.buyerAddress,
+                sellerInfo_.tokenId
+            );
+
+            // send value to seller
+            Address.sendValue(payable(sellerInfo_.sellerAddress), buyerInfo_.pricePaid);
         } else {
             // update buyer info
             p_buyerInfo[bidId_].isSelected = true;
@@ -267,8 +270,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
             p_sellerInfo[entryId_].sellingPrice = buyerInfo_.bidPrice;
             p_sellerInfo[entryId_].installmentsPaid = 1;
         }
-
-        emit BidSelected(bidId_, entryId_);
     }
 
     function payInstallment(uint256 entryId_) external payable {
@@ -339,6 +340,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
         console.log("bidPrice_: ", bidPrice_);
         console.log("pricePaid_: ", p_buyerInfo[bidId_].pricePaid);
 
+        emit InstallmentPaid(_msgSender(), entryId_, bidId_, installmentsPaid_ + 1);
+
         // all installments done so transfer NFT to buyer
         // refetch pricePaid from storage becuase we upadated it in above block
         // if (bidPrice_ == p_buyerInfo[bidId_].pricePaid) {
@@ -349,8 +352,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 p_sellerInfo[entryId_].tokenId
             );
         }
-
-        emit InstallmentPaid(_msgSender(), entryId_, bidId_, installmentsPaid_ + 1);
     }
 
     function withdrawBid(uint256 bidId_) external {
@@ -371,10 +372,10 @@ contract ProjectY is Context, Owned, ERC721Holder {
         // decrease total bidIds
         p_bidIdTracker.decrement();
 
+        emit BidWithdrawn(bidId_, buyerInfo_.entryId, buyerInfo_.pricePaid);
+
         // return the price paid
         Address.sendValue(payable(buyerInfo_.buyerAddress), buyerInfo_.pricePaid);
-
-        emit BidWithdrawn(bidId_, buyerInfo_.entryId, buyerInfo_.pricePaid);
     }
 
     function withdrawPayment(uint256 entryId_) external {
@@ -421,8 +422,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
             "CANNOT_RECLAIM_PAYMENT"
         );
 
-        uint8 paymentsClaimable_;
-        uint256 amountClaimable_;
+        uint8 paymentsClaimable_ = 0;
+        uint256 amountClaimable_ = 0;
 
         // seller is claiming for the first time and only second payment is done
         // so release downpayment only
@@ -578,6 +579,8 @@ contract ProjectY is Context, Owned, ERC721Holder {
         p_buyerInfo[bidId_].pricePaid += installmentPerMonth_;
         p_sellerInfo[entryId_].installmentsPaid++;
 
+        emit Liquidated(entryId_, bidId_, p_sellerInfo[entryId_].installmentsPaid, valueToBePaid_);
+
         // if only last installment remains then transfer nft
         if (sellerInfo_.installmentsPaid == totalInstallments_ - 1) {
             IERC721(p_sellerInfo[entryId_].contractAddress).safeTransferFrom(
@@ -589,8 +592,6 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         // transfer 95% of pricePaid to old buyer
         Address.sendValue(payable(oldbuyer_), liquidationValue_);
-
-        emit Liquidated(entryId_, bidId_, p_sellerInfo[entryId_].installmentsPaid, valueToBePaid_);
     }
 
     function setBiddingPeriod(uint64 biddingPeriod_) external onlyOwner {
@@ -609,11 +610,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
                             VIEW/PURE FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
-    function getTotalEntryIds() public view returns (uint256) {
+    function getTotalEntryIds() external view returns (uint256) {
         return p_entryIdTracker.current();
     }
 
-    function getTotalBidIds() public view returns (uint256) {
+    function getTotalBidIds() external view returns (uint256) {
         return p_bidIdTracker.current();
     }
 
@@ -783,7 +784,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
         }
     }
 
-    function getAllBidsOnNFT(uint256 _entryId)
+    function getAllBidsOnNFT(uint256 entryId_)
         external
         view
         returns (BuyerInfo[] memory allBidsOnNFT_, uint256[] memory bidIds_)
@@ -798,7 +799,7 @@ contract ProjectY is Context, Owned, ERC721Holder {
                 continue;
             }
 
-            if (p_buyerInfo[i_ + 1].entryId == _entryId) {
+            if (p_buyerInfo[i_ + 1].entryId == entryId_) {
                 bidIds_[i_] = i_ + 1;
                 allBidsOnNFT_[i_] = getBuyerInfo(i_ + 1);
             }
