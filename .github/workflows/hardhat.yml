@@ -3,6 +3,7 @@ name: Hardhat
 env:
   INFURA_PROJECT_ID: ${{ secrets.INFURA_API_KEY }}
   PRIVATE_KEY_1: ${{ secrets.PRIVATE_KEY_1 }}
+  PRIVATE_KEY_KUMAIL: ${{ secrets.PRIVATE_KEY_KUMAIL }}
   COIN_MARKET_CAP_API_KEY: ${{ secrets.COIN_MARKET_CAP_API_KEY }}
 
 on:
@@ -12,6 +13,9 @@ on:
   push:
     branches:
       - "main"
+
+  # Allow workflow to be manually run from the GitHub UI
+  workflow_dispatch:
 
 jobs:
   hardhat:

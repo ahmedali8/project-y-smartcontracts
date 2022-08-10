@@ -1,4 +1,6 @@
-[![Github Actions][gha-badge]][gha]
+[![Hardhat][gha-badge-hardhat]][gha-hardhat]
+[![Foundry][gha-badge-foundry]][gha-foundry]
+[![Slither Analysis][gha-badge-slither]][gha-slither]
 [![Code Coverage][coverage-badge]][coverage-link]
 [![Prettier][prettier-badge]][prettier]
 [![License][license-badge]][license]
@@ -23,8 +25,12 @@ $ rm -rf ./slither/* && slither . --hardhat-cache-directory ./generated/cache/ha
 
 ### Note: refer to [hardhat-foundry-template](https://github.com/ahmedali8/foundry-hardhat-template) for more information and commands
 
-[gha]: https://github.com/ahmedali8/project-y-smartcontracts/actions
-[gha-badge]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/hardhat.yml/badge.svg
+[gha-hardhat]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/hardhat.yml
+[gha-badge-hardhat]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/hardhat.yml/badge.svg
+[gha-foundry]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/foundry.yml
+[gha-badge-foundry]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/foundry.yml/badge.svg
+[gha-slither]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/slither.yml
+[gha-badge-slither]: https://github.com/ahmedali8/project-y-smartcontracts/actions/workflows/slither.yml/badge.svg
 [coverage-badge]: https://codecov.io/gh/ahmedali8/project-y-smartcontracts/branch/main/graph/badge.svg?token=Z84USEIDJX
 [coverage-link]: https://codecov.io/gh/ahmedali8/project-y-smartcontracts
 [prettier]: https://prettier.io

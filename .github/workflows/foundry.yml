@@ -8,10 +8,14 @@ on:
     branches:
       - "main"
 
+  # Allow workflow to be manually run from the GitHub UI
+  workflow_dispatch:
+
 env:
   FOUNDRY_PROFILE: ci
   INFURA_PROJECT_ID: ${{ secrets.INFURA_API_KEY }}
   PRIVATE_KEY_1: ${{ secrets.PRIVATE_KEY_1 }}
+  PRIVATE_KEY_KUMAIL: ${{ secrets.PRIVATE_KEY_KUMAIL }}
 
 jobs:
   foundry:
