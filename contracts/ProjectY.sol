@@ -21,13 +21,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
     Counters.Counter private p_bidIdTracker;
 
     // // FOR TESTNET ONLY
-    uint64 public constant ONE_MONTH = 1 days;
-    uint64 public biddingPeriod = 90 minutes;
-    uint64 public gracePeriod = 90 minutes;
+    // uint64 public constant ONE_MONTH = 1 days;
+    // uint64 public biddingPeriod = 90 minutes;
+    // uint64 public gracePeriod = 90 minutes;
 
-    // uint64 public constant ONE_MONTH = 30 days;
-    // uint64 public biddingPeriod = 7 days;
-    // uint64 public gracePeriod = 7 days;
+    uint64 public constant ONE_MONTH = 30 days;
+    uint64 public biddingPeriod = 7 days;
+    uint64 public gracePeriod = 7 days;
 
     // vars for frontend helpers
     uint256 public getHistoricTotalEntryIds;
