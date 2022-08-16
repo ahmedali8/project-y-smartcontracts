@@ -7,10 +7,10 @@
     "url": "https://github.com/ahmedali8"
   },
   "scripts": {
-    "analyze": "rm -rf ./slither/* && slither . --hardhat-cache-directory ./generated/cache/hardhat --hardhat-artifacts-directory ./generated/artifacts/hardhat --checklist --json ./slither/output.json --sarif ./slither/output.sarif",
+    "analyze": "rm -rf ./slither/* && slither . --hardhat-cache-directory ./hardhat_cache --hardhat-artifacts-directory ./artifacts --checklist --json ./slither/output.json --sarif ./slither/output.sarif",
     "build": "forge build",
     "chain": "hardhat node --no-deploy --export-all ./generated/chain.json --network hardhat",
-    "clean": "shx rm -rf ./generated/artifacts/hardhat ./generated/cache/hardhat ./coverage ./src/types ./coverage.json && yarn typechain",
+    "clean": "shx rm -rf ./artifacts ./hardhat_cache ./coverage ./src/types ./coverage.json && yarn typechain",
     "commit": "git-cz",
     "compile": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat compile",
     "coverage": "hardhat coverage --solcoverjs ./.solcover.js --temp artifacts --testfiles \"test/**/*.ts\" && yarn typechain",
@@ -28,6 +28,7 @@
     "prettier:check": "prettier --check --config ./.prettierrc.yml \"**/*.{js,json,md,sol,ts,yml}\"",
     "size": "hardhat size-contracts",
     "sudo:rm": "yarn clean && yarn cache clear && shx rm -rf ./node_modules",
+    "test": "hardhat test && forge test",
     "test:hh": "hardhat test",
     "test:hh:gas": "REPORT_GAS=true yarn test:hh",
     "test:f": "forge test",

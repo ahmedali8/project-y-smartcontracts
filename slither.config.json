@@ -1,4 +1,4 @@
 {
-  "hardhat_cache_directory": "./generated/cache/hardhat/",
-  "hardhat_artifacts_directory": "./generated/artifacts/hardhat/"
+  "hardhat_cache_directory": "./hardhat_cache",
+  "hardhat_artifacts_directory": "./artifacts"
 }

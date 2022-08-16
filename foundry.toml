@@ -3,13 +3,13 @@
 src = 'contracts'                                             # the source directory
 test = 'sol_test'                                             # the test directory
 script = 'sol_script'                                         # the script directory
-out = 'generated/artifacts/foundry'                           # the output directory (for artifacts)
+out = 'out'                                                   # the output directory (for artifacts)
 libs = ['node_modules', 'lib']                                # a list of library directories
-broadcast = 'generated/broadcast'
+broadcast = 'broadcast'
 remappings = []                                               # a list of remappings
 libraries = []                                                # a list of deployed libraries to link against
 cache = true                                                  # whether to cache builds or not
-cache_path = 'generated/cache/foundry'                        # where the cache is stored if enabled
+cache_path = 'foundry_cache'                                  # where the cache is stored if enabled
 force = true                                                  # whether to ignore the cache (clean build)
 evm_version = 'london'                                        # the evm version (by hardfork name)
 gas_reports = ['*']                                           # list of contracts to report gas of

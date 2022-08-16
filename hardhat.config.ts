@@ -110,8 +110,9 @@ const config: HardhatUserConfig = {
     ...getAllNetworkConfigs(),
   },
   paths: {
-    artifacts: "./generated/artifacts/hardhat",
-    cache: "./generated/cache/hardhat",
+    artifacts: "./artifacts",
+    // Avoid foundry cache conflict.
+    cache: "./hardhat_cache",
     deploy: "./deploy",
     deployments: "./deployments",
     sources: "./contracts",

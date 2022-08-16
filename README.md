@@ -20,7 +20,7 @@ $ yarn install
 
 ```bash
 # Slither
-$ rm -rf ./slither/* && slither . --hardhat-cache-directory ./generated/cache/hardhat --hardhat-artifacts-directory ./generated/artifacts/hardhat --checklist --json ./slither/output.json --sarif ./slither/output.sarif
+$ rm -rf ./slither/* && slither . --hardhat-cache-directory ./hardhat_cache --hardhat-artifacts-directory ./artifacts --checklist --json ./slither/output.json --sarif ./slither/output.sarif
 ```
 
 ### Note: refer to [hardhat-foundry-template](https://github.com/ahmedali8/foundry-hardhat-template) for more information and commands

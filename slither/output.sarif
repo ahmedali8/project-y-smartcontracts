@@ -290,8 +290,8 @@
         {
           "ruleId": "2-1-timestamp",
           "message": {
-            "text": "ProjectY.withdrawSell(uint256) (contracts/ProjectY.sol#151-173) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#158-161)\n",
-            "markdown": "[ProjectY.withdrawSell(uint256)](contracts/ProjectY.sol#L151-L173) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L158-L161)\n"
+            "text": "ProjectY.selectBid(uint256) (contracts/ProjectY.sol#224-280) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#235-238)\n",
+            "markdown": "[ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L224-L280) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L235-L238)\n"
           },
           "level": "warning",
           "locations": [
@@ -301,21 +301,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 151,
-                  "endLine": 173
+                  "startLine": 224,
+                  "endLine": 280
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "89b08284c6918bd84905583641790b496ee3926d9040ae1fec3d61831f262dc9"
+            "id": "37cacc5cadb938394cf9ffeef5c593f7b6b3e6959708a3847e925ea961d8e842"
           }
         },
         {
           "ruleId": "2-1-timestamp",
           "message": {
-            "text": "ProjectY.payInstallment(uint256) (contracts/ProjectY.sol#275-355) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) > installmentPaidTimestamp_,PAY_AFTER_APPROPRIATE_TIME) (contracts/ProjectY.sol#315-318)\n\t- require(bool,string)(! (uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),DUE_DATE_PASSED) (contracts/ProjectY.sol#327-330)\n",
-            "markdown": "[ProjectY.payInstallment(uint256)](contracts/ProjectY.sol#L275-L355) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) > installmentPaidTimestamp_,PAY_AFTER_APPROPRIATE_TIME)](contracts/ProjectY.sol#L315-L318)\n\t- [require(bool,string)(! (uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),DUE_DATE_PASSED)](contracts/ProjectY.sol#L327-L330)\n"
+            "text": "ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#182-222) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(blockTimestamp_ <= p_sellerInfo[entryId_].timestamp + biddingPeriod,BIDDING_PERIOD_OVER) (contracts/ProjectY.sol#192-195)\n",
+            "markdown": "[ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L182-L222) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(blockTimestamp_ <= p_sellerInfo[entryId_].timestamp + biddingPeriod,BIDDING_PERIOD_OVER)](contracts/ProjectY.sol#L192-L195)\n"
           },
           "level": "warning",
           "locations": [
@@ -325,21 +325,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 275,
-                  "endLine": 355
+                  "startLine": 182,
+                  "endLine": 222
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "8f23b779c44af593d99f58eaaeefb859ee264ab68a25e1bca92d48e9793a1829"
+            "id": "60e5811d67bdab4291102e2d93933e4210115355b2289448920c2e1a36d44ce8"
           }
         },
         {
           "ruleId": "2-1-timestamp",
           "message": {
-            "text": "ProjectY.selectBid(uint256) (contracts/ProjectY.sol#217-273) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#228-231)\n",
-            "markdown": "[ProjectY.selectBid(uint256)](contracts/ProjectY.sol#L217-L273) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(blockTimestamp_ >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L228-L231)\n"
+            "text": "ProjectY.withdrawBid(uint256) (contracts/ProjectY.sol#364-386) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) >= p_sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#370-373)\n",
+            "markdown": "[ProjectY.withdrawBid(uint256)](contracts/ProjectY.sol#L364-L386) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) >= p_sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L370-L373)\n"
           },
           "level": "warning",
           "locations": [
@@ -349,21 +349,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 217,
-                  "endLine": 273
+                  "startLine": 364,
+                  "endLine": 386
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "a31589e46eabc922747533ed51492ee0b7b7a43a8a691ad124083eb38503ba15"
+            "id": "a8dbbaaf5b73ff8409c68f263e72b31c2f737fcd1f1785222def27b6df97b183"
           }
         },
         {
           "ruleId": "2-1-timestamp",
           "message": {
-            "text": "ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan) (contracts/ProjectY.sol#175-215) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(blockTimestamp_ <= p_sellerInfo[entryId_].timestamp + biddingPeriod,BIDDING_PERIOD_OVER) (contracts/ProjectY.sol#185-188)\n",
-            "markdown": "[ProjectY.bid(uint256,uint256,ProjectY.InstallmentPlan)](contracts/ProjectY.sol#L175-L215) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(blockTimestamp_ <= p_sellerInfo[entryId_].timestamp + biddingPeriod,BIDDING_PERIOD_OVER)](contracts/ProjectY.sol#L185-L188)\n"
+            "text": "ProjectY.withdrawSell(uint256) (contracts/ProjectY.sol#152-180) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#159-162)\n",
+            "markdown": "[ProjectY.withdrawSell(uint256)](contracts/ProjectY.sol#L152-L180) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) >= sellerInfo_.timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L159-L162)\n"
           },
           "level": "warning",
           "locations": [
@@ -373,21 +373,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 175,
-                  "endLine": 215
+                  "startLine": 152,
+                  "endLine": 180
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "d21fa32c337c8115323d8581a2459e144c4c9018a2398ea85288f1939cce8366"
+            "id": "b06d0abefd23a75c13e59550f7c420b4726a7900336ec68c6ba6b49f087016d3"
           }
         },
         {
           "ruleId": "2-1-timestamp",
           "message": {
-            "text": "ProjectY.withdrawBid(uint256) (contracts/ProjectY.sol#357-379) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) >= p_sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER) (contracts/ProjectY.sol#363-366)\n",
-            "markdown": "[ProjectY.withdrawBid(uint256)](contracts/ProjectY.sol#L357-L379) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) >= p_sellerInfo[buyerInfo_.entryId].timestamp + biddingPeriod,BIDDING_PERIOD_NOT_OVER)](contracts/ProjectY.sol#L363-L366)\n"
+            "text": "ProjectY.payInstallment(uint256) (contracts/ProjectY.sol#282-362) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) > installmentPaidTimestamp_,PAY_AFTER_APPROPRIATE_TIME) (contracts/ProjectY.sol#322-325)\n\t- require(bool,string)(! (uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),DUE_DATE_PASSED) (contracts/ProjectY.sol#334-337)\n",
+            "markdown": "[ProjectY.payInstallment(uint256)](contracts/ProjectY.sol#L282-L362) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) > installmentPaidTimestamp_,PAY_AFTER_APPROPRIATE_TIME)](contracts/ProjectY.sol#L322-L325)\n\t- [require(bool,string)(! (uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod)),DUE_DATE_PASSED)](contracts/ProjectY.sol#L334-L337)\n"
           },
           "level": "warning",
           "locations": [
@@ -397,21 +397,21 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 357,
-                  "endLine": 379
+                  "startLine": 282,
+                  "endLine": 362
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "e6b048bc340e1b8dbe1f209239eef22213c6a4373df828de23cf3502eaf7766a"
+            "id": "c8ad325dba08ca084c726627afafb0ef3fb85a345aa6b8d08dd85e286d5a24e6"
           }
         },
         {
           "ruleId": "2-1-timestamp",
           "message": {
-            "text": "ProjectY.liquidate(uint256) (contracts/ProjectY.sol#525-595) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),INSTALLMENT_ON_TRACK) (contracts/ProjectY.sol#559-562)\n",
-            "markdown": "[ProjectY.liquidate(uint256)](contracts/ProjectY.sol#L525-L595) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),INSTALLMENT_ON_TRACK)](contracts/ProjectY.sol#L559-L562)\n"
+            "text": "ProjectY.liquidate(uint256) (contracts/ProjectY.sol#532-602) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),INSTALLMENT_ON_TRACK) (contracts/ProjectY.sol#566-569)\n",
+            "markdown": "[ProjectY.liquidate(uint256)](contracts/ProjectY.sol#L532-L602) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- [require(bool,string)(uint64(block.timestamp) > (installmentMonthTimestamp_ + gracePeriod),INSTALLMENT_ON_TRACK)](contracts/ProjectY.sol#L566-L569)\n"
           },
           "level": "warning",
           "locations": [
@@ -421,14 +421,14 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 525,
-                  "endLine": 595
+                  "startLine": 532,
+                  "endLine": 602
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "id": "e81de5e2e33983e991036a84e97bfe7acedf98415626bbfa0833951142720813"
+            "id": "e5a4b4a16b9400bb79bb70b21304efd962f367f7da2af07ec6b25f754120544d"
           }
         },
         {
@@ -506,8 +506,8 @@
         {
           "ruleId": "3-0-pragma",
           "message": {
-            "text": "Different versions of Solidity are used:\n\t- Version used: ['0.8.13', '>=0.4.22<0.9.0', '>=0.8.0', '^0.8.0', '^0.8.1']\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#4)\n\t- ^0.8.1 (node_modules/@openzeppelin/contracts/utils/Address.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Counters.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Strings.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)\n\t- >=0.8.0 (node_modules/@rari-capital/solmate/src/auth/Owned.sol#2)\n\t- 0.8.13 (contracts/ProjectY.sol#2)\n\t- ^0.8.0 (contracts/test/MockERC721.sol#2)\n\t- >=0.4.22<0.9.0 (node_modules/hardhat/console.sol#2)\n",
-            "markdown": "Different versions of Solidity are used:\n\t- Version used: ['0.8.13', '>=0.4.22<0.9.0', '>=0.8.0', '^0.8.0', '^0.8.1']\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#L4)\n\t- [^0.8.1](node_modules/@openzeppelin/contracts/utils/Address.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Context.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Counters.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Strings.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#L4)\n\t- [>=0.8.0](node_modules/@rari-capital/solmate/src/auth/Owned.sol#L2)\n\t- [0.8.13](contracts/ProjectY.sol#L2)\n\t- [^0.8.0](contracts/test/MockERC721.sol#L2)\n\t- [>=0.4.22<0.9.0](node_modules/hardhat/console.sol#L2)\n"
+            "text": "Different versions of Solidity are used:\n\t- Version used: ['0.8.15', '>=0.4.22<0.9.0', '>=0.8.0', '^0.8.0', '^0.8.1']\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#4)\n\t- ^0.8.1 (node_modules/@openzeppelin/contracts/utils/Address.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Counters.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Strings.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)\n\t- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)\n\t- >=0.8.0 (node_modules/@rari-capital/solmate/src/auth/Owned.sol#2)\n\t- 0.8.15 (contracts/ProjectY.sol#2)\n\t- ^0.8.0 (contracts/test/MockERC721.sol#2)\n\t- >=0.4.22<0.9.0 (node_modules/hardhat/console.sol#2)\n",
+            "markdown": "Different versions of Solidity are used:\n\t- Version used: ['0.8.15', '>=0.4.22<0.9.0', '>=0.8.0', '^0.8.0', '^0.8.1']\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol#L4)\n\t- [^0.8.1](node_modules/@openzeppelin/contracts/utils/Address.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Context.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Counters.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Strings.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#L4)\n\t- [>=0.8.0](node_modules/@rari-capital/solmate/src/auth/Owned.sol#L2)\n\t- [0.8.15](contracts/ProjectY.sol#L2)\n\t- [^0.8.0](contracts/test/MockERC721.sol#L2)\n\t- [>=0.4.22<0.9.0](node_modules/hardhat/console.sol#L2)\n"
           },
           "level": "warning",
           "locations": [
@@ -524,7 +524,7 @@
             }
           ],
           "partialFingerprints": {
-            "id": "2c40ff3dcf0d9d88a04653f9fcff6f47305e4549bc3bd33583894b5b0b46a6e1"
+            "id": "2fbe5c0ab1baa48118e22279c87b9e637bbdb51ec47a01f4fa9979c604dfbfa4"
           }
         },
         {
@@ -722,8 +722,8 @@
         {
           "ruleId": "3-0-solc-version",
           "message": {
-            "text": "Pragma version0.8.13 (contracts/ProjectY.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7\n",
-            "markdown": "Pragma version[0.8.13](contracts/ProjectY.sol#L2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7\n"
+            "text": "Pragma version0.8.15 (contracts/ProjectY.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7\n",
+            "markdown": "Pragma version[0.8.15](contracts/ProjectY.sol#L2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7\n"
           },
           "level": "warning",
           "locations": [
@@ -740,7 +740,7 @@
             }
           ],
           "partialFingerprints": {
-            "id": "8bde47a571e1e70f9aeda050eee8f90b4afb858d1e06949ae9e1c1c148212422"
+            "id": "8ccf96bcd95da694bbe27d017c4321460c3df16b9b9f53cf337b69a8fdebc74e"
           }
         },
         {
@@ -1034,8 +1034,8 @@
         {
           "ruleId": "3-0-naming-convention",
           "message": {
-            "text": "Variable ProjectY.p_buyerInfo (contracts/ProjectY.sol#70) is not in mixedCase\n",
-            "markdown": "Variable [ProjectY.p_buyerInfo](contracts/ProjectY.sol#L70) is not in mixedCase\n"
+            "text": "Variable ProjectY.p_buyerInfo (contracts/ProjectY.sol#71) is not in mixedCase\n",
+            "markdown": "Variable [ProjectY.p_buyerInfo](contracts/ProjectY.sol#L71) is not in mixedCase\n"
           },
           "level": "warning",
           "locations": [
@@ -1045,8 +1045,8 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 70,
-                  "endLine": 70
+                  "startLine": 71,
+                  "endLine": 71
                 }
               }
             }
@@ -1058,8 +1058,8 @@
         {
           "ruleId": "3-0-naming-convention",
           "message": {
-            "text": "Variable ProjectY.p_sellerInfo (contracts/ProjectY.sol#67) is not in mixedCase\n",
-            "markdown": "Variable [ProjectY.p_sellerInfo](contracts/ProjectY.sol#L67) is not in mixedCase\n"
+            "text": "Variable ProjectY.p_sellerInfo (contracts/ProjectY.sol#68) is not in mixedCase\n",
+            "markdown": "Variable [ProjectY.p_sellerInfo](contracts/ProjectY.sol#L68) is not in mixedCase\n"
           },
           "level": "warning",
           "locations": [
@@ -1069,8 +1069,8 @@
                   "uri": "contracts/ProjectY.sol"
                 },
                 "region": {
-                  "startLine": 67,
-                  "endLine": 67
+                  "startLine": 68,
+                  "endLine": 68
                 }
               }
             }
@@ -1250,8 +1250,8 @@
         {
           "ruleId": "4-0-external-function",
           "message": {
-            "text": "burn(uint256) should be declared external:\n\t- MockERC721.burn(uint256) (contracts/test/MockERC721.sol#15-17)\n",
-            "markdown": "burn(uint256) should be declared external:\n\t- [MockERC721.burn(uint256)](contracts/test/MockERC721.sol#L15-L17)\n"
+            "text": "burn(uint256) should be declared external:\n\t- MockERC721.burn(uint256) (contracts/test/MockERC721.sol#18-21)\n",
+            "markdown": "burn(uint256) should be declared external:\n\t- [MockERC721.burn(uint256)](contracts/test/MockERC721.sol#L18-L21)\n"
           },
           "level": "warning",
           "locations": [
@@ -1261,8 +1261,8 @@
                   "uri": "contracts/test/MockERC721.sol"
                 },
                 "region": {
-                  "startLine": 15,
-                  "endLine": 17
+                  "startLine": 18,
+                  "endLine": 21
                 }
               }
             }
@@ -1298,8 +1298,8 @@
         {
           "ruleId": "4-0-external-function",
           "message": {
-            "text": "mint(address,uint256) should be declared external:\n\t- MockERC721.mint(address,uint256) (contracts/test/MockERC721.sol#11-13)\n",
-            "markdown": "mint(address,uint256) should be declared external:\n\t- [MockERC721.mint(address,uint256)](contracts/test/MockERC721.sol#L11-L13)\n"
+            "text": "mint(address,uint256) should be declared external:\n\t- MockERC721.mint(address,uint256) (contracts/test/MockERC721.sol#13-16)\n",
+            "markdown": "mint(address,uint256) should be declared external:\n\t- [MockERC721.mint(address,uint256)](contracts/test/MockERC721.sol#L13-L16)\n"
           },
           "level": "warning",
           "locations": [
@@ -1309,8 +1309,8 @@
                   "uri": "contracts/test/MockERC721.sol"
                 },
                 "region": {
-                  "startLine": 11,
-                  "endLine": 13
+                  "startLine": 13,
+                  "endLine": 16
                 }
               }
             }
