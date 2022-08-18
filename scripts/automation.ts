@@ -24,8 +24,8 @@ async function main() {
     PROJECTY_CONTRACT_ADDRESS = "0x83081bE6d9Df400850D3Bf5914b3D9766E230843";
     ERC721_CONTRACT_ADDRESS = "0xF05A4230010CE2285E28C48398b9Dcf8482cddDB";
   } else if (chainId == NETWORKS["polygon-mumbai"].chainId) {
-    PROJECTY_CONTRACT_ADDRESS = "";
-    ERC721_CONTRACT_ADDRESS = "";
+    PROJECTY_CONTRACT_ADDRESS = "0x63d878eBF4deCcC675c29e5606f0993749068614";
+    ERC721_CONTRACT_ADDRESS = "0xbb326B3242955dA5ED5D01A6834601278A029241";
   }
 
   if (chainId != 31337 && chainId != 1337) {
@@ -81,7 +81,7 @@ async function main() {
   // bid on kumail
   for (let i = 0; i < 12; i++) {
     const installment = i % 2 === 0 ? InstallmentPlan.SixMonths : InstallmentPlan.NineMonths;
-    const bidPrice = toWei(`0.${i + 2}`);
+    const bidPrice = toWei(`0.00${i + 2}`);
     await projecty
       .connect(deployerSigner)
       .bid(i + 1, bidPrice, installment, { value: getDownPayment(installment, bidPrice) });
