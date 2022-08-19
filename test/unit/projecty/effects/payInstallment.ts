@@ -251,6 +251,16 @@ export default function shouldBehaveLikePayInstallment(): void {
         it("transfers nft to buyer", async function () {
           expect(await this.mocks.erc721.ownerOf(tokenId)).to.equal(buyer.address);
         });
+
+        it("reverts if called again", async function () {
+          const installmentPerMonth = getInstallmentPerMonth(buyingInstallment, bidPrice);
+
+          await expect(
+            this.contracts.projecty
+              .connect(buyer)
+              .payInstallment(entryId, { value: installmentPerMonth })
+          ).to.be.revertedWith(ProjectYErrors.NoInstallmentLeft);
+        });
       });
     });
   });

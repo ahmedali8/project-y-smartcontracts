@@ -74,7 +74,7 @@ export default function shouldBehaveLikeWithdrawPayment(): void {
     context("when caller is not seller", function () {
       it("reverts", async function () {
         await expect(
-          this.contracts.projecty.connect(this.signers.accounts[9]).selectBid(bidId)
+          this.contracts.projecty.connect(this.signers.accounts[9]).withdrawPayment(entryId)
         ).to.be.revertedWith(ProjectYErrors.CallerNotSeller);
       });
     });
