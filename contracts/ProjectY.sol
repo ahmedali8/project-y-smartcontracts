@@ -749,15 +749,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         for (uint256 i_ = 0; i_ < totalEntryIds_; i_++) {
             // skip seller info if entryId is invalid
-            if (!getIsEntryIdValid(i_ + 1)) {
-                continue;
-            }
+            if (getIsEntryIdValid(i_ + 1)) {
+                sellerInfo_ = getSellerInfo(i_ + 1);
 
-            sellerInfo_ = getSellerInfo(i_ + 1);
-
-            if (sellerInfo_.onSale) {
-                entryIds_[i_] = i_ + 1;
-                nftsOpenForSale_[i_] = sellerInfo_;
+                if (sellerInfo_.onSale) {
+                    entryIds_[i_] = i_ + 1;
+                    nftsOpenForSale_[i_] = sellerInfo_;
+                }
             }
         }
     }
@@ -778,15 +776,13 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         for (uint256 i_ = 0; i_ < totalEntryIds_; i_++) {
             // skip seller info if entryId is invalid
-            if (!getIsEntryIdValid(i_ + 1)) {
-                continue;
-            }
+            if (getIsEntryIdValid(i_ + 1)) {
+                sellerInfo_ = getSellerInfo(i_ + 1);
 
-            sellerInfo_ = getSellerInfo(i_ + 1);
-
-            if (sellerInfo_.onSale && sellerInfo_.sellerAddress == user_) {
-                entryIds_[i_] = i_ + 1;
-                userNFTsOpenForSale_[i_] = sellerInfo_;
+                if (sellerInfo_.onSale && sellerInfo_.sellerAddress == user_) {
+                    entryIds_[i_] = i_ + 1;
+                    userNFTsOpenForSale_[i_] = sellerInfo_;
+                }
             }
         }
     }
@@ -802,13 +798,11 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         for (uint256 i_ = 0; i_ < totalBidIds_; i_++) {
             // skip buyer info if bidId is invalid
-            if (!getIsBidIdValid(i_ + 1)) {
-                continue;
-            }
-
-            if (p_buyerInfo[i_ + 1].entryId == entryId_) {
-                bidIds_[i_] = i_ + 1;
-                allBidsOnNFT_[i_] = getBuyerInfo(i_ + 1);
+            if (getIsBidIdValid(i_ + 1)) {
+                if (p_buyerInfo[i_ + 1].entryId == entryId_) {
+                    bidIds_[i_] = i_ + 1;
+                    allBidsOnNFT_[i_] = getBuyerInfo(i_ + 1);
+                }
             }
         }
     }
@@ -843,28 +837,26 @@ contract ProjectY is Context, Owned, ERC721Holder {
 
         for (uint256 i_ = 0; i_ < totalEntryIds_; i_++) {
             // skip seller info if entryId is invalid
-            if (!getIsEntryIdValid(i_ + 1)) {
-                continue;
-            }
+            if (getIsEntryIdValid(i_ + 1)) {
+                sellerInfo_ = getSellerInfo(i_ + 1);
 
-            sellerInfo_ = getSellerInfo(i_ + 1);
+                // skip loop if no selected bid id
+                if (sellerInfo_.selectedBidId != 0) {
+                    buyerInfo_ = getBuyerInfo(sellerInfo_.selectedBidId);
 
-            // skip loop if no selected bid id
-            if (sellerInfo_.selectedBidId == 0) {
-                continue;
-            }
+                    if (buyerInfo_.buyerAddress == user_) {
+                        sellerInfos_[i_] = sellerInfo_;
+                        buyerInfos_[i_] = buyerInfo_;
 
-            buyerInfo_ = getBuyerInfo(sellerInfo_.selectedBidId);
+                        downPayments_[i_] = getDownPaymentAmount(sellerInfo_.selectedBidId);
+                        monthlyPayments_[i_] = getInstallmentAmountPerMonth(
+                            sellerInfo_.selectedBidId
+                        );
 
-            if (buyerInfo_.buyerAddress == user_) {
-                sellerInfos_[i_] = sellerInfo_;
-                buyerInfos_[i_] = buyerInfo_;
-
-                downPayments_[i_] = getDownPaymentAmount(sellerInfo_.selectedBidId);
-                monthlyPayments_[i_] = getInstallmentAmountPerMonth(sellerInfo_.selectedBidId);
-
-                entryIds_[i_] = i_ + 1;
-                bidIds_[i_] = i_ + 1;
+                        entryIds_[i_] = i_ + 1;
+                        bidIds_[i_] = i_ + 1;
+                    }
+                }
             }
         }
     }
