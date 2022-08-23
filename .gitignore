@@ -1,33 +1,45 @@
-# Ignore all Visual Studio Code settings
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
 
-# Local history for Visual Studio Code
-.history
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+**/node_modules
 
-# Dependency directory
-node_modules
+#build
+*.tsbuildinfo
+*.stackdump
+.yalc
+yalc.lock
+packages/vite-app-ts/dist
+packages/**/data
+build
+dist
 
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
+# hardhat ts
+packages/hardhat-ts/cache
+packages/hardhat-ts/generated
+!packages/hardhat-ts/generated/.gitignore
+cache
+artifacts
+tenderly.yaml
 .env.local
 
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# secrets / env
+**/.env.*.local
+**/*.secret
+**/aws.json
+!packages/hardhat-ts/mnemonics/README.md
+**/mnemonics/*.secret
+**/mnemonics/*.txt
 
-# Optional npm cache directory
-.npm
+#subgraph
+packages/advanced/subgraph/config/config.json
+packages/advanced/subgraph/subgraph.yaml
+packages/advanced/subgraph/generated
+packages/advanced/subgraph/abis/*
 
-# Modern Yarn files
+# dependencies, yarn, etc
+/node_modules
+/.pnp
+.pnp.js
+# yarn / eslint
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -35,31 +47,27 @@ yarn-error.log*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.eslintcache
 
-# Hardhat files
-**/docs
-**/artifacts
-**/hardhat_cache
-.deps
-**/src/types/**
-
-# TypeScript bindings output directory
-typechain-types
-
-# solidity-coverage directory and output file
+# testing
 coverage
-coverage.json
-**/.coverage_artifacts
-**/.coverage_cache
-**/.coverage_contracts
 
-# Foundry
-bin
-out
-foundry_cache
+# misc
+.DS_Store
+.netlify
 
-# Ignore flattened files
-**.flat.sol
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.idea
 
-# Miscellaneous files
-**/storageLayout
+
+# vercel
+**/.vercel/**/*
+**/.next/**/*
+**/out/**/*
+
+# misc
+.DS_Store
+*.pem

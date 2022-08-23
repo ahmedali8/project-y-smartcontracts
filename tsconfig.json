@@ -1,32 +1,33 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
-    "emitDecoratorMetadata": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "lib": ["es6"],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noImplicitAny": true,
-    "removeComments": true,
-    "resolveJsonModule": true,
     "sourceMap": true,
+    // "inlineSources": true,
+    "allowJs": false,
+    "declarationMap": true,
+    "declaration": true,
     "strict": true,
-    "target": "es6"
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "paths": {
+      "~common/*": ["../common/src/*"]
+    }
   },
-  "exclude": ["node_modules"],
-  "files": ["./hardhat.config.ts"],
-  "include": [
-    "src/**/*",
-    "deploy/**/*",
-    "scripts/**/*",
-    "tasks/**/*",
-    "test/**/*",
-    "types/**/*",
-    "utils/**/*",
-    "config/**/*",
-    "helpers/**/*"
+  "include": ["**/*.ts", "**/*.tsx", "./scripts", "**/*.json"],
+  "exclude": [
+    "**/node_modules",
+    "node_modules",
+    ".husky",
+    "**/*.css",
+    "./tailwind.config.js",
+    "**/.yalc/",
+    "**/.yalc/**/*",
+    ".yalc/**/*"
   ]
 }

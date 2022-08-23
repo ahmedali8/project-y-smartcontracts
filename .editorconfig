@@ -1,16 +1,9 @@
-# EditorConfig  http://EditorConfig.org
-
-# top-most EditorConfig file
 root = true
 
-# All files
-[*]
-charset = utf-8
-end_of_line = lf
-indent_size = 2
+[packages/**.{j,t}s{,x}]
 indent_style = space
-insert_final_newline = true
-trim_trailing_whitespace = true
+indent_size = 2
 
-[*.sol]
+[*.{sol,yul}]
+indent_style = space
 indent_size = 4
