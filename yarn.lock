@@ -1934,6 +1934,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rari-capital/solmate@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "@rari-capital/solmate@npm:6.4.0"
+  checksum: 27c656f72ce9b51ab6ec25165ae5426f74af934352eca062eb8419c4cf7fc4c6debf45487afd6bee7860e38b7c33d3a6d353a0d4c176c961c9c8125d30cf52a4
+  languageName: node
+  linkType: hard
+
 "@resolver-engine/core@npm:^0.3.3":
   version: 0.3.3
   resolution: "@resolver-engine/core@npm:0.3.3"
@@ -2126,6 +2133,7 @@ __metadata:
     "@openzeppelin/contracts": ^4.7.2
     "@openzeppelin/hardhat-upgrades": ^1.19.1
     "@primitivefi/hardhat-dodoc": ^0.2.3
+    "@rari-capital/solmate": ^6.4.0
     "@scaffold-eth/common": 0.0.0
     "@tenderly/hardhat-tenderly": ^1.1.4
     "@typechain/ethers-v5": ^10.1.0

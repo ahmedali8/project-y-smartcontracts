@@ -85,6 +85,7 @@ export const MainPage: FC = () => {
   // init contracts
   const yourContract = useAppContracts('YourContract', ethersAppContext.chainId);
   const yourNFT = useAppContracts('YourNFT', ethersAppContext.chainId);
+  const projectY = useAppContracts('ProjectY', ethersAppContext.chainId);
   const mainnetDai = useAppContracts('DAI', NETWORKS.mainnet.chainId);
 
   // keep track of a variable from the contract in the local React state:
@@ -121,11 +122,11 @@ export const MainPage: FC = () => {
   // This is the list of tabs and their contents
   const pageList: TContractPageList = {
     mainPage: {
-      name: 'YourContract',
+      name: 'ProjectY',
       content: (
         <GenericContract
-          contractName="YourContract"
-          contract={yourContract}
+          contractName="ProjectY"
+          contract={projectY}
           mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
           blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}
         />
@@ -140,17 +141,6 @@ export const MainPage: FC = () => {
             contract={yourNFT}
             mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
             blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}></GenericContract>
-        ),
-      },
-      {
-        name: 'Mainnet-Dai',
-        content: (
-          <GenericContract
-            contractName="Dai"
-            contract={mainnetDai}
-            mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
-            blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}
-          />
         ),
       },
     ],

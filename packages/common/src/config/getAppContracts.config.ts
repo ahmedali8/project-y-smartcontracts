@@ -38,6 +38,12 @@ export const getAppContractsConfig = () => {
         hardhatDeployedContractsJson
       ),
 
+      ProjectY: createConnectorForHardhatContract(
+        'ProjectY',
+        hardhatContracts.ProjectY__factory,
+        hardhatDeployedContractsJson
+      ),
+
       // --------------------------------------------------
       // 🙋🏽‍♂️ Add your external contracts here, make sure to define the address in `externalContractsConfig.ts`Í
       // --------------------------------------------------
